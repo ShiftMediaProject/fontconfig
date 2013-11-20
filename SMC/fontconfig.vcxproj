@@ -1,0 +1,730 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugDLL|Win32">
+      <Configuration>DebugDLL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugDLL|x64">
+      <Configuration>DebugDLL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDLL|Win32">
+      <Configuration>ReleaseDLL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDLL|x64">
+      <Configuration>ReleaseDLL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\fc-case\fccase.h" />
+    <ClInclude Include="..\fc-glyphname\fcglyphname.h" />
+    <ClInclude Include="..\fontconfig\fcfreetype.h" />
+    <ClInclude Include="..\fontconfig\fcprivate.h" />
+    <ClInclude Include="..\fontconfig\fontconfig.h" />
+    <ClInclude Include="..\src\fcarch.h" />
+    <ClInclude Include="..\src\fcatomic.h" />
+    <ClInclude Include="..\src\fcdeprecate.h" />
+    <ClInclude Include="..\src\fcftint.h" />
+    <ClInclude Include="..\src\fcint.h" />
+    <ClInclude Include="..\src\fcmutex.h" />
+    <ClInclude Include="..\src\fcobjs.h" />
+    <ClInclude Include="..\src\fcwindows.h" />
+    <ClInclude Include="..\src\ftglue.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="src\fcalias.h" />
+    <ClInclude Include="src\fcaliastail.h" />
+    <ClInclude Include="src\fcftalias.h" />
+    <ClInclude Include="src\fcftaliastail.h" />
+    <ClInclude Include="src\fcstdint.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\fcatomic.c" />
+    <ClCompile Include="..\src\fcblanks.c" />
+    <ClCompile Include="..\src\fccache.c" />
+    <ClCompile Include="..\src\fccfg.c" />
+    <ClCompile Include="..\src\fccharset.c" />
+    <ClCompile Include="..\src\fccompat.c" />
+    <ClCompile Include="..\src\fcdbg.c" />
+    <ClCompile Include="..\src\fcdefault.c" />
+    <ClCompile Include="..\src\fcdir.c" />
+    <ClCompile Include="..\src\fcformat.c" />
+    <ClCompile Include="..\src\fcfreetype.c" />
+    <ClCompile Include="..\src\fcfs.c" />
+    <ClCompile Include="..\src\fchash.c" />
+    <ClCompile Include="..\src\fcinit.c" />
+    <ClCompile Include="..\src\fclang.c" />
+    <ClCompile Include="..\src\fclist.c" />
+    <ClCompile Include="..\src\fcmatch.c" />
+    <ClCompile Include="..\src\fcmatrix.c" />
+    <ClCompile Include="..\src\fcname.c" />
+    <ClCompile Include="..\src\fcobjs.c" />
+    <ClCompile Include="..\src\fcpat.c" />
+    <ClCompile Include="..\src\fcserialize.c" />
+    <ClCompile Include="..\src\fcstat.c" />
+    <ClCompile Include="..\src\fcstr.c" />
+    <ClCompile Include="..\src\fcxml.c" />
+    <ClCompile Include="..\src\ftglue.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fontconfig.def" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DBF1E8F7-5B7D-4CBF-842A-B7E0C02520DC}</ProjectGuid>
+    <RootNamespace>fontconfig</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
+    <TargetName>fontconfigd</TargetName>
+    <IntDir>$(ProjectDir)\obj\$(Configuration)\$(Platform)\</IntDir>
+    <OutDir>..\..\..\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">
+    <TargetName>fontconfigd</TargetName>
+    <OutDir>..\..\..\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Configuration)\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
+    <TargetName>fontconfig</TargetName>
+    <IntDir>$(ProjectDir)\obj\$(Configuration)\$(Platform)\</IntDir>
+    <OutDir>..\..\..\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">
+    <TargetName>fontconfig</TargetName>
+    <OutDir>..\..\..\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Configuration)\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>libfontconfigd</TargetName>
+    <IntDir>$(ProjectDir)\obj\$(Configuration)\$(Platform)\</IntDir>
+    <OutDir>..\..\..\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>libfontconfigd</TargetName>
+    <OutDir>..\..\..\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Configuration)\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>libfontconfig</TargetName>
+    <IntDir>$(ProjectDir)\obj\$(Configuration)\$(Platform)\</IntDir>
+    <OutDir>..\..\..\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>libfontconfig</TargetName>
+    <OutDir>..\..\..\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Configuration)\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutputPath)\include;$(OutputPath)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <ExceptionHandling>false</ExceptionHandling>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\lib\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(OutputPath)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libiconvd.lib;libfreetyped.lib;libexpatd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>mkdir $(OutputPath)\include
+mkdir $(OutputPath)\include\fontconfig
+copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
+mkdir $(OutputPath)\licenses
+copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
+mkdir $(OutputPath)\fonts
+copy .\fonts.conf $(OutputPath)\fonts
+mkdir $(OutputPath)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\src\fcalias.h (
+del ..\src\fcalias.h
+)
+if exist ..\src\fcaliastail.h (
+del ..\src\fcaliastail.h
+)
+if exist ..\src\fcftalias.h (
+del ..\src\fcftalias.h
+)
+if exist ..\src\fcftaliastail.h (
+del ..\src\fcftaliastail.h
+)
+if exist ..\src\fcobjshash.h (
+del ..\src\fcobjshash.h
+)
+if exist ..\src\fcstdint.h (
+del ..\src\fcstdint.h
+)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutputPath)\include;$(OutputPath)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <ExceptionHandling>false</ExceptionHandling>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX64</TargetMachine>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\lib\x64\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(OutputPath)\lib\x64\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libiconvd.lib;libfreetyped.lib;libexpatd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>mkdir $(OutputPath)\include
+mkdir $(OutputPath)\include\fontconfig
+copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
+mkdir $(OutputPath)\licenses
+copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
+mkdir $(OutputPath)\fonts
+copy .\fonts.conf $(OutputPath)\fonts
+mkdir $(OutputPath)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\src\fcalias.h (
+del ..\src\fcalias.h
+)
+if exist ..\src\fcaliastail.h (
+del ..\src\fcaliastail.h
+)
+if exist ..\src\fcftalias.h (
+del ..\src\fcftalias.h
+)
+if exist ..\src\fcftaliastail.h (
+del ..\src\fcftaliastail.h
+)
+if exist ..\src\fcobjshash.h (
+del ..\src\fcobjshash.h
+)
+if exist ..\src\fcstdint.h (
+del ..\src\fcstdint.h
+)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_USRDLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutputPath)\include;$(OutputPath)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <ExceptionHandling>false</ExceptionHandling>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\bin\$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)\lib\$(TargetName).lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)\bin\$(TargetName).pdb</ProgramDatabaseFile>
+      <ModuleDefinitionFile>.\fontconfig.def</ModuleDefinitionFile>
+      <ProfileGuidedDatabase>$(OutDir)\bin\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalLibraryDirectories>$(OutputPath)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>iconvd.lib;freetyped.lib;expatd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir $(OutputPath)\include
+mkdir $(OutputPath)\include\fontconfig
+copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
+mkdir $(OutputPath)\licenses
+copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
+mkdir $(OutputPath)\fonts
+copy .\fonts.conf $(OutputPath)\fonts
+mkdir $(OutputPath)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\src\fcalias.h (
+del ..\src\fcalias.h
+)
+if exist ..\src\fcaliastail.h (
+del ..\src\fcaliastail.h
+)
+if exist ..\src\fcftalias.h (
+del ..\src\fcftalias.h
+)
+if exist ..\src\fcftaliastail.h (
+del ..\src\fcftaliastail.h
+)
+if exist ..\src\fcobjshash.h (
+del ..\src\fcobjshash.h
+)
+if exist ..\src\fcstdint.h (
+del ..\src\fcstdint.h
+)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_USRDLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutputPath)\include;$(OutputPath)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <ExceptionHandling>false</ExceptionHandling>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\bin\x64\$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)\lib\x64\$(TargetName).lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)\bin\x64\$(TargetName).pdb</ProgramDatabaseFile>
+      <ModuleDefinitionFile>.\fontconfig.def</ModuleDefinitionFile>
+      <ProfileGuidedDatabase>$(OutDir)\bin\x64\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalLibraryDirectories>$(OutputPath)\lib\x64\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>iconvd.lib;freetyped.lib;expatd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir $(OutputPath)\include
+mkdir $(OutputPath)\include\fontconfig
+copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
+mkdir $(OutputPath)\licenses
+copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
+mkdir $(OutputPath)\fonts
+copy .\fonts.conf $(OutputPath)\fonts
+mkdir $(OutputPath)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\src\fcalias.h (
+del ..\src\fcalias.h
+)
+if exist ..\src\fcaliastail.h (
+del ..\src\fcaliastail.h
+)
+if exist ..\src\fcftalias.h (
+del ..\src\fcftalias.h
+)
+if exist ..\src\fcftaliastail.h (
+del ..\src\fcftaliastail.h
+)
+if exist ..\src\fcobjshash.h (
+del ..\src\fcobjshash.h
+)
+if exist ..\src\fcstdint.h (
+del ..\src\fcstdint.h
+)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutputPath)\include;$(OutputPath)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExceptionHandling>false</ExceptionHandling>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+    <Lib>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\lib\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(OutputPath)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libiconv.lib;libfreetype.lib;libexpat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>mkdir $(OutputPath)\include
+mkdir $(OutputPath)\include\fontconfig
+copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
+mkdir $(OutputPath)\licenses
+copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
+mkdir $(OutputPath)\fonts
+copy .\fonts.conf $(OutputPath)\fonts
+mkdir $(OutputPath)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\src\fcalias.h (
+del ..\src\fcalias.h
+)
+if exist ..\src\fcaliastail.h (
+del ..\src\fcaliastail.h
+)
+if exist ..\src\fcftalias.h (
+del ..\src\fcftalias.h
+)
+if exist ..\src\fcftaliastail.h (
+del ..\src\fcftaliastail.h
+)
+if exist ..\src\fcobjshash.h (
+del ..\src\fcobjshash.h
+)
+if exist ..\src\fcstdint.h (
+del ..\src\fcstdint.h
+)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutputPath)\include;$(OutputPath)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExceptionHandling>false</ExceptionHandling>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+    <Lib>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\lib\x64\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(OutputPath)\lib\x64\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libiconv.lib;libfreetype.lib;libexpat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>mkdir $(OutputPath)\include
+mkdir $(OutputPath)\include\fontconfig
+copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
+mkdir $(OutputPath)\licenses
+copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
+mkdir $(OutputPath)\fonts
+copy .\fonts.conf $(OutputPath)\fonts
+mkdir $(OutputPath)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\src\fcalias.h (
+del ..\src\fcalias.h
+)
+if exist ..\src\fcaliastail.h (
+del ..\src\fcaliastail.h
+)
+if exist ..\src\fcftalias.h (
+del ..\src\fcftalias.h
+)
+if exist ..\src\fcftaliastail.h (
+del ..\src\fcftaliastail.h
+)
+if exist ..\src\fcobjshash.h (
+del ..\src\fcobjshash.h
+)
+if exist ..\src\fcstdint.h (
+del ..\src\fcstdint.h
+)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_USRDLL;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutputPath)\include;$(OutputPath)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExceptionHandling>false</ExceptionHandling>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\bin\$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)\lib\$(TargetName).lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)\bin\$(TargetName).pdb</ProgramDatabaseFile>
+      <ModuleDefinitionFile>.\fontconfig.def</ModuleDefinitionFile>
+      <ProfileGuidedDatabase>$(OutDir)\bin\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalLibraryDirectories>$(OutputPath)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>iconv.lib;freetype.lib;expat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir $(OutputPath)\include
+mkdir $(OutputPath)\include\fontconfig
+copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
+mkdir $(OutputPath)\licenses
+copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
+mkdir $(OutputPath)\fonts
+copy .\fonts.conf $(OutputPath)\fonts
+mkdir $(OutputPath)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\src\fcalias.h (
+del ..\src\fcalias.h
+)
+if exist ..\src\fcaliastail.h (
+del ..\src\fcaliastail.h
+)
+if exist ..\src\fcftalias.h (
+del ..\src\fcftalias.h
+)
+if exist ..\src\fcftaliastail.h (
+del ..\src\fcftaliastail.h
+)
+if exist ..\src\fcobjshash.h (
+del ..\src\fcobjshash.h
+)
+if exist ..\src\fcstdint.h (
+del ..\src\fcstdint.h
+)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_USRDLL;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutputPath)\include;$(OutputPath)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExceptionHandling>false</ExceptionHandling>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\bin\x64\$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)\lib\x64\$(TargetName).lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)\bin\x64\$(TargetName).pdb</ProgramDatabaseFile>
+      <ModuleDefinitionFile>.\fontconfig.def</ModuleDefinitionFile>
+      <ProfileGuidedDatabase>$(OutDir)\bin\x64\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalLibraryDirectories>$(OutputPath)\lib\x64\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>iconv.lib;freetype.lib;expat.lib;stdio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir $(OutputPath)\include
+mkdir $(OutputPath)\include\fontconfig
+copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
+mkdir $(OutputPath)\licenses
+copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
+mkdir $(OutputPath)\fonts
+copy .\fonts.conf $(OutputPath)\fonts
+mkdir $(OutputPath)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\src\fcalias.h (
+del ..\src\fcalias.h
+)
+if exist ..\src\fcaliastail.h (
+del ..\src\fcaliastail.h
+)
+if exist ..\src\fcftalias.h (
+del ..\src\fcftalias.h
+)
+if exist ..\src\fcftaliastail.h (
+del ..\src\fcftaliastail.h
+)
+if exist ..\src\fcobjshash.h (
+del ..\src\fcobjshash.h
+)
+if exist ..\src\fcstdint.h (
+del ..\src\fcstdint.h
+)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
