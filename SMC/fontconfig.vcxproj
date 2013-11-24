@@ -259,6 +259,12 @@ del ..\src\fcobjshash.h
 )
 if exist ..\src\fcstdint.h (
 del ..\src\fcstdint.h
+)
+if exist ..\fc-case\fccase.h (
+del ..\fc-case\fccase.h
+)
+if exist ..\fc-glyphname\fcglyphname.h (
+del ..\fc-glyphname\fcglyphname.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -317,6 +323,12 @@ del ..\src\fcobjshash.h
 )
 if exist ..\src\fcstdint.h (
 del ..\src\fcstdint.h
+)
+if exist ..\fc-case\fccase.h (
+del ..\fc-case\fccase.h
+)
+if exist ..\fc-glyphname\fcglyphname.h (
+del ..\fc-glyphname\fcglyphname.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -376,6 +388,12 @@ del ..\src\fcobjshash.h
 )
 if exist ..\src\fcstdint.h (
 del ..\src\fcstdint.h
+)
+if exist ..\fc-case\fccase.h (
+del ..\fc-case\fccase.h
+)
+if exist ..\fc-glyphname\fcglyphname.h (
+del ..\fc-glyphname\fcglyphname.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -435,6 +453,12 @@ del ..\src\fcobjshash.h
 )
 if exist ..\src\fcstdint.h (
 del ..\src\fcstdint.h
+)
+if exist ..\fc-case\fccase.h (
+del ..\fc-case\fccase.h
+)
+if exist ..\fc-glyphname\fcglyphname.h (
+del ..\fc-glyphname\fcglyphname.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -507,6 +531,15 @@ del ..\src\fcobjshash.h
 )
 if exist ..\src\fcstdint.h (
 del ..\src\fcstdint.h
+)
+if exist ..\fc-case\fccase.h (
+del ..\fc-case\fccase.h
+)
+if exist ..\fc-glyphname\fcglyphname.h (
+del ..\fc-glyphname\fcglyphname.h
+)
+if exist ..\fc-lang\fclang.h (
+del ..\fc-lang\fclang.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -579,6 +612,12 @@ del ..\src\fcobjshash.h
 )
 if exist ..\src\fcstdint.h (
 del ..\src\fcstdint.h
+)
+if exist ..\fc-case\fccase.h (
+del ..\fc-case\fccase.h
+)
+if exist ..\fc-glyphname\fcglyphname.h (
+del ..\fc-glyphname\fcglyphname.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -650,6 +689,12 @@ del ..\src\fcobjshash.h
 )
 if exist ..\src\fcstdint.h (
 del ..\src\fcstdint.h
+)
+if exist ..\fc-case\fccase.h (
+del ..\fc-case\fccase.h
+)
+if exist ..\fc-glyphname\fcglyphname.h (
+del ..\fc-glyphname\fcglyphname.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -721,6 +766,12 @@ del ..\src\fcobjshash.h
 )
 if exist ..\src\fcstdint.h (
 del ..\src\fcstdint.h
+)
+if exist ..\fc-case\fccase.h (
+del ..\fc-case\fccase.h
+)
+if exist ..\fc-glyphname\fcglyphname.h (
+del ..\fc-glyphname\fcglyphname.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
