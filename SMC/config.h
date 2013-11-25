@@ -1,6 +1,3 @@
-/* config.h.  Generated from config.h.in by configure.  */
-/* config.h.in.  Generated from configure.ac by autoheader.  */
-
 
 /* Font configuration directory */
 #define CONFDIR "c:/windows/etc"
@@ -299,9 +296,7 @@
 /* Use regex */
 /* #undef USE_REGEX */
 
-
-/* Version number of package */
-#define VERSION "2.10.95"
+#include "version.h"
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64

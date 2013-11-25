@@ -55,6 +55,7 @@
     <ClInclude Include="src\fcftalias.h" />
     <ClInclude Include="src\fcftaliastail.h" />
     <ClInclude Include="src\fcstdint.h" />
+    <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\fcatomic.c" />

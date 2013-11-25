@@ -10,43 +10,16 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{e05e69ea-955c-4c2c-83f8-ff30c0007387}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\generated">
-      <UniqueIdentifier>{f4e72aec-26b6-4270-98c0-30d633cf2052}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\src">
       <UniqueIdentifier>{922e0cd8-983a-43d3-bad3-20bd11bb918e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\fontconfig">
+      <UniqueIdentifier>{0dfb972a-51ee-40d0-a100-c759b6d83f44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\fontconfig\fcfreetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\fontconfig\fcprivate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\fontconfig\fontconfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\fcatomic.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\fcstdint.h">
-      <Filter>Header Files\generated</Filter>
-    </ClInclude>
-    <ClInclude Include="src\fcalias.h">
-      <Filter>Header Files\generated</Filter>
-    </ClInclude>
-    <ClInclude Include="src\fcaliastail.h">
-      <Filter>Header Files\generated</Filter>
-    </ClInclude>
-    <ClInclude Include="src\fcftalias.h">
-      <Filter>Header Files\generated</Filter>
-    </ClInclude>
-    <ClInclude Include="src\fcftaliastail.h">
-      <Filter>Header Files\generated</Filter>
-    </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>Header Files\generated</Filter>
     </ClInclude>
     <ClInclude Include="..\src\fcarch.h">
       <Filter>Header Files\src</Filter>
@@ -72,11 +45,41 @@
     <ClInclude Include="..\src\ftglue.h">
       <Filter>Header Files\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\fontconfig\fcfreetype.h">
+      <Filter>Header Files\fontconfig</Filter>
+    </ClInclude>
+    <ClInclude Include="..\fontconfig\fcprivate.h">
+      <Filter>Header Files\fontconfig</Filter>
+    </ClInclude>
+    <ClInclude Include="..\fontconfig\fontconfig.h">
+      <Filter>Header Files\fontconfig</Filter>
+    </ClInclude>
+    <ClInclude Include="version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fcalias.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fcaliastail.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\fc-case\fccase.h">
-      <Filter>Header Files\generated</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fcftalias.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fcftaliastail.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\fc-glyphname\fcglyphname.h">
-      <Filter>Header Files\generated</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fcstdint.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
