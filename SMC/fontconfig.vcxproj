@@ -213,7 +213,7 @@
       <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include\msvc;$(OutDir)\include\msvc\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
@@ -224,20 +224,20 @@
     <Lib>
       <TargetMachine>MachineX86</TargetMachine>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>$(OutDir)\lib\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)\lib\msvc32\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\msvc32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconvd.lib;libfreetyped.lib;libexpatd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>mkdir $(OutputPath)\include
-mkdir $(OutputPath)\include\fontconfig
-copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
-mkdir $(OutputPath)\licenses
-copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
-mkdir $(OutputPath)\fonts
-copy .\fonts.conf $(OutputPath)\fonts
-mkdir $(OutputPath)\fonts\conf.d
-copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+      <Command>mkdir $(OutDir)\include\msvc
+mkdir $(OutDir)\include\msvc\fontconfig
+copy ..\fontconfig\*.h $(OutDir)\include\msvc\fontconfig
+mkdir $(OutDir)\licenses
+copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
+mkdir $(OutDir)\fonts
+copy .\fonts.conf $(OutDir)\fonts
+mkdir $(OutDir)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutDir)\fonts\conf.d\</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
@@ -270,8 +270,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist $(OutDir)\include\msvc\fontconfig (
+rd /s /q $(OutDir)\include\msvc\fontconfig
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -283,7 +283,7 @@ rd /s /q $(OutDir)\include\fontconfig
       <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include\msvc;$(OutDir)\include\msvc\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
@@ -294,20 +294,20 @@ rd /s /q $(OutDir)\include\fontconfig
     <Lib>
       <TargetMachine>MachineX64</TargetMachine>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>$(OutDir)\lib\x64\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)\lib\msvc64\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\msvc64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconvd.lib;libfreetyped.lib;libexpatd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>mkdir $(OutputPath)\include
-mkdir $(OutputPath)\include\fontconfig
-copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
-mkdir $(OutputPath)\licenses
-copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
-mkdir $(OutputPath)\fonts
-copy .\fonts.conf $(OutputPath)\fonts
-mkdir $(OutputPath)\fonts\conf.d
-copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+      <Command>mkdir $(OutDir)\include\msvc
+mkdir $(OutDir)\include\msvc\fontconfig
+copy ..\fontconfig\*.h $(OutDir)\include\msvc\fontconfig
+mkdir $(OutDir)\licenses
+copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
+mkdir $(OutDir)\fonts
+copy .\fonts.conf $(OutDir)\fonts
+mkdir $(OutDir)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutDir)\fonts\conf.d\</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
@@ -340,8 +340,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist $(OutDir)\include\msvc\fontconfig (
+rd /s /q $(OutDir)\include\msvc\fontconfig
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -353,7 +353,7 @@ rd /s /q $(OutDir)\include\fontconfig
       <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_USRDLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include\msvc;$(OutDir)\include\msvc\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
@@ -361,24 +361,24 @@ rd /s /q $(OutDir)\include\fontconfig
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>$(OutDir)\bin\$(TargetName)$(TargetExt)</OutputFile>
-      <ImportLibrary>$(OutDir)\lib\$(TargetName).lib</ImportLibrary>
-      <ProgramDatabaseFile>$(OutDir)\bin\$(TargetName).pdb</ProgramDatabaseFile>
+      <OutputFile>$(OutDir)\bin\msvc32\$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)\lib\msvc32\$(TargetName).lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)\bin\msvc32\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\fontconfig.def</ModuleDefinitionFile>
-      <ProfileGuidedDatabase>$(OutDir)\bin\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProfileGuidedDatabase>$(OutDir)\bin\msvc32\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\msvc32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>iconvd.lib;freetyped.lib;expatd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutputPath)\include
-mkdir $(OutputPath)\include\fontconfig
-copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
-mkdir $(OutputPath)\licenses
-copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
-mkdir $(OutputPath)\fonts
-copy .\fonts.conf $(OutputPath)\fonts
-mkdir $(OutputPath)\fonts\conf.d
-copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+      <Command>mkdir $(OutDir)\include\msvc
+mkdir $(OutDir)\include\msvc\fontconfig
+copy ..\fontconfig\*.h $(OutDir)\include\msvc\fontconfig
+mkdir $(OutDir)\licenses
+copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
+mkdir $(OutDir)\fonts
+copy .\fonts.conf $(OutDir)\fonts
+mkdir $(OutDir)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutDir)\fonts\conf.d\</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
@@ -411,8 +411,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist $(OutDir)\include\msvc\fontconfig (
+rd /s /q $(OutDir)\include\msvc\fontconfig
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -424,7 +424,7 @@ rd /s /q $(OutDir)\include\fontconfig
       <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;snprintf=_snprintf;_USRDLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include\msvc;$(OutDir)\include\msvc\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
@@ -432,24 +432,24 @@ rd /s /q $(OutDir)\include\fontconfig
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>$(OutDir)\bin\x64\$(TargetName)$(TargetExt)</OutputFile>
-      <ImportLibrary>$(OutDir)\lib\x64\$(TargetName).lib</ImportLibrary>
-      <ProgramDatabaseFile>$(OutDir)\bin\x64\$(TargetName).pdb</ProgramDatabaseFile>
+      <OutputFile>$(OutDir)\bin\msvc64\$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)\lib\msvc64\$(TargetName).lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)\bin\msvc64\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\fontconfig.def</ModuleDefinitionFile>
-      <ProfileGuidedDatabase>$(OutDir)\bin\x64\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProfileGuidedDatabase>$(OutDir)\bin\msvc64\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\msvc64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>iconvd.lib;freetyped.lib;expatd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutputPath)\include
-mkdir $(OutputPath)\include\fontconfig
-copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
-mkdir $(OutputPath)\licenses
-copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
-mkdir $(OutputPath)\fonts
-copy .\fonts.conf $(OutputPath)\fonts
-mkdir $(OutputPath)\fonts\conf.d
-copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+      <Command>mkdir $(OutDir)\include\msvc
+mkdir $(OutDir)\include\msvc\fontconfig
+copy ..\fontconfig\*.h $(OutDir)\include\msvc\fontconfig
+mkdir $(OutDir)\licenses
+copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
+mkdir $(OutDir)\fonts
+copy .\fonts.conf $(OutDir)\fonts
+mkdir $(OutDir)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutDir)\fonts\conf.d\</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
@@ -482,8 +482,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist $(OutDir)\include\msvc\fontconfig (
+rd /s /q $(OutDir)\include\msvc\fontconfig
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -506,7 +506,7 @@ rd /s /q $(OutDir)\include\fontconfig
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include\msvc;$(OutDir)\include\msvc\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
     </ClCompile>
@@ -520,20 +520,20 @@ rd /s /q $(OutDir)\include\fontconfig
     </Lib>
     <Lib>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>$(OutDir)\lib\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)\lib\msvc32\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\msvc32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconv.lib;libfreetype.lib;libexpat.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>mkdir $(OutputPath)\include
-mkdir $(OutputPath)\include\fontconfig
-copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
-mkdir $(OutputPath)\licenses
-copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
-mkdir $(OutputPath)\fonts
-copy .\fonts.conf $(OutputPath)\fonts
-mkdir $(OutputPath)\fonts\conf.d
-copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+      <Command>mkdir $(OutDir)\include\msvc
+mkdir $(OutDir)\include\msvc\fontconfig
+copy ..\fontconfig\*.h $(OutDir)\include\msvc\fontconfig
+mkdir $(OutDir)\licenses
+copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
+mkdir $(OutDir)\fonts
+copy .\fonts.conf $(OutDir)\fonts
+mkdir $(OutDir)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutDir)\fonts\conf.d\</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
@@ -566,8 +566,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist $(OutDir)\include\msvc\fontconfig (
+rd /s /q $(OutDir)\include\msvc\fontconfig
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -590,7 +590,7 @@ rd /s /q $(OutDir)\include\fontconfig
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include\msvc;$(OutDir)\include\msvc\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
     </ClCompile>
@@ -604,20 +604,20 @@ rd /s /q $(OutDir)\include\fontconfig
     </Lib>
     <Lib>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>$(OutDir)\lib\x64\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)\lib\msvc64\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\msvc64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconv.lib;libfreetype.lib;libexpat.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>mkdir $(OutputPath)\include
-mkdir $(OutputPath)\include\fontconfig
-copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
-mkdir $(OutputPath)\licenses
-copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
-mkdir $(OutputPath)\fonts
-copy .\fonts.conf $(OutputPath)\fonts
-mkdir $(OutputPath)\fonts\conf.d
-copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+      <Command>mkdir $(OutDir)\include\msvc
+mkdir $(OutDir)\include\msvc\fontconfig
+copy ..\fontconfig\*.h $(OutDir)\include\msvc\fontconfig
+mkdir $(OutDir)\licenses
+copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
+mkdir $(OutDir)\fonts
+copy .\fonts.conf $(OutDir)\fonts
+mkdir $(OutDir)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutDir)\fonts\conf.d\</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
@@ -650,8 +650,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist $(OutDir)\include\msvc\fontconfig (
+rd /s /q $(OutDir)\include\msvc\fontconfig
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -674,7 +674,7 @@ rd /s /q $(OutDir)\include\fontconfig
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include\msvc;$(OutDir)\include\msvc\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
     </ClCompile>
@@ -683,24 +683,24 @@ rd /s /q $(OutDir)\include\fontconfig
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>$(OutDir)\bin\$(TargetName)$(TargetExt)</OutputFile>
-      <ImportLibrary>$(OutDir)\lib\$(TargetName).lib</ImportLibrary>
-      <ProgramDatabaseFile>$(OutDir)\bin\$(TargetName).pdb</ProgramDatabaseFile>
+      <OutputFile>$(OutDir)\bin\msvc32\$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)\lib\msvc32\$(TargetName).lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)\bin\msvc32\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\fontconfig.def</ModuleDefinitionFile>
-      <ProfileGuidedDatabase>$(OutDir)\bin\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProfileGuidedDatabase>$(OutDir)\bin\msvc32\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\msvc32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>iconv.lib;freetype.lib;expat.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutputPath)\include
-mkdir $(OutputPath)\include\fontconfig
-copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
-mkdir $(OutputPath)\licenses
-copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
-mkdir $(OutputPath)\fonts
-copy .\fonts.conf $(OutputPath)\fonts
-mkdir $(OutputPath)\fonts\conf.d
-copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+      <Command>mkdir $(OutDir)\include\msvc
+mkdir $(OutDir)\include\msvc\fontconfig
+copy ..\fontconfig\*.h $(OutDir)\include\msvc\fontconfig
+mkdir $(OutDir)\licenses
+copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
+mkdir $(OutDir)\fonts
+copy .\fonts.conf $(OutDir)\fonts
+mkdir $(OutDir)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutDir)\fonts\conf.d\</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
@@ -733,8 +733,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist $(OutDir)\include\msvc\fontconfig (
+rd /s /q $(OutDir)\include\msvc\fontconfig
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -757,7 +757,7 @@ rd /s /q $(OutDir)\include\fontconfig
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;.\;.\src;$(OutDir)\include\msvc;$(OutDir)\include\msvc\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
     </ClCompile>
@@ -766,24 +766,24 @@ rd /s /q $(OutDir)\include\fontconfig
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>$(OutDir)\bin\x64\$(TargetName)$(TargetExt)</OutputFile>
-      <ImportLibrary>$(OutDir)\lib\x64\$(TargetName).lib</ImportLibrary>
-      <ProgramDatabaseFile>$(OutDir)\bin\x64\$(TargetName).pdb</ProgramDatabaseFile>
+      <OutputFile>$(OutDir)\bin\msvc64\$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)\lib\msvc64\$(TargetName).lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)\bin\msvc64\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\fontconfig.def</ModuleDefinitionFile>
-      <ProfileGuidedDatabase>$(OutDir)\bin\x64\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProfileGuidedDatabase>$(OutDir)\bin\msvc64\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\msvc64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>iconv.lib;freetype.lib;expat.lib;stdio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutputPath)\include
-mkdir $(OutputPath)\include\fontconfig
-copy ..\fontconfig\*.h $(OutputPath)\include\fontconfig
-mkdir $(OutputPath)\licenses
-copy ..\COPYING $(OutputPath)\licenses\fontconfig.txt
-mkdir $(OutputPath)\fonts
-copy .\fonts.conf $(OutputPath)\fonts
-mkdir $(OutputPath)\fonts\conf.d
-copy ..\conf.d\*.conf $(OutputPath)\fonts\conf.d\</Command>
+      <Command>mkdir $(OutDir)\include\msvc
+mkdir $(OutDir)\include\msvc\fontconfig
+copy ..\fontconfig\*.h $(OutDir)\include\msvc\fontconfig
+mkdir $(OutDir)\licenses
+copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
+mkdir $(OutDir)\fonts
+copy .\fonts.conf $(OutDir)\fonts
+mkdir $(OutDir)\fonts\conf.d
+copy ..\conf.d\*.conf $(OutDir)\fonts\conf.d\</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
@@ -816,8 +816,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist $(OutDir)\include\msvc\fontconfig (
+rd /s /q $(OutDir)\include\msvc\fontconfig
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
