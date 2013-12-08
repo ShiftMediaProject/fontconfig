@@ -359,7 +359,6 @@ rd /s /q $(OutDir)\include\fontconfig
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\bin\$(TargetName)$(TargetExt)</OutputFile>
       <ImportLibrary>$(OutDir)\lib\$(TargetName).dll.lib</ImportLibrary>
@@ -430,7 +429,6 @@ rd /s /q $(OutDir)\include\fontconfig
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\bin\$(TargetName)$(TargetExt)</OutputFile>
       <ImportLibrary>$(OutDir)\lib\$(TargetName).dll.lib</ImportLibrary>
@@ -679,7 +677,6 @@ rd /s /q $(OutDir)\include\fontconfig
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
@@ -762,7 +759,6 @@ rd /s /q $(OutDir)\include\fontconfig
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
