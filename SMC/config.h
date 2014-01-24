@@ -261,9 +261,6 @@
 /* Define to the home page for this package. */
 #define PACKAGE_URL ""
 
-/* Define to the version of this package. */
-#define PACKAGE_VERSION "2.10.95"
-
 /* Define to necessary symbol if this constant
  uses a non-standard name on
    your system. */
