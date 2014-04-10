@@ -67,7 +67,7 @@
 const struct option longopts[] = {
     {"force", 0, 0, 'f'},
     {"really-force", 0, 0, 'r'},
-    {"sysroot", 0, 0, 'y'},
+    {"sysroot", required_argument, 0, 'y'},
     {"system-only", 0, 0, 's'},
     {"version", 0, 0, 'V'},
     {"verbose", 0, 0, 'v'},
@@ -118,7 +118,7 @@ usage (char *program, int error)
 static FcStrSet *processed_dirs;
 
 static int
-scanDirs (FcStrList *list, FcConfig *config, FcBool force, FcBool really_force, FcBool verbose, int *changed)
+scanDirs (FcStrList *list, FcConfig *config, FcBool force, FcBool really_force, FcBool verbose, FcBool recursive, int *changed, FcStrSet *updateDirs)
 {
     int		    ret = 0;
     const FcChar8   *dir;
@@ -137,11 +137,14 @@ scanDirs (FcStrList *list, FcConfig *config, FcBool force, FcBool really_force, 
     {
 	if (verbose)
 	{
-	    printf ("%s: ", dir);
+	    if (!recursive)
+		printf ("Re-scanning %s: ", dir);
+	    else
+		printf ("%s: ", dir);
 	    fflush (stdout);
 	}
 	
-	if (FcStrSetMember (processed_dirs, dir))
+	if (recursive && FcStrSetMember (processed_dirs, dir))
 	{
 	    if (verbose)
 		printf ("skipping, looped directory detected\n");
@@ -184,8 +187,13 @@ scanDirs (FcStrList *list, FcConfig *config, FcBool force, FcBool really_force, 
 	
 	if (!cache)
 	{
-	    (*changed)++;
-	    cache = FcDirCacheRead (dir, FcTrue, config);
+	    if (!recursive)
+		cache = FcDirCacheRescan (dir, config);
+	    else
+	    {
+		(*changed)++;
+		cache = FcDirCacheRead (dir, FcTrue, config);
+	    }
 	    if (!cache)
 	    {
 		fprintf (stderr, "%s: error scanning\n", dir);
@@ -213,32 +221,39 @@ scanDirs (FcStrList *list, FcConfig *config, FcBool force, FcBool really_force, 
 		ret++;
 	    }
 	}
-	
-	subdirs = FcStrSetCreate ();
-	if (!subdirs)
+
+	if (recursive)
 	{
-	    fprintf (stderr, "%s: Can't create subdir set\n", dir);
-	    ret++;
+	    subdirs = FcStrSetCreate ();
+	    if (!subdirs)
+	    {
+		fprintf (stderr, "%s: Can't create subdir set\n", dir);
+		ret++;
+		FcDirCacheUnload (cache);
+		continue;
+	    }
+	    for (i = 0; i < FcCacheNumSubdir (cache); i++)
+		FcStrSetAdd (subdirs, FcCacheSubdir (cache, i));
+	    if (updateDirs && FcCacheNumSubdir (cache) > 0)
+		FcStrSetAdd (updateDirs, dir);
+	
 	    FcDirCacheUnload (cache);
-	    continue;
-	}
-	for (i = 0; i < FcCacheNumSubdir (cache); i++)
-	    FcStrSetAdd (subdirs, FcCacheSubdir (cache, i));
 	
-	FcDirCacheUnload (cache);
-	
-	sublist = FcStrListCreate (subdirs);
-	FcStrSetDestroy (subdirs);
-	if (!sublist)
-	{
-	    fprintf (stderr, "%s: Can't create subdir list\n", dir);
-	    ret++;
-	    continue;
+	    sublist = FcStrListCreate (subdirs);
+	    FcStrSetDestroy (subdirs);
+	    if (!sublist)
+	    {
+		fprintf (stderr, "%s: Can't create subdir list\n", dir);
+		ret++;
+		continue;
+	    }
+	    FcStrSetAdd (processed_dirs, dir);
+	    ret += scanDirs (sublist, config, force, really_force, verbose, recursive, changed, updateDirs);
+	    FcStrListDone (sublist);
 	}
-	FcStrSetAdd (processed_dirs, dir);
-	ret += scanDirs (sublist, config, force, really_force, verbose, changed);
+	else
+	    FcDirCacheUnload (cache);
     }
-    FcStrListDone (list);
     return ret;
 }
 
@@ -266,7 +281,7 @@ cleanCacheDirectories (FcConfig *config, FcBool verbose)
 int
 main (int argc, char **argv)
 {
-    FcStrSet	*dirs;
+    FcStrSet	*dirs, *updateDirs;
     FcStrList	*list;
     FcBool    	verbose = FcFalse;
     FcBool	force = FcFalse;
@@ -364,9 +379,19 @@ main (int argc, char **argv)
 	fprintf(stderr, "Cannot malloc\n");
 	return 1;
     }
-	
+
+    updateDirs = FcStrSetCreate ();
     changed = 0;
-    ret = scanDirs (list, config, force, really_force, verbose, &changed);
+    ret = scanDirs (list, config, force, really_force, verbose, FcTrue, &changed, updateDirs);
+    /* Update the directory cache again to avoid the race condition as much as possible */
+    FcStrListDone (list);
+    list = FcStrListCreate (updateDirs);
+    if (list)
+    {
+	ret += scanDirs (list, config, FcTrue, really_force, verbose, FcFalse, &changed, NULL);
+	FcStrListDone (list);
+    }
+    FcStrSetDestroy (updateDirs);
 
     /*
      * Try to create CACHEDIR.TAG anyway.
@@ -379,6 +404,8 @@ main (int argc, char **argv)
 
     cleanCacheDirectories (config, verbose);
 
+    FcConfigDestroy (config);
+    FcFini ();
     /* 
      * Now we need to sleep a second  (or two, to be extra sure), to make
      * sure that timestamps for changes after this run of fc-cache are later
@@ -386,8 +413,7 @@ main (int argc, char **argv)
      * sleep(3) can't be interrupted by a signal here -- this isn't in the
      * library, and there aren't any signals flying around here.
      */
-    FcConfigDestroy (config);
-    FcFini ();
+    /* the resolution of mtime on FAT is 2 seconds */
     if (changed)
 	sleep (2);
     if (verbose)

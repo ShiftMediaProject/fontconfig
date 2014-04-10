@@ -1105,7 +1105,6 @@ FcFreeTypeQueryFace (const FT_Face  face,
     const char	    *tmp;
 
     FcChar8	    *hashstr = NULL;
-    char	    *fontdata = NULL;
     FT_Error	    err;
     FT_ULong	    len = 0, alen;
 
@@ -1587,7 +1586,7 @@ FcFreeTypeQueryFace (const FT_Face  face,
 	}
 	if (width == -1 &&
 	    FT_Get_BDF_Property (face, "SETWIDTH_NAME", &prop) == 0 &&
-	    prop.type == BDF_PROPERTY_TYPE_ATOM)
+	    prop.type == BDF_PROPERTY_TYPE_ATOM && prop.u.atom != NULL)
 	{
 	    width = FcIsWidth ((FcChar8 *) prop.u.atom);
 	    if (FcDebug () & FC_DBG_SCANV)
@@ -1668,15 +1667,21 @@ FcFreeTypeQueryFace (const FT_Face  face,
     err = FT_Load_Sfnt_Table (face, 0, 0, NULL, &len);
     if (err == FT_Err_Ok)
     {
+	char *fontdata;
+
 	alen = (len + 63) & ~63;
 	fontdata = malloc (alen);
 	if (!fontdata)
 	    goto bail3;
 	err = FT_Load_Sfnt_Table (face, 0, 0, (FT_Byte *)fontdata, &len);
 	if (err != FT_Err_Ok)
+	{
+	    free (fontdata);
 	    goto bail3;
+	}
 	memset (&fontdata[len], 0, alen - len);
 	hashstr = FcHashGetSHA256DigestFromMemory (fontdata, len);
+	free (fontdata);
     }
     else if (err == FT_Err_Invalid_Face_Handle)
     {
@@ -1692,7 +1697,11 @@ FcFreeTypeQueryFace (const FT_Face  face,
     if (hashstr)
     {
 	if (!FcPatternAddString (pat, FC_HASH, hashstr))
+	{
+	    free (hashstr);
 	    goto bail1;
+	}
+	free (hashstr);
     }
 bail3:
 
@@ -1707,7 +1716,7 @@ bail3:
     /* For PCF fonts, override the computed spacing with the one from
        the property */
     if(FT_Get_BDF_Property(face, "SPACING", &prop) == 0 &&
-       prop.type == BDF_PROPERTY_TYPE_ATOM) {
+       prop.type == BDF_PROPERTY_TYPE_ATOM && prop.u.atom != NULL) {
         if(!strcmp(prop.u.atom, "c") || !strcmp(prop.u.atom, "C"))
             spacing = FC_CHARCELL;
         else if(!strcmp(prop.u.atom, "m") || !strcmp(prop.u.atom, "M"))
@@ -1783,10 +1792,6 @@ bail3:
 bail2:
     FcCharSetDestroy (cs);
 bail1:
-    if (hashstr)
-	free (hashstr);
-    if (fontdata)
-	free (fontdata);
     FcPatternDestroy (pat);
 bail0:
     return NULL;

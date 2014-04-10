@@ -610,11 +610,11 @@ FcTypecheckValue (FcConfigParse *parse, FcType value, FcType type)
 	if ((value == FcTypeLangSet && type == FcTypeString) ||
 	    (value == FcTypeString && type == FcTypeLangSet))
 	    return;
-	if (type == (FcType) -1)
+	if (type ==  FcTypeUnknown)
 	    return;
 	/* It's perfectly fine to use user-define elements in expressions,
 	 * so don't warn in that case. */
-	if (value == (FcType) -1)
+	if (value == FcTypeUnknown)
 	    return;
 	FcConfigMessage (parse, FcSevereWarning, "saw %s, expected %s",
 			 FcTypeName (value), FcTypeName (type));
@@ -2233,11 +2233,6 @@ FcParseInclude (FcConfigParse *parse)
 	    /* No config dir nor file on the XDG directory spec compliant place
 	     * so need to guess what it is supposed to be.
 	     */
-	    FcChar8 *parent = FcStrDirname (s);
-
-	    if (!FcFileIsDir (parent))
-		FcMakeDirectory (parent);
-	    FcStrFree (parent);
 	    if (FcStrStr (s, (const FcChar8 *)"conf.d") != NULL)
 		goto userdir;
 	    else
@@ -2259,6 +2254,11 @@ FcParseInclude (FcConfigParse *parse)
 	{
 	    if (FcFileIsDir (filename))
 	    {
+		FcChar8 *parent = FcStrDirname (userdir);
+
+		if (!FcFileIsDir (parent))
+		    FcMakeDirectory (parent);
+		FcStrFree (parent);
 		if (FcFileIsDir (userdir) ||
 		    rename ((const char *)filename, (const char *)userdir) != 0 ||
 		    symlink ((const char *)userdir, (const char *)filename) != 0)
@@ -2272,6 +2272,11 @@ FcParseInclude (FcConfigParse *parse)
 	    }
 	    else
 	    {
+		FcChar8 *parent = FcStrDirname (userconf);
+
+		if (!FcFileIsDir (parent))
+		    FcMakeDirectory (parent);
+		FcStrFree (parent);
 		if (FcFileIsFile (userconf) ||
 		    rename ((const char *)filename, (const char *)userconf) != 0 ||
 		    symlink ((const char *)userconf, (const char *)filename) != 0)
@@ -2560,6 +2565,11 @@ FcParseMatch (FcConfigParse *parse)
 	    break;
 	}
 	FcVStackPopAndDestroy (parse);
+    }
+    if (!rule)
+    {
+	FcConfigMessage (parse, FcSevereWarning, "No <test> nor <edit> elements in <match>");
+	return;
     }
     if (!FcConfigAddRule (parse->config, rule, kind))
 	FcConfigMessage (parse, FcSevereError, "out of memory");

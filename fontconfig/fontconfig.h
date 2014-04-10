@@ -51,8 +51,8 @@ typedef int		FcBool;
  */
 
 #define FC_MAJOR	2
-#define FC_MINOR	10
-#define FC_REVISION	95
+#define FC_MINOR	11
+#define FC_REVISION	1
 
 #define FC_VERSION	((FC_MAJOR * 10000) + (FC_MINOR * 100) + (FC_REVISION))
 
@@ -91,7 +91,7 @@ typedef int		FcBool;
 #define FC_FILE		    "file"		/* String */
 #define FC_INDEX	    "index"		/* Int */
 #define FC_FT_FACE	    "ftface"		/* FT_Face */
-#define FC_RASTERIZER	    "rasterizer"	/* String */
+#define FC_RASTERIZER	    "rasterizer"	/* String (deprecated) */
 #define FC_OUTLINE	    "outline"		/* Bool */
 #define FC_SCALABLE	    "scalable"		/* Bool */
 #define FC_SCALE	    "scale"		/* double */
@@ -541,6 +541,9 @@ FcDirSave (FcFontSet *set, FcStrSet *dirs, const FcChar8 *dir);
 
 FcPublic FcCache *
 FcDirCacheLoad (const FcChar8 *dir, FcConfig *config, FcChar8 **cache_file);
+
+FcPublic FcCache *
+FcDirCacheRescan (const FcChar8 *dir, FcConfig *config);
     
 FcPublic FcCache *
 FcDirCacheRead (const FcChar8 *dir, FcBool force, FcConfig *config);
@@ -973,6 +976,9 @@ FcStrSetDestroy (FcStrSet *set);
 
 FcPublic FcStrList *
 FcStrListCreate (FcStrSet *set);
+
+FcPublic void
+FcStrListFirst (FcStrList *list);
 
 FcPublic FcChar8 *
 FcStrListNext (FcStrList *list);
