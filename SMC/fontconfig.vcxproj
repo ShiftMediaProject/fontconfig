@@ -149,14 +149,12 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'" Label="Configuration">
@@ -741,6 +739,7 @@ cd $(ProjectDir)
       <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
+      <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -827,6 +826,7 @@ cd $(ProjectDir)
       <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018</DisableSpecificWarnings>
+      <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
