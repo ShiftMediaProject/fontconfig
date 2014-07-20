@@ -2,7 +2,7 @@
 /* Font configuration directory */
 #define CONFDIR "c:/windows/etc"
 
-#define FC_CACHEDIR "c:/temp"
+#define FC_CACHEDIR "./"
 
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
@@ -11,7 +11,7 @@
 #define ALIGNOF_DOUBLE 8
 
 /* Use libxml2 instead of Expat */
-/* #undef ENABLE_LIBXML2 */
+#define ENABLE_LIBXML2 1
 
 /* Additional font directories */
 #define FC_ADD_FONTS "yes"
