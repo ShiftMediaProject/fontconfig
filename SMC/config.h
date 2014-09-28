@@ -175,7 +175,7 @@
 #define HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the <strings.h> header file. */
-#define HAVE_STRINGS_H 1
+/* #undef HAVE_STRINGS_H */
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
@@ -267,22 +267,23 @@
 /* #undef PTHREAD_CREATE_JOINABLE */
 
 /* The size of `char', as computed by sizeof. */
-/* #undef SIZEOF_CHAR */
+#define SIZEOF_CHAR 1
 
 /* The size of `int', as computed by sizeof. */
-/* #undef SIZEOF_INT */
+#define SIZEOF_INT 4
 
 /* The size of `long', as computed by sizeof. */
-/* #undef SIZEOF_LONG */
+#define SIZEOF_LONG 4
 
 /* The size of `short', as computed by sizeof. */
-/* #undef SIZEOF_SHORT */
-
-/* The size of `void*', as computed by sizeof. */
-/* #undef SIZEOF_VOIDP */
+#define SIZEOF_SHORT 2
 
 /* The size of `void *', as computed by sizeof. */
+#if defined(__x86_64) || defined(_M_X64)
+#define SIZEOF_VOID_P 8
+#else
 #define SIZEOF_VOID_P 4
+#endif
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
