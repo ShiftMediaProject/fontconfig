@@ -108,8 +108,8 @@ del ..\fc-lang\fclang.h
 cd ../fc-lang/
 set orthlist=
 for /f "tokens=*" %%F in ('dir /b /a:-d *.orth') do call set orthlist=%%orthlist%% %%F
-fc-lang.exe -d . %orthlist% &lt; fclang.tmpl.h &gt; ..\SMC\fc-lang\fclang.h
-cd ../SMC</Command>
+fc-lang.exe -d . %orthlist% &lt; fclang.tmpl.h &gt; ..\SMP\fc-lang\fclang.h
+cd ../SMP</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -144,8 +144,8 @@ del ..\fc-lang\fclang.h
 cd ../fc-lang/
 set orthlist=
 for /f "tokens=*" %%F in ('dir /b /a:-d *.orth') do call set orthlist=%%orthlist%% %%F
-fc-lang.exe -d . %orthlist% &lt; fclang.tmpl.h &gt; ..\SMC\fc-lang\fclang.h
-cd ../SMC</Command>
+fc-lang.exe -d . %orthlist% &lt; fclang.tmpl.h &gt; ..\SMP\fc-lang\fclang.h
+cd ../SMP</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -180,8 +180,8 @@ del ..\fc-lang\fclang.h
 cd ../fc-lang/
 set orthlist=
 for /f "tokens=*" %%F in ('dir /b /a:-d *.orth') do call set orthlist=%%orthlist%% %%F
-fc-lang.exe -d . %orthlist% &lt; fclang.tmpl.h &gt; ..\SMC\fc-lang\fclang.h
-cd ../SMC</Command>
+fc-lang.exe -d . %orthlist% &lt; fclang.tmpl.h &gt; ..\SMP\fc-lang\fclang.h
+cd ../SMP</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -217,8 +217,8 @@ del ..\fc-lang\fclang.h
 cd ../fc-lang/
 set orthlist=
 for /f "tokens=*" %%F in ('dir /b /a:-d *.orth') do call set orthlist=%%orthlist%% %%F
-fc-lang.exe -d . %orthlist% &lt; fclang.tmpl.h &gt; ..\SMC\fc-lang\fclang.h
-cd ../SMC</Command>
+fc-lang.exe -d . %orthlist% &lt; fclang.tmpl.h &gt; ..\SMP\fc-lang\fclang.h
+cd ../SMP</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

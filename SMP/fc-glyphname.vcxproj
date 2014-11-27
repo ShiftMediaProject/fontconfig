@@ -109,8 +109,8 @@ del ..\fc-glyphname\fcglyphname.h
     <PostBuildEvent>
       <Command>mkdir fc-glyphname
 cd ../fc-glyphname
-fc-glyphname.exe zapfdingbats.txt &lt; fcglyphname.tmpl.h &gt; ..\SMC\fc-glyphname\fcglyphname.h
-cd ../SMC</Command>
+fc-glyphname.exe zapfdingbats.txt &lt; fcglyphname.tmpl.h &gt; ..\SMP\fc-glyphname\fcglyphname.h
+cd ../SMP</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -143,8 +143,8 @@ del ..\fc-glyphname\fcglyphname.h
     <PostBuildEvent>
       <Command>mkdir fc-glyphname
 cd ../fc-glyphname
-fc-glyphname.exe zapfdingbats.txt &lt; fcglyphname.tmpl.h &gt; ..\SMC\fc-glyphname\fcglyphname.h
-cd ../SMC</Command>
+fc-glyphname.exe zapfdingbats.txt &lt; fcglyphname.tmpl.h &gt; ..\SMP\fc-glyphname\fcglyphname.h
+cd ../SMP</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -177,8 +177,8 @@ del ..\fc-glyphname\fcglyphname.h
     <PostBuildEvent>
       <Command>mkdir fc-glyphname
 cd ../fc-glyphname
-fc-glyphname.exe zapfdingbats.txt &lt; fcglyphname.tmpl.h &gt; ..\SMC\fc-glyphname\fcglyphname.h
-cd ../SMC</Command>
+fc-glyphname.exe zapfdingbats.txt &lt; fcglyphname.tmpl.h &gt; ..\SMP\fc-glyphname\fcglyphname.h
+cd ../SMP</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -212,8 +212,8 @@ del ..\fc-glyphname\fcglyphname.h
     <PostBuildEvent>
       <Command>mkdir fc-glyphname
 cd ../fc-glyphname
-fc-glyphname.exe zapfdingbats.txt &lt; fcglyphname.tmpl.h &gt; ..\SMC\fc-glyphname\fcglyphname.h
-cd ../SMC</Command>
+fc-glyphname.exe zapfdingbats.txt &lt; fcglyphname.tmpl.h &gt; ..\SMP\fc-glyphname\fcglyphname.h
+cd ../SMP</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

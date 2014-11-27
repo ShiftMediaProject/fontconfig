@@ -109,8 +109,8 @@ del ..\fc-case\fccase.h
     <PostBuildEvent>
       <Command>mkdir fc-case
 cd ../fc-case/
-fc-case.exe CaseFolding.txt &lt; fccase.tmpl.h &gt; ../SMC/fc-case/fccase.h
-cd ../SMC
+fc-case.exe CaseFolding.txt &lt; fccase.tmpl.h &gt; ../SMP/fc-case/fccase.h
+cd ../SMP
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -144,8 +144,8 @@ del ..\fc-case\fccase.h
     <PostBuildEvent>
       <Command>mkdir fc-case
 cd ../fc-case/
-fc-case.exe CaseFolding.txt &lt; fccase.tmpl.h &gt; ../SMC/fc-case/fccase.h
-cd ../SMC
+fc-case.exe CaseFolding.txt &lt; fccase.tmpl.h &gt; ../SMP/fc-case/fccase.h
+cd ../SMP
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -179,8 +179,8 @@ del ..\fc-case\fccase.h
     <PostBuildEvent>
       <Command>mkdir fc-case
 cd ../fc-case/
-fc-case.exe CaseFolding.txt &lt; fccase.tmpl.h &gt; ../SMC/fc-case/fccase.h
-cd ../SMC
+fc-case.exe CaseFolding.txt &lt; fccase.tmpl.h &gt; ../SMP/fc-case/fccase.h
+cd ../SMP
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -215,8 +215,8 @@ del ..\fc-case\fccase.h
     <PostBuildEvent>
       <Command>mkdir fc-case
 cd ../fc-case/
-fc-case.exe CaseFolding.txt &lt; fccase.tmpl.h &gt; ../SMC/fc-case/fccase.h
-cd ../SMC
+fc-case.exe CaseFolding.txt &lt; fccase.tmpl.h &gt; ../SMP/fc-case/fccase.h
+cd ../SMP
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
