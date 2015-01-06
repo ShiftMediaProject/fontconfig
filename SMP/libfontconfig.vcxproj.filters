@@ -54,9 +54,6 @@
     <ClInclude Include="..\fontconfig\fontconfig.h">
       <Filter>Header Files\fontconfig</Filter>
     </ClInclude>
-    <ClInclude Include="version.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="config.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -201,4 +201,3 @@ EXPORTS
 	FcValueEqual
 	FcValuePrint
 	FcValueSave
-VERSION 8.0

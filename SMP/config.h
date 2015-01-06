@@ -1,11 +1,5 @@
 
-/* Font configuration directory */
-#define CONFDIR "c:/windows/etc"
-
 #define FC_CACHEDIR "./"
-
-/* Define if building universal (internal helper macro) */
-/* #undef AC_APPLE_UNIVERSAL_BUILD */
 
 /* The normal alignment of `double', in bytes. */
 #define ALIGNOF_DOUBLE 8
@@ -239,28 +233,6 @@
 /* Define to 1 if you have the `_mktemp_s' function. */
 #define HAVE__MKTEMP_S 1
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
-#define LT_OBJDIR ".libs/"
-
-/* Name of package */
-#define PACKAGE "fontconfig"
-
-/* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "https://bugs.freedesktop.org/enter_bug.cgi?product=fontconfig"
-
-/* Define to the full name of this package. */
-#define PACKAGE_NAME "fontconfig"
-
-/* Define to the full name and version of this package. */
-#define PACKAGE_STRING "fontconfig"
-
-/* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME "fontconfig"
-
-/* Define to the home page for this package. */
-#define PACKAGE_URL ""
-
 /* Define to necessary symbol if this constant
  uses a non-standard name on
    your system. */
@@ -293,33 +265,3 @@
 
 /* Use regex */
 /* #undef USE_REGEX */
-
-#include "version.h"
-
-/* Number of bits in a file offset, on hosts where this is settable. */
-#define _FILE_OFFSET_BITS 64
-
-/* Define for large files, on AIX-style hosts. */
-/* #undef _LARGE_FILES */
-
-/* Define to 1 if on MINIX. */
-/* #undef _MINIX */
-
-/* Define to 2 if the system does not provide POSIX.1 features except with
-   this defined. */
-/* #undef _POSIX_1_SOURCE */
-
-/* Define to 1 if you need to in order for `stat' and other things to work. */
-/* #undef _POSIX_SOURCE */
-
-/* Define to empty if `const' does not conform to ANSI C. */
-/* #undef const */
-
-/* Define to `__inline__' or `__inline' if that's what the C compiler
-   calls it, or to nothing if 'inline' is not supported under any name.  */
-#ifndef __cplusplus
-/* #undef inline */
-#endif
-
-/* Define to `int' if <sys/types.h> does not define. */
-/* #undef pid_t */
