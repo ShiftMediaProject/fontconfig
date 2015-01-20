@@ -169,6 +169,18 @@ FcExprCreateMatrix (FcConfig *config, const FcExprMatrix *matrix)
 }
 
 static FcExpr *
+FcExprCreateRange (FcConfig *config, FcRange *range)
+{
+    FcExpr *e = FcConfigAllocExpr (config);
+    if (e)
+    {
+	e->op = FcOpRange;
+	e->u.rval = FcRangeCopy (range);
+    }
+    return e;
+}
+
+static FcExpr *
 FcExprCreateBool (FcConfig *config, FcBool b)
 {
     FcExpr *e = FcConfigAllocExpr (config);
@@ -258,6 +270,7 @@ FcExprDestroy (FcExpr *e)
 	FcExprMatrixFree (e->u.mexpr);
 	break;
     case FcOpRange:
+	FcRangeDestroy (e->u.rval);
 	break;
     case FcOpCharSet:
 	FcCharSetDestroy (e->u.cval);
@@ -503,7 +516,7 @@ typedef struct _FcVStack {
 	int		integer;
 	double		_double;
 	FcExprMatrix	*matrix;
-	FcRange		range;
+	FcRange		*range;
 	FcBool		bool_;
 	FcCharSet	*charset;
 	FcLangSet	*langset;
@@ -593,6 +606,8 @@ FcTypeName (FcType type)
 	return "FT_Face";
     case FcTypeLangSet:
 	return "langset";
+    case FcTypeRange:
+	return "range";
     default:
 	return "unknown";
     }
@@ -608,7 +623,9 @@ FcTypecheckValue (FcConfigParse *parse, FcType value, FcType type)
     if (value != type)
     {
 	if ((value == FcTypeLangSet && type == FcTypeString) ||
-	    (value == FcTypeString && type == FcTypeLangSet))
+	    (value == FcTypeString && type == FcTypeLangSet) ||
+	    (value == FcTypeInteger && type == FcTypeRange) ||
+	    (value == FcTypeDouble && type == FcTypeRange))
 	    return;
 	if (type ==  FcTypeUnknown)
 	    return;
@@ -650,6 +667,9 @@ FcTypecheckExpr (FcConfigParse *parse, FcExpr *expr, FcType type)
 	break;
     case FcOpLangSet:
 	FcTypecheckValue (parse, FcTypeLangSet, type);
+	break;
+    case FcOpRange:
+	FcTypecheckValue (parse, FcTypeRange, type);
 	break;
     case FcOpNil:
 	break;
@@ -865,11 +885,10 @@ FcVStackPushMatrix (FcConfigParse *parse, FcExprMatrix *matrix)
 static FcBool
 FcVStackPushRange (FcConfigParse *parse, FcRange *range)
 {
-    FcVStack	*vstack = FcVStackCreateAndPush (parse);
+    FcVStack 	*vstack = FcVStackCreateAndPush (parse);
     if (!vstack)
 	return FcFalse;
-    vstack->u.range.begin = range->begin;
-    vstack->u.range.end = range->end;
+    vstack->u.range = range;
     vstack->tag = FcVStackRange;
     return FcTrue;
 }
@@ -1017,8 +1036,10 @@ FcVStackPopAndDestroy (FcConfigParse *parse)
     case FcVStackMatrix:
 	FcExprMatrixFreeShallow (vstack->u.matrix);
 	break;
-    case FcVStackRange:
     case FcVStackBool:
+	break;
+    case FcVStackRange:
+	FcRangeDestroy (vstack->u.range);
 	break;
     case FcVStackCharSet:
 	FcCharSetDestroy (vstack->u.charset);
@@ -1232,7 +1253,9 @@ static void
 FcParseBlank (FcConfigParse *parse)
 {
     int		n = FcVStackElements (parse);
-    FcChar32	i;
+    FcChar32	i, begin, end;
+    FcRange	r;
+
     while (n-- > 0)
     {
 	FcVStack    *v = FcVStackFetch (parse, n);
@@ -1248,9 +1271,12 @@ FcParseBlank (FcConfigParse *parse)
 		goto bail;
 	    break;
 	case FcVStackRange:
-	    if (v->u.range.begin <= v->u.range.end)
+	    r = FcRangeCanonicalize (v->u.range);
+	    begin = (FcChar32)r.u.d.begin;
+	    end = (FcChar32)r.u.d.end;
+	    if (begin <= end)
 	    {
-	      for (i = v->u.range.begin; i <= v->u.range.end; i++)
+	      for (i = begin; i <= end; i++)
 	      {
 		  if (!FcBlanksAdd (parse->config->blanks, i))
 		      goto bail;
@@ -1463,9 +1489,11 @@ static void
 FcParseRange (FcConfigParse *parse)
 {
     FcVStack	*vstack;
-    FcRange	r = {0, 0};
-    FcChar32	n;
+    FcRange	*r;
+    FcChar32	n[2] = {0, 0};
     int		count = 1;
+    double	d[2] = {0.0L, 0.0L};
+    FcBool	dflag = FcFalse;
 
     while ((vstack = FcVStackPeek (parse)))
     {
@@ -1476,31 +1504,52 @@ FcParseRange (FcConfigParse *parse)
 	}
 	switch ((int) vstack->tag) {
 	case FcVStackInteger:
-	    n = vstack->u.integer;
+	    if (dflag)
+		d[count] = (double)vstack->u.integer;
+	    else
+		n[count] = vstack->u.integer;
+	    break;
+	case FcVStackDouble:
+	    if (count == 0 && !dflag)
+		d[1] = (double)n[1];
+	    d[count] = vstack->u._double;
+	    dflag = FcTrue;
 	    break;
 	default:
 	    FcConfigMessage (parse, FcSevereError, "invalid element in range");
-	    n = 0;
+	    if (dflag)
+		d[count] = 0.0L;
+	    else
+		n[count] = 0;
 	    break;
 	}
-	if (count == 1)
-	    r.end = n;
-	else
-	    r.begin = n;
 	count--;
 	FcVStackPopAndDestroy (parse);
     }
-    if (count < 0)
+    if (count >= 0)
     {
-	if (r.begin > r.end)
+	FcConfigMessage (parse, FcSevereError, "invalid range");
+	return;
+    }
+    if (dflag)
+    {
+	if (d[0] > d[1])
 	{
 	    FcConfigMessage (parse, FcSevereError, "invalid range");
 	    return;
 	}
-	FcVStackPushRange (parse, &r);
+	r = FcRangeCreateDouble (d[0], d[1]);
     }
     else
-	FcConfigMessage (parse, FcSevereError, "invalid range");
+    {
+	if (n[0] > n[1])
+	{
+	    FcConfigMessage (parse, FcSevereError, "invalid range");
+	    return;
+	}
+	r = FcRangeCreateInteger (n[0], n[1]);
+    }
+    FcVStackPushRange (parse, r);
 }
 
 static FcBool
@@ -1536,7 +1585,8 @@ FcParseCharSet (FcConfigParse *parse)
 {
     FcVStack	*vstack;
     FcCharSet	*charset = FcCharSetCreate ();
-    FcChar32	i;
+    FcChar32	i, begin, end;
+    FcRange	r;
     int n = 0;
 
     while ((vstack = FcVStackPeek (parse)))
@@ -1551,9 +1601,13 @@ FcParseCharSet (FcConfigParse *parse)
 		n++;
 	    break;
 	case FcVStackRange:
-	    if (vstack->u.range.begin <= vstack->u.range.end)
+	    r = FcRangeCanonicalize (vstack->u.range);
+	    begin = (FcChar32)r.u.d.begin;
+	    end = (FcChar32)r.u.d.end;
+
+	    if (begin <= end)
 	    {
-	      for (i = vstack->u.range.begin; i <= vstack->u.range.end; i++)
+	      for (i = begin; i <= end; i++)
 	      {
 		  if (!FcCharSetAddChar (charset, i))
 		  {
@@ -1888,6 +1942,7 @@ FcPopExpr (FcConfigParse *parse)
 	expr = FcExprCreateMatrix (parse->config, vstack->u.matrix);
 	break;
     case FcVStackRange:
+	expr = FcExprCreateRange (parse->config, vstack->u.range);
 	break;
     case FcVStackBool:
 	expr = FcExprCreateBool (parse->config, vstack->u.bool_);
@@ -1996,7 +2051,14 @@ FcParseDir (FcConfigParse *parse)
 
     attr = FcConfigGetAttribute (parse, "prefix");
     if (attr && FcStrCmp (attr, (const FcChar8 *)"xdg") == 0)
+    {
 	prefix = FcConfigXdgDataHome ();
+	/* home directory might be disabled.
+	 * simply ignore this element.
+	 */
+	if (!prefix)
+	    goto bail;
+    }
     data = FcStrBufDoneStatic (&parse->pstack->str);
     if (!data)
     {
@@ -2087,11 +2149,18 @@ static void
 FcParseCacheDir (FcConfigParse *parse)
 {
     const FcChar8 *attr;
-    FcChar8 *prefix = NULL, *p, *data;
+    FcChar8 *prefix = NULL, *p, *data = NULL;
 
     attr = FcConfigGetAttribute (parse, "prefix");
     if (attr && FcStrCmp (attr, (const FcChar8 *)"xdg") == 0)
+    {
 	prefix = FcConfigXdgCacheHome ();
+	/* home directory might be disabled.
+	 * simply ignore this element.
+	 */
+	if (!prefix)
+	    goto bail;
+    }
     data = FcStrBufDone (&parse->pstack->str);
     if (!data)
     {
@@ -2199,7 +2268,14 @@ FcParseInclude (FcConfigParse *parse)
         deprecated = FcTrue;
     attr = FcConfigGetAttribute (parse, "prefix");
     if (attr && FcStrCmp (attr, (const FcChar8 *)"xdg") == 0)
+    {
 	prefix = FcConfigXdgConfigHome ();
+	/* home directory might be disabled.
+	 * simply ignore this element.
+	 */
+	if (!prefix)
+	    goto bail;
+    }
     if (prefix)
     {
 	size_t plen = strlen ((const char *)prefix);
@@ -2653,6 +2729,11 @@ FcPopValue (FcConfigParse *parse)
 	if (value.u.l)
 	    value.type = FcTypeLangSet;
 	break;
+    case FcVStackRange:
+	value.u.r = FcRangeCopy (vstack->u.range);
+	if (value.u.r)
+	    value.type = FcTypeRange;
+	break;
     default:
 	FcConfigMessage (parse, FcSevereWarning, "unknown pattern element %d",
 			 vstack->tag);
@@ -3069,11 +3150,12 @@ FcConfigParseAndLoad (FcConfig	    *config,
 {
 
     XML_Parser	    p;
-    FcChar8	    *filename;
+    FcChar8	    *filename, *f;
     int		    fd;
     int		    len;
     FcConfigParse   parse;
     FcBool	    error = FcTrue;
+    const FcChar8   *sysroot = FcConfigGetSysRoot (config);
 
 #ifdef ENABLE_LIBXML2
     xmlSAXHandler   sax;
@@ -3098,9 +3180,14 @@ FcConfigParseAndLoad (FcConfig	    *config,
     }
 #endif
 
-    filename = FcConfigFilename (name);
-    if (!filename)
+    f = FcConfigFilename (name);
+    if (!f)
 	goto bail0;
+    if (sysroot)
+	filename = FcStrBuildFilename (sysroot, f, NULL);
+    else
+	filename = FcStrdup (f);
+    FcStrFree (f);
 
     if (FcStrSetMember (config->configFiles, filename))
     {

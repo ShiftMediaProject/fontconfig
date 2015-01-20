@@ -33,7 +33,7 @@ dnl This is the package version number, not the shared library
 dnl version.  This same version number must appear in fontconfig/fontconfig.h
 dnl Yes, it is a pain to synchronize version numbers.  Unfortunately, it's
 dnl not possible to extract the version number here from fontconfig.h
-AC_INIT([fontconfig], [2.11.1], [https://bugs.freedesktop.org/enter_bug.cgi?product=fontconfig])
+AC_INIT([fontconfig], [2.11.92], [https://bugs.freedesktop.org/enter_bug.cgi?product=fontconfig])
 AM_INIT_AUTOMAKE([1.11 parallel-tests dist-bzip2])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
@@ -138,7 +138,7 @@ dnl ==========================================================================
 # Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
-AC_CHECK_HEADERS([fcntl.h regex.h stdlib.h string.h unistd.h sys/statvfs.h sys/vfs.h sys/statfs.h sys/param.h sys/mount.h])
+AC_CHECK_HEADERS([fcntl.h stdlib.h string.h unistd.h sys/statvfs.h sys/vfs.h sys/statfs.h sys/param.h sys/mount.h])
 AX_CREATE_STDINT_H([src/fcstdint.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -150,12 +150,12 @@ AC_TYPE_PID_T
 # Checks for library functions.
 AC_FUNC_VPRINTF
 AC_FUNC_MMAP
-AC_CHECK_FUNCS([link mkstemp mkostemp _mktemp_s mkdtemp getopt getopt_long getprogname getexecname rand random lrand48 random_r rand_r readlink regcomp regerror regexec regfree fstatvfs fstatfs lstat])
+AC_CHECK_FUNCS([link mkstemp mkostemp _mktemp_s mkdtemp getopt getopt_long getprogname getexecname rand random lrand48 random_r rand_r readlink fstatvfs fstatfs lstat])
 
 dnl AC_CHECK_FUNCS doesn't check for header files.
 dnl posix_fadvise() may be not available in older libc.
 AC_CHECK_SYMBOL([posix_fadvise], [fcntl.h], [fc_func_posix_fadvise=1], [fc_func_posix_fadvise=0])
-AC_DEFINE_UNQUOTED([HAVE_POSIX_FADVISE], [$fc_func_posix_fadvise], [Define to 1 if you have the 'posix_fadivse' function.])
+AC_DEFINE_UNQUOTED([HAVE_POSIX_FADVISE], [$fc_func_posix_fadvise], [Define to 1 if you have the 'posix_fadvise' function.])
 if test "$os_win32" = "no"; then
 	AC_MSG_CHECKING([for scandir])
 	fc_saved_CFLAGS="$CFLAGS"
@@ -211,12 +211,6 @@ if test "x$ac_cv_func_fstatfs" = "xyes"; then
 fi
 AC_CHECK_MEMBERS([struct dirent.d_type],,,
 	[#include <dirent.h>])
-#
-# regex
-#
-if test "x$ac_cv_func_regcomp" = "xyes" -a "x$ac_cv_func_regerror" = "xyes" -a "x$ac_cv_func_regexec" = "xyes" -a "x$ac_cv_func_regfree"; then
-	AC_DEFINE(USE_REGEX,,[Use regex])
-fi
 
 #
 # Checks for iconv
@@ -321,6 +315,10 @@ AC_CHECK_MEMBER(FT_Bitmap_Size.y_ppem,
 #include FT_FREETYPE_H])
 AC_DEFINE_UNQUOTED(HAVE_FT_BITMAP_SIZE_Y_PPEM,$HAVE_FT_BITMAP_SIZE_Y_PPEM,
 		   [FT_Bitmap_Size structure includes y_ppem field])
+AC_CHECK_MEMBERS([TT_OS2.usLowerOpticalPointSize, TT_OS2.usUpperOpticalPointSize], [], [], [[
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_TRUETYPE_TABLES_H]])
 CFLAGS="$fontconfig_save_cflags"
 LIBS="$fontconfig_save_libs"
 
