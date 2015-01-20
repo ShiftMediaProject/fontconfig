@@ -122,9 +122,6 @@
     <ClCompile Include="..\src\fcfs.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\fchash.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\fcinit.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -156,6 +153,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ftglue.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\fcrange.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\fcweight.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

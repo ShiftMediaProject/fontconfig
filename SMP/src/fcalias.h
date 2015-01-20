@@ -310,6 +310,8 @@ extern __typeof (FcPatternAddBool) IA__FcPatternAddBool __attribute((visibility(
 #define FcPatternAddBool IA__FcPatternAddBool
 extern __typeof (FcPatternAddLangSet) IA__FcPatternAddLangSet __attribute((visibility("hidden")));
 #define FcPatternAddLangSet IA__FcPatternAddLangSet
+extern __typeof (FcPatternAddRange) IA__FcPatternAddRange __attribute((visibility("hidden")));
+#define FcPatternAddRange IA__FcPatternAddRange
 extern __typeof (FcPatternGetInteger) IA__FcPatternGetInteger __attribute((visibility("hidden")));
 #define FcPatternGetInteger IA__FcPatternGetInteger
 extern __typeof (FcPatternGetDouble) IA__FcPatternGetDouble __attribute((visibility("hidden")));
@@ -324,12 +326,28 @@ extern __typeof (FcPatternGetBool) IA__FcPatternGetBool __attribute((visibility(
 #define FcPatternGetBool IA__FcPatternGetBool
 extern __typeof (FcPatternGetLangSet) IA__FcPatternGetLangSet __attribute((visibility("hidden")));
 #define FcPatternGetLangSet IA__FcPatternGetLangSet
+extern __typeof (FcPatternGetRange) IA__FcPatternGetRange __attribute((visibility("hidden")));
+#define FcPatternGetRange IA__FcPatternGetRange
 extern __typeof (FcPatternVaBuild) IA__FcPatternVaBuild __attribute((visibility("hidden")));
 #define FcPatternVaBuild IA__FcPatternVaBuild
 extern __typeof (FcPatternBuild) IA__FcPatternBuild __attribute((visibility("hidden")));
 #define FcPatternBuild IA__FcPatternBuild
 extern __typeof (FcPatternFormat) IA__FcPatternFormat __attribute((visibility("hidden")));
 #define FcPatternFormat IA__FcPatternFormat
+extern __typeof (FcRangeCreateDouble) IA__FcRangeCreateDouble __attribute((visibility("hidden")));
+#define FcRangeCreateDouble IA__FcRangeCreateDouble
+extern __typeof (FcRangeCreateInteger) IA__FcRangeCreateInteger __attribute((visibility("hidden")));
+#define FcRangeCreateInteger IA__FcRangeCreateInteger
+extern __typeof (FcRangeDestroy) IA__FcRangeDestroy __attribute((visibility("hidden")));
+#define FcRangeDestroy IA__FcRangeDestroy
+extern __typeof (FcRangeCopy) IA__FcRangeCopy __attribute((visibility("hidden")));
+#define FcRangeCopy IA__FcRangeCopy
+extern __typeof (FcRangeGetDouble) IA__FcRangeGetDouble __attribute((visibility("hidden")));
+#define FcRangeGetDouble IA__FcRangeGetDouble
+extern __typeof (FcWeightFromOpenType) IA__FcWeightFromOpenType __attribute((visibility("hidden")));
+#define FcWeightFromOpenType IA__FcWeightFromOpenType
+extern __typeof (FcWeightToOpenType) IA__FcWeightToOpenType __attribute((visibility("hidden")));
+#define FcWeightToOpenType IA__FcWeightToOpenType
 extern __typeof (FcStrCopy) IA__FcStrCopy __attribute((visibility("hidden")));
 #define FcStrCopy IA__FcStrCopy
 extern __typeof (FcStrCopyFilename) IA__FcStrCopyFilename __attribute((visibility("hidden")));

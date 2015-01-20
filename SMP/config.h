@@ -98,6 +98,9 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
+/* Define to 1 if you have the `mkdtemp' function. */
+/* #undef HAVE_MKDTEMP */
+
 /* Define to 1 if you have the `mkostemp' function. */
 /* #undef HAVE_MKOSTEMP */
 
@@ -131,20 +134,8 @@
 /* Define to 1 if you have the `rand_r' function. */
 /* #undef HAVE_RAND_R */
 
-/* Define to 1 if you have the `regcomp' function. */
-/* #undef HAVE_REGCOMP */
-
-/* Define to 1 if you have the `regerror' function. */
-/* #undef HAVE_REGERROR */
-
-/* Define to 1 if you have the `regexec' function. */
-/* #undef HAVE_REGEXEC */
-
-/* Define to 1 if you have the <regex.h> header file. */
-/* #undef HAVE_REGEX_H */
-
-/* Define to 1 if you have the `regfree' function. */
-/* #undef HAVE_REGFREE */
+/* Define to 1 if you have the `readlink' function. */
+/* #undef HAVE_READLINK */
 
 /* Define to 1 if you have the 'scandir' function. */
 /* #undef HAVE_SCANDIR */
@@ -215,6 +206,12 @@
 /* Define to 1 if you have the <sys/vfs.h> header file. */
 /* #undef HAVE_SYS_VFS_H */
 
+/* Define to 1 if `usLowerOpticalPointSize' is a member of `TT_OS2'. */
+/* #undef HAVE_TT_OS2_USLOWEROPTICALPOINTSIZE */
+
+/* Define to 1 if `usUpperOpticalPointSize' is a member of `TT_OS2'. */
+/* #undef HAVE_TT_OS2_USUPPEROPTICALPOINTSIZE */
+
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
 
@@ -250,10 +247,13 @@
 /* The size of `short', as computed by sizeof. */
 #define SIZEOF_SHORT 2
 
+/* The size of `void*', as computed by sizeof. */
 /* The size of `void *', as computed by sizeof. */
 #if defined(__x86_64) || defined(_M_X64)
+#define SIZEOF_VOIDP 8
 #define SIZEOF_VOID_P 8
 #else
+#define SIZEOF_VOIDP 4
 #define SIZEOF_VOID_P 4
 #endif
 
@@ -262,6 +262,3 @@
 
 /* Use iconv. */
 #define USE_ICONV 1
-
-/* Use regex */
-/* #undef USE_REGEX */

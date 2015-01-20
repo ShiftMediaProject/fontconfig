@@ -145,6 +145,7 @@ EXPORTS
 	FcPatternAddFTFace
 	FcPatternAddInteger
 	FcPatternAddLangSet
+	FcPatternAddRange
 	FcPatternAddMatrix
 	FcPatternAddString
 	FcPatternAddWeak
@@ -164,6 +165,7 @@ EXPORTS
 	FcPatternGetFTFace
 	FcPatternGetInteger
 	FcPatternGetLangSet
+	FcPatternGetRange
 	FcPatternGetMatrix
 	FcPatternGetString
 	FcPatternHash
@@ -171,6 +173,11 @@ EXPORTS
 	FcPatternReference
 	FcPatternRemove
 	FcPatternVaBuild
+	FcRangeCopy
+	FcRangeCreateDouble
+	FcRangeCreateInteger
+	FcRangeDestroy
+	FcRangeGetDouble
 	FcStrBasename
 	FcStrCmp
 	FcStrCmpIgnoreCase
@@ -201,3 +208,5 @@ EXPORTS
 	FcValueEqual
 	FcValuePrint
 	FcValueSave
+	FcWeightFromOpenType
+	FcWeightToOpenType
