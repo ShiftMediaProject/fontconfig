@@ -33,7 +33,7 @@ dnl This is the package version number, not the shared library
 dnl version.  This same version number must appear in fontconfig/fontconfig.h
 dnl Yes, it is a pain to synchronize version numbers.  Unfortunately, it's
 dnl not possible to extract the version number here from fontconfig.h
-AC_INIT([fontconfig], [2.11.92], [https://bugs.freedesktop.org/enter_bug.cgi?product=fontconfig])
+AC_INIT([fontconfig], [2.11.93], [https://bugs.freedesktop.org/enter_bug.cgi?product=fontconfig])
 AM_INIT_AUTOMAKE([1.11 parallel-tests dist-bzip2])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
@@ -53,6 +53,7 @@ m4_ifdef([PKG_INSTALLDIR], [PKG_INSTALLDIR], AC_SUBST([pkgconfigdir], ${libdir}/
 
 AM_MISSING_PROG([GIT], [git])
 AM_MISSING_PROG([GPERF], [gperf])
+AM_PATH_PYTHON
 
 AC_MSG_CHECKING([for RM macro])
 _predefined_rm=`make -p -f /dev/null 2>/dev/null|grep '^RM ='|sed -e 's/^RM = //'`
@@ -72,11 +73,11 @@ dnl libtool versioning
 dnl bump revision when fixing bugs
 dnl bump current and age, reset revision to zero when adding APIs
 dnl bump current, leave age, reset revision to zero when changing/removing APIS
-LIBT_CURRENT=9
+LIBT_CURRENT=10
 LIBT_REVISION=0
 AC_SUBST(LIBT_CURRENT)
 AC_SUBST(LIBT_REVISION)
-LIBT_AGE=8
+LIBT_AGE=9
 
 LIBT_VERSION_INFO="$LIBT_CURRENT:$LIBT_REVISION:$LIBT_AGE"
 AC_SUBST(LIBT_VERSION_INFO)
@@ -103,11 +104,19 @@ if test "$os_win32" = "yes"; then
 fi
 AM_CONDITIONAL(MS_LIB_AVAILABLE, test x$ms_librarian = xyes)
 
+AC_CHECK_DECL([__SUNPRO_C], [SUNCC="yes"], [SUNCC="no"])
 WARN_CFLAGS=""
+WARNING_CPP_DIRECTIVE="no"
 if test "x$GCC" = "xyes"; then
 	WARN_CFLAGS="-Wall -Wpointer-arith -Wstrict-prototypes \
 	-Wmissing-prototypes -Wmissing-declarations \
 	-Wnested-externs -fno-strict-aliasing"
+	WARNING_CPP_DIRECTIVE="yes"
+elif test "x$SUNCC" = "xyes"; then
+	WARN_CFLAGS="-v -fd"
+	WARNING_CPP_DIRECTIVE="yes"
+fi
+if test "x$WARNING_CPP_DIRECTIVE" = "xyes"; then
 	AC_DEFINE_UNQUOTED(HAVE_WARNING_CPP_DIRECTIVE,1,
 	[Can use #warning in C files])
 fi
@@ -156,38 +165,6 @@ dnl AC_CHECK_FUNCS doesn't check for header files.
 dnl posix_fadvise() may be not available in older libc.
 AC_CHECK_SYMBOL([posix_fadvise], [fcntl.h], [fc_func_posix_fadvise=1], [fc_func_posix_fadvise=0])
 AC_DEFINE_UNQUOTED([HAVE_POSIX_FADVISE], [$fc_func_posix_fadvise], [Define to 1 if you have the 'posix_fadvise' function.])
-if test "$os_win32" = "no"; then
-	AC_MSG_CHECKING([for scandir])
-	fc_saved_CFLAGS="$CFLAGS"
-	CFLAGS="$CFLAGS $WARN_CFLAGS -Werror"
-	AC_TRY_COMPILE([
-		#include <dirent.h>
-		int main(void);
-	], [
-		int (* comp) (const struct dirent **, const struct dirent **) = 0;
-		struct dirent **d;
-		return scandir(".", &d, 0, comp) >= 0;
-	], [
-		AC_MSG_RESULT([yes])
-		AC_DEFINE([HAVE_SCANDIR], [1], [Define to 1 if you have the 'scandir' function.])
-	], [
-		AC_TRY_COMPILE([
-			#include <dirent.h>
-			int main(void);
-		], [
-			int (* comp) (const void *, const void *) = 0;
-			struct dirent **d;
-			return scandir(".", &d, 0, comp) >= 0;
-		], [
-			AC_MSG_RESULT([yes])
-			AC_DEFINE([HAVE_SCANDIR_VOID_P], [1], [Define to 1 if you have the 'scandir' function with int (* compar)(const void *, const void *)])
-		],[
-			AC_MSG_ERROR([
-*** No scandir function available.])
-		])
-	])
-fi
-CFLAGS="$fc_saved_CFLAGS"
 
 #
 if test "x$ac_cv_func_fstatvfs" = "xyes"; then
@@ -704,6 +681,7 @@ dnl Figure out what cache format suffix to use for this architecture
 AC_C_BIGENDIAN
 AC_CHECK_SIZEOF([void *])
 AC_CHECK_ALIGNOF([double])
+AC_CHECK_ALIGNOF([void *])
 
 dnl include the header file for workaround of miscalculating size on autoconf
 dnl particularly for fat binaries
@@ -720,6 +698,7 @@ Makefile
 fontconfig/Makefile
 fc-lang/Makefile
 fc-glyphname/Makefile
+fc-blanks/Makefile
 fc-case/Makefile
 src/Makefile
 conf.d/Makefile
