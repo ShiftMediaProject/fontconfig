@@ -40,6 +40,7 @@
 /depcomp
 /doc/Makefile.in
 /doltcompile
+/fc-blanks/Makefile.in
 /fc-cache/Makefile.in
 /fc-case/Makefile.in
 /fc-cat/Makefile.in
