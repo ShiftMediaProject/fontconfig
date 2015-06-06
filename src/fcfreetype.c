@@ -978,76 +978,6 @@ FcNoticeFoundry(const FT_String *notice)
     return 0;
 }
 
-static FcBool
-FcVendorMatch(const FT_Char vendor[4], const FT_Char *vendor_string)
-{
-    /* vendor is not necessarily NUL-terminated. */
-    int i, len;
-
-    len = strlen((char *) vendor_string);
-    if (memcmp(vendor, vendor_string, len) != 0)
-        return FcFalse;
-    for (i = len; i < 4; i++)
-        if (vendor[i] != ' ' && vendor[i] != '\0')
-            return FcFalse;
-    return FcTrue;
-}
-
-/* This table is partly taken from ttmkfdir by Joerg Pommnitz. */
-
-/* It should not contain useless entries (such as UNKN) nor duplicate
-   entries for padding both with spaces and NULs. */
-
-static const struct {
-    const FT_Char   vendor[5];
-    const FcChar8   foundry[13];
-} FcVendorFoundries[] = {
-    { "ADBE", "adobe"},
-    { "AGFA", "agfa"},
-    { "ALTS", "altsys"},
-    { "APPL", "apple"},
-    { "ARPH", "arphic"},
-    { "ATEC", "alltype"},
-    { "B&H",  "b&h"},
-    { "BITS", "bitstream"},
-    { "CANO", "cannon"},
-    { "CLM",  "culmus"},
-    { "DYNA", "dynalab"},
-    { "EPSN", "epson"},
-    { "FJ",   "fujitsu"},
-    { "IBM",  "ibm"},
-    { "ITC",  "itc"},
-    { "IMPR", "impress"},
-    { "LARA", "larabiefonts"},
-    { "LEAF", "interleaf"},
-    { "LETR", "letraset"},
-    { "LINO", "linotype"},
-    { "MACR", "macromedia"},
-    { "MONO", "monotype"},
-    { "MS",   "microsoft"},
-    { "MT",   "monotype"},
-    { "NEC",  "nec"},
-    { "PARA", "paratype"},
-    { "QMSI", "qms"},
-    { "RICO", "ricoh"},
-    { "URW",  "urw"},
-    { "Y&Y",  "y&y"}
-};
-
-#define NUM_VENDOR_FOUNDRIES	(int) (sizeof (FcVendorFoundries) / sizeof (FcVendorFoundries[0]))
-
-static const FcChar8 *
-FcVendorFoundry(const FT_Char vendor[4])
-{
-    int i;
-
-    if (vendor)
-	for(i = 0; i < NUM_VENDOR_FOUNDRIES; i++)
-	    if (FcVendorMatch (vendor, FcVendorFoundries[i].vendor))
-		return FcVendorFoundries[i].foundry;
-    return 0;
-}
-
 typedef struct _FcStringConst {
     const FcChar8   *name;
     int		    value;
@@ -1239,7 +1169,7 @@ FcFreeTypeQueryFace (const FT_Face  face,
 #if 0
     FcChar8	    *family = 0;
 #endif
-    FcChar8	    *complex_;
+    FcChar8	    *complex_, *foundry_ = NULL;
     const FcChar8   *foundry = 0;
     int		    spacing;
     TT_OS2	    *os2;
@@ -1269,7 +1199,8 @@ FcFreeTypeQueryFace (const FT_Face  face,
     const char	    *tmp;
 
     FcRange	    *r = NULL;
-    double	    lower_size = 0.0L, upper_size = DBL_MAX;
+
+    FcBool	    symbol = FcFalse;
 
     FcInitDebug (); /* We might be called with no initizalization whatsoever. */
 
@@ -1315,7 +1246,15 @@ FcFreeTypeQueryFace (const FT_Face  face,
      */
 
     if (os2 && os2->version >= 0x0001 && os2->version != 0xffff)
-        foundry = FcVendorFoundry(os2->achVendID);
+    {
+	if (os2->achVendID && os2->achVendID[0] != 0)
+	{
+	    foundry_ = (FcChar8 *) malloc (sizeof (os2->achVendID) + 1);
+	    memcpy ((void *)foundry_, os2->achVendID, sizeof (os2->achVendID));
+	    foundry_[sizeof (os2->achVendID)] = 0;
+	    foundry = foundry_;
+	}
+    }
 
     if (FcDebug () & FC_DBG_SCANV)
 	printf ("\n");
@@ -1677,13 +1616,12 @@ FcFreeTypeQueryFace (const FT_Face  face,
 #if defined (HAVE_TT_OS2_USUPPEROPTICALPOINTSIZE) && defined (HAVE_TT_OS2_USLOWEROPTICALPOINTSIZE)
     if (os2 && os2->version >= 0x0005 && os2->version != 0xffff)
     {
+	double lower_size, upper_size;
+
 	/* usLowerPointSize and usUpperPointSize is actually twips */
 	lower_size = os2->usLowerOpticalPointSize / 20.0L;
 	upper_size = os2->usUpperOpticalPointSize / 20.0L;
-    }
-#endif
-    if (os2)
-    {
+
 	r = FcRangeCreateDouble (lower_size, upper_size);
 	if (!FcPatternAddRange (pat, FC_SIZE, r))
 	{
@@ -1692,20 +1630,7 @@ FcFreeTypeQueryFace (const FT_Face  face,
 	}
 	FcRangeDestroy (r);
     }
-    else
-    {
-	for (i = 0; i < face->num_fixed_sizes; i++)
-	{
-	    double d = FcGetPixelSize (face, i);
-	    r = FcRangeCreateDouble (d, d);
-	    if (!FcPatternAddRange (pat, FC_SIZE, r))
-	    {
-		FcRangeDestroy (r);
-		goto bail1;
-	    }
-	    FcRangeDestroy (r);
-	}
-    }
+#endif
 
     /*
      * Type 1: Check for FontInfo dictionary information
@@ -1865,6 +1790,11 @@ FcFreeTypeQueryFace (const FT_Face  face,
     if (!cs)
 	goto bail1;
 
+    /* The FcFreeTypeCharSetAndSpacing() chose the encoding; test it for symbol. */
+    symbol = face->charmap && face->charmap->encoding == FT_ENCODING_MS_SYMBOL;
+    if (!FcPatternAddBool (pat, FC_SYMBOL, symbol))
+	goto bail1;
+
 #if HAVE_FT_GET_BDF_PROPERTY
     /* For PCF fonts, override the computed spacing with the one from
        the property */
@@ -1897,9 +1827,18 @@ FcFreeTypeQueryFace (const FT_Face  face,
     if (!FcPatternAddCharSet (pat, FC_CHARSET, cs))
 	goto bail2;
 
-    ls = FcFreeTypeLangSet (cs, exclusiveLang);
-    if (!ls)
-	goto bail2;
+    if (!symbol)
+    {
+	ls = FcFreeTypeLangSet (cs, exclusiveLang);
+	if (!ls)
+	    goto bail2;
+    }
+    else
+    {
+	/* Symbol fonts don't cover any language, even though they
+	 * claim to support Latin1 range. */
+	ls = FcLangSetCreate ();
+    }
 
     if (!FcPatternAddLangSet (pat, FC_LANG, ls))
     {
@@ -1946,6 +1885,8 @@ bail2:
     FcCharSetDestroy (cs);
 bail1:
     FcPatternDestroy (pat);
+    if (foundry_)
+	free (foundry_);
 bail0:
     return NULL;
 }
@@ -2153,6 +2094,22 @@ FcFreeTypeCharIndex (FT_Face face, FcChar32 ucs4)
 	glyphindex = FT_Get_Char_Index (face, (FT_ULong) ucs4);
 	if (glyphindex)
 	    return glyphindex;
+	if (ucs4 < 0x100 && face->charmap &&
+	    face->charmap->encoding == FT_ENCODING_MS_SYMBOL)
+	{
+	    /* For symbol-encoded OpenType fonts, we duplicate the
+	     * U+F000..F0FF range at U+0000..U+00FF.  That's what
+	     * Windows seems to do, and that's hinted about at:
+	     * http://www.microsoft.com/typography/otspec/recom.htm
+	     * under "Non-Standard (Symbol) Fonts".
+	     *
+	     * See thread with subject "Webdings and other MS symbol
+	     * fonts don't display" on mailing list from May 2015.
+	     */
+	    glyphindex = FT_Get_Char_Index (face, (FT_ULong) ucs4 + 0xF000);
+	    if (glyphindex)
+		return glyphindex;
+	}
     }
 #if HAVE_FT_HAS_PS_GLYPH_NAMES
     /*
@@ -2313,6 +2270,23 @@ FcFreeTypeCharSetAndSpacingForSize (FT_Face face, FcBlanks *blanks, int *spacing
 		}
 		ucs4 = FT_Get_Next_Char (face, ucs4, &glyph);
 	    }
+	    if (fcFontEncodings[o] == FT_ENCODING_MS_SYMBOL)
+	    {
+		/* For symbol-encoded OpenType fonts, we duplicate the
+		 * U+F000..F0FF range at U+0000..U+00FF.  That's what
+		 * Windows seems to do, and that's hinted about at:
+		 * http://www.microsoft.com/typography/otspec/recom.htm
+		 * under "Non-Standard (Symbol) Fonts".
+		 *
+		 * See thread with subject "Webdings and other MS symbol
+		 * fonts don't display" on mailing list from May 2015.
+		 */
+		for (ucs4 = 0xF000; ucs4 < 0xF100; ucs4++)
+		{
+		    if (FcCharSetHasChar (fcs, ucs4))
+			FcCharSetAddChar (fcs, ucs4 - 0xF000);
+		}
+	    }
 #ifdef CHECK
 	    for (ucs4 = 0; ucs4 < 0x10000; ucs4++)
 	    {
@@ -2327,6 +2301,8 @@ FcFreeTypeCharSetAndSpacingForSize (FT_Face face, FcBlanks *blanks, int *spacing
 	    }
 #endif
 	}
+
+       break;
     }
 #if HAVE_FT_HAS_PS_GLYPH_NAMES
     /*

@@ -220,7 +220,7 @@ FcCompareSizeRange (FcValue *v1, FcValue *v2)
     if (FcRangeIsInRange (r1, r2))
 	ret = 0.0;
     else
-	ret = FC_MIN (fabs (r1->u.d.end - r2->u.d.begin), fabs (r1->u.d.begin - r2->u.d.end));
+	ret = FC_MIN (fabs (r1->end - r2->begin), fabs (r1->begin - r2->end));
 
 bail:
     if (r1)
@@ -292,6 +292,7 @@ typedef enum _FcMatcherPriority {
     PRI1(LANG),
     PRI_FAMILY_WEAK,
     PRI_POSTSCRIPT_NAME_WEAK,
+    PRI1(SYMBOL),
     PRI1(SPACING),
     PRI1(SIZE),
     PRI1(PIXEL_SIZE),
