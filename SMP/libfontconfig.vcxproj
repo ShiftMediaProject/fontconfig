@@ -59,8 +59,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\fc-case\fccase.h" />
-    <ClInclude Include="..\fc-glyphname\fcglyphname.h" />
     <ClInclude Include="..\fontconfig\fcfreetype.h" />
     <ClInclude Include="..\fontconfig\fcprivate.h" />
     <ClInclude Include="..\fontconfig\fontconfig.h" />
@@ -74,6 +72,10 @@
     <ClInclude Include="..\src\fcwindows.h" />
     <ClInclude Include="..\src\ftglue.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="fc-blanks\fcblanks.h" />
+    <ClInclude Include="fc-case\fccase.h" />
+    <ClInclude Include="fc-glyphname\fcglyphname.h" />
+    <ClInclude Include="fc-lang\fclang.h" />
     <ClInclude Include="src\fcalias.h" />
     <ClInclude Include="src\fcaliastail.h" />
     <ClInclude Include="src\fcftalias.h" />

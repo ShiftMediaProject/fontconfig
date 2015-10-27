@@ -63,19 +63,25 @@
     <ClInclude Include="src\fcaliastail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\fc-case\fccase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\fcftalias.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\fcftaliastail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\fc-glyphname\fcglyphname.h">
+    <ClInclude Include="src\fcstdint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\fcstdint.h">
+    <ClInclude Include="fc-case\fccase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fc-blanks\fcblanks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fc-glyphname\fcglyphname.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fc-lang\fclang.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
