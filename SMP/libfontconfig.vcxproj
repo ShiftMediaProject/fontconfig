@@ -417,6 +417,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -565,6 +568,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -639,6 +645,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -712,6 +721,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -785,6 +797,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -872,6 +887,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -959,6 +977,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -1046,6 +1067,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -1133,6 +1157,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -1218,6 +1245,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -1303,6 +1333,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -1387,6 +1420,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -1471,6 +1507,9 @@ if exist $(OutDir)\include\fontconfig (
 rd /s /q $(OutDir)\include\fontconfig
 cd ../
 cd $(ProjectDir)
+)
+if not exist .\fc-blanks\fcblanks.h (
+python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-blanks\fcblanks.h
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
