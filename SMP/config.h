@@ -168,6 +168,9 @@
 /* Define to 1 if `d_type' is a member of `struct dirent'. */
 /* #undef HAVE_STRUCT_DIRENT_D_TYPE */
 
+/* Define to 1 if `st_mtim' is a member of `struct stat'. */
+/* #undef HAVE_STRUCT_STAT_ST_MTIM */
+
 /* Define to 1 if `f_flags' is a member of `struct statfs'. */
 /* #undef HAVE_STRUCT_STATFS_F_FLAGS */
 
