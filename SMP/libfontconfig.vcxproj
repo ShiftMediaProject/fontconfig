@@ -368,7 +368,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;_WIN32_WINNT=0x0502;LIBXML_STATIC;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(OutDir)\lib\x86\$(TargetName).pdb</ProgramDataBaseFileName>
@@ -381,7 +381,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\lib\x86\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;$(ProjectDir)\..\..\prebuilt\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconvd.lib;libfreetyped.lib;libxml2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -457,7 +457,7 @@ rmdir /s /q $(OutDir)\fonts
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;_WIN32_WINNT=0x0600;LIBXML_STATIC;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(OutDir)\lib\x64\$(TargetName).pdb</ProgramDataBaseFileName>
@@ -470,7 +470,7 @@ rmdir /s /q $(OutDir)\fonts
       <TargetMachine>MachineX64</TargetMachine>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\lib\x64\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;$(ProjectDir)\..\..\prebuilt\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconvd.lib;libfreetyped.lib;libxml2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -547,7 +547,7 @@ rmdir /s /q $(OutDir)\fonts
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;_WIN32_WINNT=0x0502;_USRDLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -560,7 +560,7 @@ rmdir /s /q $(OutDir)\fonts
       <ProgramDatabaseFile>$(OutDir)\lib\x86\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\libfontconfig.def</ModuleDefinitionFile>
       <ProfileGuidedDatabase>$(IntDir)\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;$(ProjectDir)\..\..\prebuilt\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>iconvd.lib;freetyped.lib;xml2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -639,7 +639,7 @@ rmdir /s /q $(OutDir)\fonts
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;_WIN32_WINNT=0x0502;LIBXML_STATIC;_USRDLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -652,7 +652,7 @@ rmdir /s /q $(OutDir)\fonts
       <ProgramDatabaseFile>$(OutDir)\lib\x86\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\libfontconfig.def</ModuleDefinitionFile>
       <ProfileGuidedDatabase>$(IntDir)\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;$(ProjectDir)\..\..\prebuilt\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconvd.lib;libfreetyped.lib;libxml2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -731,7 +731,7 @@ rmdir /s /q $(OutDir)\fonts
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;_WIN32_WINNT=0x0600;_USRDLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -744,7 +744,7 @@ rmdir /s /q $(OutDir)\fonts
       <ProgramDatabaseFile>$(OutDir)\lib\x64\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\libfontconfig.def</ModuleDefinitionFile>
       <ProfileGuidedDatabase>$(IntDir)\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;$(ProjectDir)\..\..\prebuilt\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>iconvd.lib;freetyped.lib;xml2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
@@ -822,7 +822,7 @@ rmdir /s /q $(OutDir)\fonts
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;_WINDOWS;_WIN32_WINNT=0x0600;LIBXML_STATIC;_USRDLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -835,7 +835,7 @@ rmdir /s /q $(OutDir)\fonts
       <ProgramDatabaseFile>$(OutDir)\lib\x64\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\libfontconfig.def</ModuleDefinitionFile>
       <ProfileGuidedDatabase>$(IntDir)\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;$(ProjectDir)\..\..\prebuilt\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconvd.lib;libfreetyped.lib;libxml2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
@@ -923,7 +923,7 @@ rmdir /s /q $(OutDir)\fonts
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
@@ -941,7 +941,7 @@ rmdir /s /q $(OutDir)\fonts
     <Lib>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\lib\x86\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;$(ProjectDir)\..\..\prebuilt\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconv.lib;libfreetype.lib;libxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -1028,7 +1028,7 @@ rmdir /s /q $(OutDir)\fonts
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
@@ -1046,7 +1046,7 @@ rmdir /s /q $(OutDir)\fonts
     <Lib>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\lib\x86\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;$(ProjectDir)\..\..\prebuilt\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconv.lib;libfreetype.lib;libxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -1133,7 +1133,7 @@ rmdir /s /q $(OutDir)\fonts
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
@@ -1151,7 +1151,7 @@ rmdir /s /q $(OutDir)\fonts
     <Lib>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\lib\x64\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;$(ProjectDir)\..\..\prebuilt\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconv.lib;libfreetype.lib;libxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -1238,7 +1238,7 @@ rmdir /s /q $(OutDir)\fonts
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
@@ -1256,7 +1256,7 @@ rmdir /s /q $(OutDir)\fonts
     <Lib>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\lib\x64\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;$(ProjectDir)\..\..\prebuilt\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconv.lib;libfreetype.lib;libxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -1343,7 +1343,7 @@ rmdir /s /q $(OutDir)\fonts
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -1358,7 +1358,7 @@ rmdir /s /q $(OutDir)\fonts
       <ProgramDatabaseFile>$(OutDir)\lib\x86\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\libfontconfig.def</ModuleDefinitionFile>
       <ProfileGuidedDatabase>$(IntDir)\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;$(ProjectDir)\..\..\prebuilt\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>iconv.lib;freetype.lib;xml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
@@ -1446,7 +1446,7 @@ rmdir /s /q $(OutDir)\fonts
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -1461,7 +1461,7 @@ rmdir /s /q $(OutDir)\fonts
       <ProgramDatabaseFile>$(OutDir)\lib\x86\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\libfontconfig.def</ModuleDefinitionFile>
       <ProfileGuidedDatabase>$(IntDir)\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x86\;$(ProjectDir)\..\..\prebuilt\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconv.lib;libfreetype.lib;libxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
@@ -1549,7 +1549,7 @@ rmdir /s /q $(OutDir)\fonts
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -1564,7 +1564,7 @@ rmdir /s /q $(OutDir)\fonts
       <ProgramDatabaseFile>$(OutDir)\lib\x64\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\libfontconfig.def</ModuleDefinitionFile>
       <ProfileGuidedDatabase>$(IntDir)\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;$(ProjectDir)\..\..\prebuilt\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>iconv.lib;freetype.lib;xml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -1651,7 +1651,7 @@ rmdir /s /q $(OutDir)\fonts
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\;.\src;$(OutDir)\include;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4090;4018;4267;4244;4311;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -1666,7 +1666,7 @@ rmdir /s /q $(OutDir)\fonts
       <ProgramDatabaseFile>$(OutDir)\lib\x64\$(TargetName).pdb</ProgramDatabaseFile>
       <ModuleDefinitionFile>.\libfontconfig.def</ModuleDefinitionFile>
       <ProfileGuidedDatabase>$(IntDir)\$(TargetName).pgd</ProfileGuidedDatabase>
-      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)\lib\x64\;$(ProjectDir)\..\..\prebuilt\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libiconv.lib;libfreetype.lib;libxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Link>
