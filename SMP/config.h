@@ -1,4 +1,3 @@
-
 #define FC_CACHEDIR "./"
 
 /* The normal alignment of `double', in bytes. */
@@ -15,6 +14,9 @@
 
 /* System font directory */
 #define FC_DEFAULT_FONTS "c:/windows/fonts"
+
+/* The type of len parameter of gperf hash/lookup function */
+#define FC_GPERF_SIZE_T unsigned int
 
 /* Define to nothing if C supports flexible array members, and to 1 if it does
    not. That way, with a declaration like `struct s { int n; double
