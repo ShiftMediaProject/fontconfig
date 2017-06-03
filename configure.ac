@@ -33,7 +33,7 @@ dnl This is the package version number, not the shared library
 dnl version.  This same version number must appear in fontconfig/fontconfig.h
 dnl Yes, it is a pain to synchronize version numbers.  Unfortunately, it's
 dnl not possible to extract the version number here from fontconfig.h
-AC_INIT([fontconfig], [2.12.2], [https://bugs.freedesktop.org/enter_bug.cgi?product=fontconfig])
+AC_INIT([fontconfig], [2.12.3], [https://bugs.freedesktop.org/enter_bug.cgi?product=fontconfig])
 AM_INIT_AUTOMAKE([1.11 parallel-tests dist-bzip2])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
@@ -307,8 +307,17 @@ dnl The outcome of the family property has been changed in freetype-2.7.1.
 dnl Our test cases relies on it and need to update the dependency to get it success.
 dnl However it isn't exactly required to run fontconfig itself.
 dnl so adding another test here for compatibility. it might be simplified in the future.
-PKG_CHECK_EXISTS([freetype2 >= 19.0.13], [have_freetype_2_7_1=yes], [have_freetype_2_7_1=no])
-AM_CONDITIONAL(FREETYPE_2_7_1, test "x$have_freetype_2_7_1" = xyes)
+PKG_CHECK_EXISTS([freetype2 = 19.0.13], [have_freetype_2_7_1=yes], [have_freetype_2_7_1=no])
+PKG_CHECK_EXISTS([freetype2 >= 20.0.14],
+	[AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+		#include <ft2build.h>
+		#include FT_CONFIG_OPTIONS_H
+		#ifndef PCF_CONFIG_OPTION_LONG_FAMILY_NAMES
+		#  error "No pcf long family names support"
+		#endif
+		]])], [have_pcf_long_family_names=yes], [have_pcf_long_family_names=no])],
+	[have_pcf_long_family_names=no])
+AM_CONDITIONAL(FREETYPE_PCF_LONG_FAMILY_NAMES, test "x$have_freetype_2_7_1" = xyes -o "x$have_pcf_long_family_names" = xyes)
 
 AC_SUBST(FREETYPE_LIBS)
 AC_SUBST(FREETYPE_CFLAGS)
