@@ -33,7 +33,7 @@ dnl This is the package version number, not the shared library
 dnl version.  This same version number must appear in fontconfig/fontconfig.h
 dnl Yes, it is a pain to synchronize version numbers.  Unfortunately, it's
 dnl not possible to extract the version number here from fontconfig.h
-AC_INIT([fontconfig], [2.12.1], [https://bugs.freedesktop.org/enter_bug.cgi?product=fontconfig])
+AC_INIT([fontconfig], [2.12.2], [https://bugs.freedesktop.org/enter_bug.cgi?product=fontconfig])
 AM_INIT_AUTOMAKE([1.11 parallel-tests dist-bzip2])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
@@ -75,7 +75,7 @@ dnl bump revision when fixing bugs
 dnl bump current and age, reset revision to zero when adding APIs
 dnl bump current, leave age, reset revision to zero when changing/removing APIS
 LIBT_CURRENT=10
-LIBT_REVISION=2
+LIBT_REVISION=3
 AC_SUBST(LIBT_CURRENT)
 AC_SUBST(LIBT_REVISION)
 LIBT_AGE=9
@@ -193,6 +193,26 @@ fi
 AC_CHECK_MEMBERS([struct dirent.d_type],,,
 	[#include <dirent.h>])
 
+# Check the argument type of the gperf hash/lookup function
+AC_MSG_CHECKING([The type of len parameter of gperf hash/lookup function])
+fc_gperf_test="$(echo 'foo' | gperf -L ANSI-C)"
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+	#include <string.h>
+
+	const char *in_word_set(register const char *, register size_t);
+	$fc_gperf_test
+	]])], [FC_GPERF_SIZE_T=size_t],
+	[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+		#include <string.h>
+
+		const char *in_word_set(register const char *, register unsigned int);
+		$fc_gperf_test
+	]])], [FC_GPERF_SIZE_T="unsigned int"],
+	[AC_MSG_ERROR([Unable to determine the type of the len parameter of the gperf hash/lookup function])]
+)])
+AC_DEFINE_UNQUOTED(FC_GPERF_SIZE_T, $FC_GPERF_SIZE_T, [The type of len parameter of the gperf hash/lookup function])
+AC_MSG_RESULT($FC_GPERF_SIZE_T)
+
 #
 # Checks for iconv
 #
@@ -280,6 +300,15 @@ AC_DEFINE_UNQUOTED(USE_ICONV,$use_iconv,[Use iconv.])
 #
 PKG_CHECK_MODULES(FREETYPE, freetype2)
 PKGCONFIG_REQUIRES="$PKGCONFIG_REQUIRES freetype2"
+
+dnl See http://git.savannah.gnu.org/cgit/freetype/freetype2.git/tree/docs/VERSIONS.TXT for versioning in freetype
+dnl
+dnl The outcome of the family property has been changed in freetype-2.7.1.
+dnl Our test cases relies on it and need to update the dependency to get it success.
+dnl However it isn't exactly required to run fontconfig itself.
+dnl so adding another test here for compatibility. it might be simplified in the future.
+PKG_CHECK_EXISTS([freetype2 >= 19.0.13], [have_freetype_2_7_1=yes], [have_freetype_2_7_1=no])
+AM_CONDITIONAL(FREETYPE_2_7_1, test "x$have_freetype_2_7_1" = xyes)
 
 AC_SUBST(FREETYPE_LIBS)
 AC_SUBST(FREETYPE_CFLAGS)
