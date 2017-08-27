@@ -396,9 +396,9 @@
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -437,8 +437,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -451,8 +451,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -485,9 +485,9 @@ rmdir /s /q $(OutDir)\fonts
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -526,8 +526,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -540,8 +540,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -578,9 +578,9 @@ rmdir /s /q $(OutDir)\fonts
       <MinimumRequiredVersion>5.1</MinimumRequiredVersion>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -619,8 +619,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -633,8 +633,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -671,9 +671,9 @@ rmdir /s /q $(OutDir)\fonts
       <MinimumRequiredVersion>5.1</MinimumRequiredVersion>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -712,8 +712,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -726,8 +726,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -763,9 +763,9 @@ rmdir /s /q $(OutDir)\fonts
       <MinimumRequiredVersion>6.0</MinimumRequiredVersion>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -804,8 +804,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -818,8 +818,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -855,9 +855,9 @@ rmdir /s /q $(OutDir)\fonts
       <MinimumRequiredVersion>6.0</MinimumRequiredVersion>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -896,8 +896,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -910,8 +910,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -956,9 +956,9 @@ rmdir /s /q $(OutDir)\fonts
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -997,8 +997,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -1011,8 +1011,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -1057,9 +1057,9 @@ rmdir /s /q $(OutDir)\fonts
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -1098,8 +1098,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -1112,8 +1112,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -1158,9 +1158,9 @@ rmdir /s /q $(OutDir)\fonts
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -1199,8 +1199,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -1213,8 +1213,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -1259,9 +1259,9 @@ rmdir /s /q $(OutDir)\fonts
       <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -1300,8 +1300,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -1314,8 +1314,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -1360,9 +1360,9 @@ rmdir /s /q $(OutDir)\fonts
       <MinimumRequiredVersion>5.1</MinimumRequiredVersion>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -1401,8 +1401,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -1415,8 +1415,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -1461,9 +1461,9 @@ rmdir /s /q $(OutDir)\fonts
       <MinimumRequiredVersion>5.1</MinimumRequiredVersion>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -1502,8 +1502,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -1516,8 +1516,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -1561,9 +1561,9 @@ rmdir /s /q $(OutDir)\fonts
       <MinimumRequiredVersion>6.0</MinimumRequiredVersion>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -1602,8 +1602,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -1616,8 +1616,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
@@ -1661,9 +1661,9 @@ rmdir /s /q $(OutDir)\fonts
       <MinimumRequiredVersion>6.0</MinimumRequiredVersion>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\include
-mkdir $(OutDir)\include\fontconfig
-copy ..\fontconfig\*.h $(OutDir)\include\fontconfig
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\fontconfig
+copy ..\fontconfig\*.h "$(OutDir)"\include\fontconfig
 mkdir $(OutDir)\licenses
 copy ..\COPYING $(OutDir)\licenses\fontconfig.txt
 mkdir $(OutDir)\fonts
@@ -1702,8 +1702,8 @@ del ..\fc-glyphname\fcglyphname.h
 if exist ..\fc-lang\fclang.h (
 del ..\fc-lang\fclang.h
 )
-if exist $(OutDir)\include\fontconfig (
-rd /s /q $(OutDir)\include\fontconfig
+if exist "$(OutDir)"\include\fontconfig (
+rd /s /q "$(OutDir)"\include\fontconfig
 cd ../
 cd $(ProjectDir)
 )
@@ -1716,8 +1716,8 @@ python ..\fc-blanks\fc-blanks.py &lt; ..\fc-blanks\fcblanks.tmpl.h &gt; .\fc-bla
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>force_clean</Outputs>
-      <Command>if exist $(OutDir)\include\fontconfig (
-rmdir /s /q $(OutDir)\include\fontconfig
+      <Command>if exist "$(OutDir)"\include\fontconfig (
+rmdir /s /q "$(OutDir)"\include\fontconfig
 )
 if exist $(OutDir)\licenses\fontconfig.txt (
 del /f /q $(OutDir)\licenses\fontconfig.txt
