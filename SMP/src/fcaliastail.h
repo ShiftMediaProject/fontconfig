@@ -332,6 +332,8 @@ extern __typeof (FcPatternAdd) FcPatternAdd __attribute((alias("IA__FcPatternAdd
 extern __typeof (FcPatternAddWeak) FcPatternAddWeak __attribute((alias("IA__FcPatternAddWeak"), visibility("default")));
 # undef FcPatternGet
 extern __typeof (FcPatternGet) FcPatternGet __attribute((alias("IA__FcPatternGet"), visibility("default")));
+# undef FcPatternGetWithBinding
+extern __typeof (FcPatternGetWithBinding) FcPatternGetWithBinding __attribute((alias("IA__FcPatternGetWithBinding"), visibility("default")));
 # undef FcPatternDel
 extern __typeof (FcPatternDel) FcPatternDel __attribute((alias("IA__FcPatternDel"), visibility("default")));
 # undef FcPatternRemove
@@ -454,6 +456,8 @@ extern __typeof (FcStrListDone) FcStrListDone __attribute((alias("IA__FcStrListD
 #ifdef __fcxml__
 # undef FcConfigParseAndLoad
 extern __typeof (FcConfigParseAndLoad) FcConfigParseAndLoad __attribute((alias("IA__FcConfigParseAndLoad"), visibility("default")));
+# undef FcConfigParseAndLoadFromMemory
+extern __typeof (FcConfigParseAndLoadFromMemory) FcConfigParseAndLoadFromMemory __attribute((alias("IA__FcConfigParseAndLoadFromMemory"), visibility("default")));
 #endif /* __fcxml__ */
 #ifdef __fccfg__
 # undef FcConfigGetRescanInverval

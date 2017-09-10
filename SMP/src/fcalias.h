@@ -292,6 +292,8 @@ extern __typeof (FcPatternAddWeak) IA__FcPatternAddWeak __attribute((visibility(
 #define FcPatternAddWeak IA__FcPatternAddWeak
 extern __typeof (FcPatternGet) IA__FcPatternGet __attribute((visibility("hidden")));
 #define FcPatternGet IA__FcPatternGet
+extern __typeof (FcPatternGetWithBinding) IA__FcPatternGetWithBinding __attribute((visibility("hidden")));
+#define FcPatternGetWithBinding IA__FcPatternGetWithBinding
 extern __typeof (FcPatternDel) IA__FcPatternDel __attribute((visibility("hidden")));
 #define FcPatternDel IA__FcPatternDel
 extern __typeof (FcPatternRemove) IA__FcPatternRemove __attribute((visibility("hidden")));
@@ -404,6 +406,8 @@ extern __typeof (FcStrListDone) IA__FcStrListDone __attribute((visibility("hidde
 #define FcStrListDone IA__FcStrListDone
 extern __typeof (FcConfigParseAndLoad) IA__FcConfigParseAndLoad __attribute((visibility("hidden")));
 #define FcConfigParseAndLoad IA__FcConfigParseAndLoad
+extern __typeof (FcConfigParseAndLoadFromMemory) IA__FcConfigParseAndLoadFromMemory __attribute((visibility("hidden")));
+#define FcConfigParseAndLoadFromMemory IA__FcConfigParseAndLoadFromMemory
 extern __typeof (FcConfigGetRescanInverval) IA__FcConfigGetRescanInverval __attribute((visibility("hidden")));
 #define FcConfigGetRescanInverval IA__FcConfigGetRescanInverval
 extern __typeof (FcConfigSetRescanInverval) IA__FcConfigSetRescanInverval __attribute((visibility("hidden")));

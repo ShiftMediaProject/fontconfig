@@ -57,6 +57,7 @@ EXPORTS
 	FcConfigGetSysRoot
 	FcConfigHome
 	FcConfigParseAndLoad
+    FcConfigParseAndLoadFromMemory
 	FcConfigReference
 	FcConfigSetCurrent
 	FcConfigSetRescanInterval
@@ -168,6 +169,7 @@ EXPORTS
 	FcPatternGetRange
 	FcPatternGetMatrix
 	FcPatternGetString
+    FcPatternGetWithBinding
 	FcPatternHash
 	FcPatternPrint
 	FcPatternReference
