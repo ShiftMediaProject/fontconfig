@@ -28,7 +28,7 @@
 /* Objects MT-safe for readonly access. */
 
 typedef struct {
-    const FcChar8    	lang[8];
+    const FcChar8    	lang[16];
     const FcCharSet	charset;
 } FcLangCharSet;
 
@@ -188,6 +188,9 @@ FcLangNormalize (const FcChar8 *lang)
     if (!lang || !*lang)
 	return NULL;
 
+    /* might be called without initialization */
+    FcInitDebug ();
+
     if (FcStrCmpIgnoreCase (lang, (const FcChar8 *)"C") == 0 ||
 	FcStrCmpIgnoreCase (lang, (const FcChar8 *)"C.UTF-8") == 0 ||
 	FcStrCmpIgnoreCase (lang, (const FcChar8 *)"C.utf8") == 0 ||
@@ -259,7 +262,8 @@ FcLangNormalize (const FcChar8 *lang)
 		 lang);
 	goto bail0;
     }
-    if (territory && (tlen < 2 || tlen > 3))
+    if (territory && (tlen < 2 || tlen > 3) &&
+	!(territory[0] == 'z' && tlen < 5))
     {
 	fprintf (stderr, "Fontconfig warning: ignoring %s: not a valid region tag\n",
 		 lang);
@@ -351,6 +355,13 @@ FcLangCompare (const FcChar8 *s1, const FcChar8 *s2)
 {
     FcChar8	    c1, c2;
     FcLangResult    result = FcLangDifferentLang;
+    const FcChar8  *s1_orig = s1;
+    FcBool	    is_und;
+
+    is_und = FcToLower (s1[0]) == 'u' &&
+	     FcToLower (s1[1]) == 'n' &&
+	     FcToLower (s1[2]) == 'd' &&
+	     FcLangEnd (s1[3]);
 
     for (;;)
     {
@@ -361,14 +372,24 @@ FcLangCompare (const FcChar8 *s1, const FcChar8 *s2)
 	c2 = FcToLower (c2);
 	if (c1 != c2)
 	{
-	    if (FcLangEnd (c1) && FcLangEnd (c2))
+	    if (!is_und && FcLangEnd (c1) && FcLangEnd (c2))
 		result = FcLangDifferentTerritory;
 	    return result;
 	}
 	else if (!c1)
-	    return FcLangEqual;
+	{
+	    return is_und ? result : FcLangEqual;
+	}
 	else if (c1 == '-')
-	    result = FcLangDifferentTerritory;
+	{
+	    if (!is_und)
+		result = FcLangDifferentTerritory;
+	}
+
+	/* If we parsed past "und-", then do not consider it undefined anymore,
+	 * as there's *something* specified. */
+	if (is_und && s1 - s1_orig == 4)
+	    is_und = FcFalse;
     }
 }
 
