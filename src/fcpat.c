@@ -1021,18 +1021,24 @@ FcPatternGetMatrix(const FcPattern *p, const char *object, int id, FcMatrix **m)
 
 
 FcResult
-FcPatternGetBool(const FcPattern *p, const char *object, int id, FcBool *b)
+FcPatternObjectGetBool (const FcPattern *p, FcObject object, int id, FcBool *b)
 {
     FcValue	v;
     FcResult	r;
 
-    r = FcPatternGet (p, object, id, &v);
+    r = FcPatternObjectGet (p, object, id, &v);
     if (r != FcResultMatch)
 	return r;
     if (v.type != FcTypeBool)
         return FcResultTypeMismatch;
     *b = v.u.b;
     return FcResultMatch;
+}
+
+FcResult
+FcPatternGetBool(const FcPattern *p, const char *object, int id, FcBool *b)
+{
+    return FcPatternObjectGetBool (p, FcObjectFromName (object), id, b);
 }
 
 FcResult
@@ -1112,6 +1118,9 @@ FcPatternDuplicate (const FcPattern *orig)
     FcPatternElt    *e;
     int		    i;
     FcValueListPtr  l;
+
+    if (!orig)
+	return NULL;
 
     new = FcPatternCreate ();
     if (!new)

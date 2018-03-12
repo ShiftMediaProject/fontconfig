@@ -1,8 +1,4 @@
-if FREETYPE_PCF_LONG_FAMILY_NAMES
-check_SCRIPTS=run-test271.sh
-else
 check_SCRIPTS=run-test.sh
-endif
 TEST_EXTENSIONS = \
 	.sh \
 	$(NULL)
@@ -12,15 +8,20 @@ AM_TESTS_ENVIRONMENT= \
 	EXEEXT=${EXEEXT}; export EXEEXT; \
 	$(NULL)
 
+BUILT_SOURCES = out.expected
+
 SH_LOG_COMPILER = sh
+TESTS=run-test.sh
+
+TESTDATA=4x6.pcf 8x16.pcf out.expected fonts.conf.in
 
 if FREETYPE_PCF_LONG_FAMILY_NAMES
-TESTS=run-test271.sh
+$(srcdir)/out.expected: $(srcdir)/out.expected-long-family-names
+	cp $(srcdir)/out.expected-long-family-names $(srcdir)/out.expected
 else
-TESTS=run-test.sh
+$(srcdir)/out.expected: $(srcdir)/out.expected-no-long-family-names
+	cp $(srcdir)/out.expected-no-long-family-names $(srcdir)/out.expected
 endif
-
-TESTDATA=4x6.pcf 8x16.pcf out.expected out271.expected fonts.conf.in
 
 AM_CPPFLAGS = -I$(top_srcdir) -I$(top_builddir)
 
@@ -54,8 +55,10 @@ check_PROGRAMS += test-bz96676
 test_bz96676_LDADD = $(top_builddir)/src/libfontconfig.la
 TESTS += test-bz96676
 
-EXTRA_DIST=run-test.sh run-test271.sh $(TESTDATA)
+EXTRA_DIST=run-test.sh $(TESTDATA) out.expected-long-family-names out.expected-no-long-family-names
 
-CLEANFILES=
+CLEANFILES=out fonts.conf
+
+MAINTAINERCLEANFILES=out.expected
 
 -include $(top_srcdir)/git.mk
