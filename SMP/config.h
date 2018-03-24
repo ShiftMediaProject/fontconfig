@@ -1,10 +1,22 @@
 #define FC_CACHEDIR "./"
 
+#define FC_TEMPLATEDIR "./"
+
+/* Define if building universal (internal helper macro) */
+/* #undef AC_APPLE_UNIVERSAL_BUILD */
+
 /* The normal alignment of `double', in bytes. */
 #define ALIGNOF_DOUBLE 8
 
+/* The normal alignment of `void *', in bytes. */
+#define ALIGNOF_VOID_P sizeof(void *)
+
 /* Use libxml2 instead of Expat */
 #define ENABLE_LIBXML2 1
+
+/* Define to 1 if translation of program messages to the user's native
+   language is requested. */
+/* #undef ENABLE_NLS */
 
 /* Additional font directories */
 #define FC_ADD_FONTS "yes"
@@ -13,10 +25,10 @@
 /* #undef FC_ARCHITECTURE */
 
 /* System font directory */
-#define FC_DEFAULT_FONTS "c:/windows/fonts"
+#define FC_DEFAULT_FONTS "WINDOWSFONTDIR"
 
-/* The type of len parameter of gperf hash/lookup function */
-#define FC_GPERF_SIZE_T unsigned int
+/* The type of len parameter of the gperf hash/lookup function */
+#define FC_GPERF_SIZE_T size_t
 
 /* Define to nothing if C supports flexible array members, and to 1 if it does
    not. That way, with a declaration like `struct s { int n; double
@@ -46,14 +58,11 @@
 /* Define to 1 if you have the `fstatvfs' function. */
 /* #undef HAVE_FSTATVFS */
 
-/* FT_Bitmap_Size structure includes y_ppem field */
-#define HAVE_FT_BITMAP_SIZE_Y_PPEM 1
+/* Define to 1 if you have the `FT_Done_MM_Var' function. */
+#define HAVE_FT_DONE_MM_VAR 1
 
 /* Define to 1 if you have the `FT_Get_BDF_Property' function. */
 #define HAVE_FT_GET_BDF_PROPERTY 1
-
-/* Define to 1 if you have the `FT_Get_Next_Char' function. */
-#define HAVE_FT_GET_NEXT_CHAR 1
 
 /* Define to 1 if you have the `FT_Get_PS_Font_Info' function. */
 #define HAVE_FT_GET_PS_FONT_INFO 1
@@ -63,9 +72,6 @@
 
 /* Define to 1 if you have the `FT_Has_PS_Glyph_Names' function. */
 #define HAVE_FT_HAS_PS_GLYPH_NAMES 1
-
-/* Define to 1 if you have the `FT_Select_Size' function. */
-#define HAVE_FT_SELECT_SIZE 1
 
 /* Define to 1 if you have the `getexecname' function. */
 /* #undef HAVE_GETEXECNAME */
@@ -81,6 +87,12 @@
 
 /* Define to 1 if you have the `getprogname' function. */
 /* #undef HAVE_GETPROGNAME */
+
+/* Define if the GNU gettext() function is already present or preinstalled. */
+/* #undef HAVE_GETTEXT */
+
+/* Define if you have the iconv() function and it works. */
+/* #undef HAVE_ICONV */
 
 /* Have Intel __sync_* atomic primitives */
 #define HAVE_INTEL_ATOMIC_PRIMITIVES 1
@@ -139,13 +151,6 @@
 /* Define to 1 if you have the `readlink' function. */
 /* #undef HAVE_READLINK */
 
-/* Define to 1 if you have the 'scandir' function. */
-/* #undef HAVE_SCANDIR */
-
-/* Define to 1 if you have the 'scandir' function with int (* compar)(const
-   void *, const void *) */
-/* #undef HAVE_SCANDIR_VOID_P */
-
 /* Define to 1 if you have the <sched.h> header file. */
 /* #undef HAVE_SCHED_H */
 
@@ -170,9 +175,6 @@
 /* Define to 1 if `d_type' is a member of `struct dirent'. */
 /* #undef HAVE_STRUCT_DIRENT_D_TYPE */
 
-/* Define to 1 if `st_mtim' is a member of `struct stat'. */
-/* #undef HAVE_STRUCT_STAT_ST_MTIM */
-
 /* Define to 1 if `f_flags' is a member of `struct statfs'. */
 /* #undef HAVE_STRUCT_STATFS_F_FLAGS */
 
@@ -184,6 +186,9 @@
 
 /* Define to 1 if `f_fstypename' is a member of `struct statvfs'. */
 /* #undef HAVE_STRUCT_STATVFS_F_FSTYPENAME */
+
+/* Define to 1 if `st_mtim' is a member of `struct stat'. */
+/* #undef HAVE_STRUCT_STAT_ST_MTIM */
 
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
    */
@@ -202,6 +207,9 @@
 /* Define to 1 if you have the <sys/statfs.h> header file. */
 /* #undef HAVE_SYS_STATFS_H */
 
+/* Define to 1 if you have the <sys/statvfs.h> header file. */
+/* #undef HAVE_SYS_STATVFS_H */
+
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #define HAVE_SYS_STAT_H 1
 
@@ -210,12 +218,6 @@
 
 /* Define to 1 if you have the <sys/vfs.h> header file. */
 /* #undef HAVE_SYS_VFS_H */
-
-/* Define to 1 if `usLowerOpticalPointSize' is a member of `TT_OS2'. */
-/* #undef HAVE_TT_OS2_USLOWEROPTICALPOINTSIZE */
-
-/* Define to 1 if `usUpperOpticalPointSize' is a member of `TT_OS2'. */
-/* #undef HAVE_TT_OS2_USUPPEROPTICALPOINTSIZE */
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
@@ -230,13 +232,12 @@
 /* #undef HAVE_XMLPARSE_H */
 
 /* Define to 1 if you have the `XML_SetDoctypeDeclHandler' function. */
-#define HAVE_XML_SETDOCTYPEDECLHANDLER 1
+/* #undef HAVE_XML_SETDOCTYPEDECLHANDLER */
 
 /* Define to 1 if you have the `_mktemp_s' function. */
 #define HAVE__MKTEMP_S 1
 
-/* Define to necessary symbol if this constant
- uses a non-standard name on
+/* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
 /* #undef PTHREAD_CREATE_JOINABLE */
 

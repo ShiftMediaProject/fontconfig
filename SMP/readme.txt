@@ -8,7 +8,7 @@ Choose whichever project configuration meets your requirements.
 
 *** Generating header files ***
 
-The build system requires the fc-blanks, fc-case, fc-glyphname, fc-lang headers to be generated. This should have already been done and the resulting
+The build system requires the fc-blanks, fc-case, fc-lang headers to be generated. This should have already been done and the resulting
 source files being found in the corresponding SMP directories. If these files are missing then the project will try and automatically
 generate new ones. If a file needs to be forced to update then it can be simply deleted which will result in new file
 being generated the next time the project is built.

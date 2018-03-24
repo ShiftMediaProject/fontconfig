@@ -72,12 +72,6 @@
     <ClInclude Include="fc-case\fccase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fc-blanks\fcblanks.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fc-glyphname\fcglyphname.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="fc-lang\fclang.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -93,9 +87,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\fcatomic.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\fcblanks.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\fccache.c">
@@ -165,6 +156,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\fcweight.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\fchash.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\fcptrlist.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -72,9 +72,7 @@
     <ClInclude Include="..\src\fcwindows.h" />
     <ClInclude Include="..\src\ftglue.h" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="fc-blanks\fcblanks.h" />
     <ClInclude Include="fc-case\fccase.h" />
-    <ClInclude Include="fc-glyphname\fcglyphname.h" />
     <ClInclude Include="fc-lang\fclang.h" />
     <ClInclude Include="src\fcalias.h" />
     <ClInclude Include="src\fcaliastail.h" />
@@ -84,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\fcatomic.c" />
-    <ClCompile Include="..\src\fcblanks.c" />
     <ClCompile Include="..\src\fccache.c">
       <ForcedIncludeFiles>compat.h;io.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
@@ -101,6 +98,7 @@
     <ClCompile Include="..\src\fcformat.c" />
     <ClCompile Include="..\src\fcfreetype.c" />
     <ClCompile Include="..\src\fcfs.c" />
+    <ClCompile Include="..\src\fchash.c" />
     <ClCompile Include="..\src\fcinit.c" />
     <ClCompile Include="..\src\fclang.c" />
     <ClCompile Include="..\src\fclist.c" />
@@ -109,6 +107,7 @@
     <ClCompile Include="..\src\fcname.c" />
     <ClCompile Include="..\src\fcobjs.c" />
     <ClCompile Include="..\src\fcpat.c" />
+    <ClCompile Include="..\src\fcptrlist.c" />
     <ClCompile Include="..\src\fcrange.c" />
     <ClCompile Include="..\src\fcserialize.c" />
     <ClCompile Include="..\src\fcstat.c">

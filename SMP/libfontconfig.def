@@ -43,6 +43,9 @@ EXPORTS
 	FcConfigCreate
 	FcConfigDestroy
 	FcConfigEnableHome
+    FcConfigFileInfoIterGet
+    FcConfigFileInfoIterInit
+    FcConfigFileInfoIterNext
 	FcConfigFilename
 	FcConfigGetBlanks
 	FcConfigGetCache
@@ -68,6 +71,7 @@ EXPORTS
 	FcConfigUptoDate
 	FcDefaultSubstitute
 	FcDirCacheClean
+    FcDirCacheCreateUUID
 	FcDirCacheLoad
 	FcDirCacheLoadFile
 	FcDirCacheRead
@@ -95,6 +99,7 @@ EXPORTS
 	FcFreeTypeCharSet
 	FcFreeTypeCharSetAndSpacing
 	FcFreeTypeQuery
+    FcFreeTypeQueryAll
 	FcFreeTypeQueryFace
 	FcGetDefaultLangs
 	FcGetLangs
@@ -211,4 +216,6 @@ EXPORTS
 	FcValuePrint
 	FcValueSave
 	FcWeightFromOpenType
+    FcWeightFromOpenTypeDouble
 	FcWeightToOpenType
+    FcWeightToOpenTypeDouble
