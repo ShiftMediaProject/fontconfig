@@ -44,6 +44,14 @@
 #  define WIN32_EXTRA_LEAN
 #  define STRICT
 #  include <windows.h>
+
+#if defined(_MSC_VER)
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
+
+#define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
+
 #endif
 
 #endif /* _FCWINDOWS_H_ */

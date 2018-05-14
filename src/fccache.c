@@ -30,7 +30,11 @@
 #include <limits.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/time.h>
+
+#ifndef _WIN32
+  #include <sys/time.h>
+#endif
+
 #include <assert.h>
 #if defined(HAVE_MMAP) || defined(__CYGWIN__)
 #  include <unistd.h>
