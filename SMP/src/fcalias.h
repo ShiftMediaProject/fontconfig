@@ -22,6 +22,8 @@ extern __typeof (FcCacheCreateTagFile) IA__FcCacheCreateTagFile FC_ATTRIBUTE_VIS
 #define FcCacheCreateTagFile IA__FcCacheCreateTagFile
 extern __typeof (FcDirCacheCreateUUID) IA__FcDirCacheCreateUUID FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcDirCacheCreateUUID IA__FcDirCacheCreateUUID
+extern __typeof (FcDirCacheDeleteUUID) IA__FcDirCacheDeleteUUID FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcDirCacheDeleteUUID IA__FcDirCacheDeleteUUID
 extern __typeof (FcConfigHome) IA__FcConfigHome FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcConfigHome IA__FcConfigHome
 extern __typeof (FcConfigEnableHome) IA__FcConfigEnableHome FC_ATTRIBUTE_VISIBILITY_HIDDEN;
@@ -290,6 +292,8 @@ extern __typeof (FcValueSave) IA__FcValueSave FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcValueSave IA__FcValueSave
 extern __typeof (FcPatternDestroy) IA__FcPatternDestroy FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcPatternDestroy IA__FcPatternDestroy
+extern __typeof (FcPatternObjectCount) IA__FcPatternObjectCount FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcPatternObjectCount IA__FcPatternObjectCount
 extern __typeof (FcPatternEqual) IA__FcPatternEqual FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcPatternEqual IA__FcPatternEqual
 extern __typeof (FcPatternEqualSubset) IA__FcPatternEqualSubset FC_ATTRIBUTE_VISIBILITY_HIDDEN;
@@ -356,6 +360,22 @@ extern __typeof (FcRangeCopy) IA__FcRangeCopy FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcRangeCopy IA__FcRangeCopy
 extern __typeof (FcRangeGetDouble) IA__FcRangeGetDouble FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcRangeGetDouble IA__FcRangeGetDouble
+extern __typeof (FcPatternIterStart) IA__FcPatternIterStart FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcPatternIterStart IA__FcPatternIterStart
+extern __typeof (FcPatternIterNext) IA__FcPatternIterNext FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcPatternIterNext IA__FcPatternIterNext
+extern __typeof (FcPatternIterEqual) IA__FcPatternIterEqual FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcPatternIterEqual IA__FcPatternIterEqual
+extern __typeof (FcPatternFindIter) IA__FcPatternFindIter FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcPatternFindIter IA__FcPatternFindIter
+extern __typeof (FcPatternIterIsValid) IA__FcPatternIterIsValid FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcPatternIterIsValid IA__FcPatternIterIsValid
+extern __typeof (FcPatternIterGetObject) IA__FcPatternIterGetObject FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcPatternIterGetObject IA__FcPatternIterGetObject
+extern __typeof (FcPatternIterValueCount) IA__FcPatternIterValueCount FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcPatternIterValueCount IA__FcPatternIterValueCount
+extern __typeof (FcPatternIterGetValue) IA__FcPatternIterGetValue FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcPatternIterGetValue IA__FcPatternIterGetValue
 extern __typeof (FcWeightFromOpenType) IA__FcWeightFromOpenType FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcWeightFromOpenType IA__FcWeightFromOpenType
 extern __typeof (FcWeightFromOpenTypeDouble) IA__FcWeightFromOpenTypeDouble FC_ATTRIBUTE_VISIBILITY_HIDDEN;

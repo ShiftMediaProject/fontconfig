@@ -26,6 +26,8 @@ extern __typeof (FcDirCacheClean) FcDirCacheClean __attribute((alias("IA__FcDirC
 extern __typeof (FcCacheCreateTagFile) FcCacheCreateTagFile __attribute((alias("IA__FcCacheCreateTagFile"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
 # undef FcDirCacheCreateUUID
 extern __typeof (FcDirCacheCreateUUID) FcDirCacheCreateUUID __attribute((alias("IA__FcDirCacheCreateUUID"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
+# undef FcDirCacheDeleteUUID
+extern __typeof (FcDirCacheDeleteUUID) FcDirCacheDeleteUUID __attribute((alias("IA__FcDirCacheDeleteUUID"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
 #endif /* __fccache__ */
 #ifdef __fccfg__
 # undef FcConfigHome
@@ -330,6 +332,8 @@ extern __typeof (FcValueEqual) FcValueEqual __attribute((alias("IA__FcValueEqual
 extern __typeof (FcValueSave) FcValueSave __attribute((alias("IA__FcValueSave"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
 # undef FcPatternDestroy
 extern __typeof (FcPatternDestroy) FcPatternDestroy __attribute((alias("IA__FcPatternDestroy"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
+# undef FcPatternObjectCount
+extern __typeof (FcPatternObjectCount) FcPatternObjectCount __attribute((alias("IA__FcPatternObjectCount"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
 # undef FcPatternEqual
 extern __typeof (FcPatternEqual) FcPatternEqual __attribute((alias("IA__FcPatternEqual"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
 # undef FcPatternEqualSubset
@@ -401,6 +405,24 @@ extern __typeof (FcRangeCopy) FcRangeCopy __attribute((alias("IA__FcRangeCopy"))
 # undef FcRangeGetDouble
 extern __typeof (FcRangeGetDouble) FcRangeGetDouble __attribute((alias("IA__FcRangeGetDouble"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
 #endif /* __fcrange__ */
+#ifdef __fcpat__
+# undef FcPatternIterStart
+extern __typeof (FcPatternIterStart) FcPatternIterStart __attribute((alias("IA__FcPatternIterStart"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
+# undef FcPatternIterNext
+extern __typeof (FcPatternIterNext) FcPatternIterNext __attribute((alias("IA__FcPatternIterNext"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
+# undef FcPatternIterEqual
+extern __typeof (FcPatternIterEqual) FcPatternIterEqual __attribute((alias("IA__FcPatternIterEqual"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
+# undef FcPatternFindIter
+extern __typeof (FcPatternFindIter) FcPatternFindIter __attribute((alias("IA__FcPatternFindIter"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
+# undef FcPatternIterIsValid
+extern __typeof (FcPatternIterIsValid) FcPatternIterIsValid __attribute((alias("IA__FcPatternIterIsValid"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
+# undef FcPatternIterGetObject
+extern __typeof (FcPatternIterGetObject) FcPatternIterGetObject __attribute((alias("IA__FcPatternIterGetObject"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
+# undef FcPatternIterValueCount
+extern __typeof (FcPatternIterValueCount) FcPatternIterValueCount __attribute((alias("IA__FcPatternIterValueCount"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
+# undef FcPatternIterGetValue
+extern __typeof (FcPatternIterGetValue) FcPatternIterGetValue __attribute((alias("IA__FcPatternIterGetValue"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;
+#endif /* __fcpat__ */
 #ifdef __fcweight__
 # undef FcWeightFromOpenType
 extern __typeof (FcWeightFromOpenType) FcWeightFromOpenType __attribute((alias("IA__FcWeightFromOpenType"))) FC_ATTRIBUTE_VISIBILITY_EXPORT;

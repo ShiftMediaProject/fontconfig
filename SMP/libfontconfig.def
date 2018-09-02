@@ -43,9 +43,9 @@ EXPORTS
 	FcConfigCreate
 	FcConfigDestroy
 	FcConfigEnableHome
-    FcConfigFileInfoIterGet
-    FcConfigFileInfoIterInit
-    FcConfigFileInfoIterNext
+	FcConfigFileInfoIterGet
+	FcConfigFileInfoIterInit
+	FcConfigFileInfoIterNext
 	FcConfigFilename
 	FcConfigGetBlanks
 	FcConfigGetCache
@@ -60,7 +60,7 @@ EXPORTS
 	FcConfigGetSysRoot
 	FcConfigHome
 	FcConfigParseAndLoad
-    FcConfigParseAndLoadFromMemory
+	FcConfigParseAndLoadFromMemory
 	FcConfigReference
 	FcConfigSetCurrent
 	FcConfigSetRescanInterval
@@ -71,10 +71,12 @@ EXPORTS
 	FcConfigUptoDate
 	FcDefaultSubstitute
 	FcDirCacheClean
-    FcDirCacheCreateUUID
+	FcDirCacheCreateUUID
+	FcDirCacheDeleteUUID
 	FcDirCacheLoad
 	FcDirCacheLoadFile
 	FcDirCacheRead
+	FcDirCacheRescan
 	FcDirCacheUnlink
 	FcDirCacheUnload
 	FcDirCacheValid
@@ -99,7 +101,7 @@ EXPORTS
 	FcFreeTypeCharSet
 	FcFreeTypeCharSetAndSpacing
 	FcFreeTypeQuery
-    FcFreeTypeQueryAll
+	FcFreeTypeQueryAll
 	FcFreeTypeQueryFace
 	FcGetDefaultLangs
 	FcGetLangs
@@ -120,8 +122,8 @@ EXPORTS
 	FcLangSetDestroy
 	FcLangSetEqual
 	FcLangSetGetLangs
-	FcLangSetHash
 	FcLangSetHasLang
+	FcLangSetHash
 	FcLangSetSubtract
 	FcLangSetUnion
 	FcMatrixCopy
@@ -151,8 +153,8 @@ EXPORTS
 	FcPatternAddFTFace
 	FcPatternAddInteger
 	FcPatternAddLangSet
-	FcPatternAddRange
 	FcPatternAddMatrix
+	FcPatternAddRange
 	FcPatternAddString
 	FcPatternAddWeak
 	FcPatternBuild
@@ -163,6 +165,7 @@ EXPORTS
 	FcPatternEqual
 	FcPatternEqualSubset
 	FcPatternFilter
+	FcPatternFindIter
 	FcPatternFormat
 	FcPatternGet
 	FcPatternGetBool
@@ -171,11 +174,19 @@ EXPORTS
 	FcPatternGetFTFace
 	FcPatternGetInteger
 	FcPatternGetLangSet
-	FcPatternGetRange
 	FcPatternGetMatrix
+	FcPatternGetRange
 	FcPatternGetString
-    FcPatternGetWithBinding
+	FcPatternGetWithBinding
 	FcPatternHash
+	FcPatternIterEqual
+	FcPatternIterGetObject
+	FcPatternIterGetValue
+	FcPatternIterIsValid
+	FcPatternIterNext
+	FcPatternIterStart
+	FcPatternIterValueCount
+	FcPatternObjectCount
 	FcPatternPrint
 	FcPatternReference
 	FcPatternRemove
@@ -195,6 +206,7 @@ EXPORTS
 	FcStrFree
 	FcStrListCreate
 	FcStrListDone
+	FcStrListFirst
 	FcStrListNext
 	FcStrPlus
 	FcStrSetAdd
@@ -216,6 +228,6 @@ EXPORTS
 	FcValuePrint
 	FcValueSave
 	FcWeightFromOpenType
-    FcWeightFromOpenTypeDouble
+	FcWeightFromOpenTypeDouble
 	FcWeightToOpenType
-    FcWeightToOpenTypeDouble
+	FcWeightToOpenTypeDouble
