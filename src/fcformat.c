@@ -271,7 +271,7 @@ interpret_builtin (FcFormatContext *c,
 		   FcPattern       *pat,
 		   FcStrBuf        *buf)
 {
-    FcChar8       *new_str;
+    FcChar8       *new_str = NULL;
     FcBool         ret;
 
     if (!expect_char (c, '=') ||
@@ -971,7 +971,7 @@ interpret_convert (FcFormatContext *c,
 		   int              start)
 {
     const FcChar8 *str;
-    FcChar8       *new_str;
+    FcChar8       *new_str = NULL;
     FcStrBuf       new_buf;
     FcChar8        buf_static[8192];
     FcBool         ret;

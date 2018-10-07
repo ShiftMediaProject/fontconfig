@@ -119,7 +119,11 @@ retry:
 #ifdef _WIN32
 	WCHAR buf[MAX_PATH];
 
+# if !defined(WINAPI_FAMILY) || !(WINAPI_FAMILY == WINAPI_FAMILY_PC_APP || WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
 	if (GetModuleFileNameW (GetModuleHandle (NULL), buf, sizeof (buf) / sizeof (buf[0])) > 0)
+# else
+	if (GetModuleFileNameW (GetCurrentProcess (), buf, sizeof(buf) / sizeof(buf[0])) > 0)
+# endif
 	{
 	    WCHAR *p;
 	    unsigned int len;

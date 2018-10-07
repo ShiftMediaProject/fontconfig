@@ -2150,6 +2150,7 @@ FcParseDir (FcConfigParse *parse)
 	int rc;
     WCHAR wide_buffer[1000];
 	data = buffer;
+#   if !defined(WINAPI_FAMILY) || !(WINAPI_FAMILY == WINAPI_FAMILY_PC_APP || WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
 	rc = GetSystemWindowsDirectoryW (wide_buffer, sizeof (wide_buffer) / sizeof (wide_buffer[0]) - 20);
 	if (rc == 0 || rc > sizeof(wide_buffer) / sizeof(wide_buffer[0]) - 20)
 	{
@@ -2161,6 +2162,9 @@ FcParseDir (FcConfigParse *parse)
 	if (data [strlen ((const char *) data) - 1] != '\\')
 	    strcat ((char *) data, "\\");
 	strcat ((char *) data, "fonts");
+#else
+    data = "C:\\Windows\\fonts";
+#endif
     }
 #endif
     if (strlen ((char *) data) == 0)
