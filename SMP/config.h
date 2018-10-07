@@ -274,3 +274,8 @@
 
 /* Use iconv. */
 #define USE_ICONV 1
+
+#include <crtversion.h>
+#if _VC_CRT_MAJOR_VERSION < 14
+#    define snprintf _snprintf
+#endif
