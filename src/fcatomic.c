@@ -54,11 +54,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#ifdef _WIN32
-#include <direct.h>
-#define mkdir(path,mode) _mkdir(path)
-#endif
-
 #define NEW_NAME	".NEW"
 #define LCK_NAME	".LCK"
 #define TMP_NAME	".TMP-XXXXXX"
@@ -136,12 +131,12 @@ FcAtomicLock (FcAtomic *atomic)
 	/* the filesystem where atomic->lck points to may not supports
 	 * the hard link. so better try to fallback
 	 */
-	ret = mkdir ((char *) atomic->lck, 0600);
+	ret = FcMakeDirectory (atomic->lck, 0600);
 	no_link = FcTrue;
     }
     (void) unlink ((char *) atomic->tmp);
 #else
-    ret = mkdir ((char *) atomic->lck, 0600);
+    ret = FcMakeDirectoryMode (atomic->lck, 0600);
 #endif
     if (ret < 0)
     {

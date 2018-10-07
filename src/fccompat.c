@@ -108,6 +108,68 @@ mkstemp (char *template)
 #define HAVE_MKSTEMP 1
 #endif
 
+#ifdef _WIN32
+#include <direct.h>
+int fcopen (const char *filename, int oflag, ...)
+{
+    int fd = -1;
+    WCHAR wide_buffer[MAX_PATH];
+    if (MultiByteToWideChar (CP_UTF8, 0, filename, -1, wide_buffer, MAX_PATH) == 0)
+        return fd;
+
+    if (oflag & O_CREAT)
+    {
+        va_list ap;
+        mode_t mode;
+
+        va_start(ap, oflag);
+        mode = (mode_t)va_arg(ap, int);
+        va_end(ap);
+
+        fd = _wopen(wide_buffer, oflag, mode);
+    }
+    else
+    {
+        fd = _wopen(wide_buffer, oflag);
+    }
+    return fd;
+}
+#define open(filename,oflag,...) fcopen(filename,oflag,__VA_ARGS__)
+int fcmkdir (const char *dirname, mode_t mode)
+{
+    WCHAR wide_buffer[MAX_PATH];
+    if (MultiByteToWideChar (CP_UTF8, 0, dirname, -1, wide_buffer, MAX_PATH) == 0)
+        return -1;
+    return _wmkdir (wide_buffer);
+}
+#define mkdir(path,mode) fcmkdir(path,mode)
+errno_t fc_mktemp_s (char *template, size_t size)
+{
+    WCHAR wide_buffer[MAX_PATH];
+    int len;
+    if ((len = MultiByteToWideChar (CP_UTF8, 0, template, -1, wide_buffer, MAX_PATH)) == 0)
+        return -1;
+    return _wmktemp_s (wide_buffer, len);
+}
+#define _mktemp_s(template,sizeInChars) fc_mktemp_s(template,sizeInChars)
+int fcaccess (const char *path, int mode)
+{
+    WCHAR wide_buffer[MAX_PATH];
+    if (MultiByteToWideChar (CP_UTF8, 0, path, -1, wide_buffer, MAX_PATH) == 0)
+        return -1;
+    return _waccess (wide_buffer, mode);
+}
+#define access(path,mode) fcaccess(path,mode)
+int fcchmod (const char *filename, int pmode)
+{
+    WCHAR wide_buffer[MAX_PATH];
+    if (MultiByteToWideChar (CP_UTF8, 0, filename, -1, wide_buffer, MAX_PATH) == 0)
+        return -1;
+    return _wchmod (wide_buffer, pmode);
+}
+#define chmod(filename,pmode) fcchmod(filename,pmode)
+#endif
+
 int
 FcOpen(const char *pathname, int flags, ...)
 {
@@ -232,13 +294,14 @@ FcRandom(void)
     return result;
 }
 
-#ifdef _WIN32
-#include <direct.h>
-#define mkdir(path,mode) _mkdir(path)
-#endif
-
 FcBool
 FcMakeDirectory (const FcChar8 *dir)
+{
+    return FcMakeDirectoryMode (dir, 0755);
+}
+
+FcBool
+FcMakeDirectoryMode (const FcChar8 *dir, mode_t mode)
 {
     FcChar8 *parent;
     FcBool  ret;
@@ -250,9 +313,9 @@ FcMakeDirectory (const FcChar8 *dir)
     if (!parent)
 	return FcFalse;
     if (access ((char *) parent, F_OK) == 0)
-	ret = mkdir ((char *) dir, 0755) == 0 && chmod ((char *) dir, 0755) == 0;
+	ret = mkdir ((char *) dir, mode) == 0 && chmod ((char *) dir, mode) == 0;
     else if (access ((char *) parent, F_OK) == -1)
-	ret = FcMakeDirectory (parent) && (mkdir ((char *) dir, 0755) == 0) && chmod ((char *) dir, 0755) == 0;
+	ret = FcMakeDirectory (parent) && (mkdir ((char *) dir, mode) == 0) && chmod ((char *) dir, mode) == 0;
     else
 	ret = FcFalse;
     FcStrFree (parent);
@@ -273,6 +336,18 @@ FcReadLink (const FcChar8 *pathname,
     errno = ENOSYS;
     return -1;
 #endif
+}
+
+int
+FcAccess (const FcChar8 *path, int amode)
+{
+    return access ((const char *) path, amode);
+}
+
+int
+FcChmod (const FcChar8 *filename, int pmode)
+{
+    return chmod ((const char *)filename, pmode);
 }
 
 #define __fccompat__

@@ -76,11 +76,15 @@ int
 FcStat (const FcChar8 *file, struct stat *statb)
 {
     WIN32_FILE_ATTRIBUTE_DATA wfad;
+    WCHAR wide_full_path_name[MAX_PATH];
     char full_path_name[MAX_PATH];
-    char *basename;
+    WCHAR *basename;
     DWORD rc;
+    WCHAR wide_file[MAX_PATH];
+    if (MultiByteToWideChar (CP_UTF8, 0, file, -1, wide_file, MAX_PATH) == 0)
+    return -1;
 
-    if (!GetFileAttributesEx ((LPCSTR) file, GetFileExInfoStandard, &wfad))
+    if (!GetFileAttributesExW (wide_file, GetFileExInfoStandard, &wfad))
 	return -1;
 
     statb->st_dev = 0;
@@ -89,11 +93,15 @@ FcStat (const FcChar8 *file, struct stat *statb)
      * Call GetLongPathName() to get the spelling of the path name as it
      * is on disk.
      */
-    rc = GetFullPathName ((LPCSTR) file, sizeof (full_path_name), full_path_name, &basename);
-    if (rc == 0 || rc > sizeof (full_path_name))
+    rc = GetFullPathNameW (wide_file, sizeof (wide_full_path_name) / sizeof(wide_full_path_name[0]), wide_full_path_name, &basename);
+    if (rc == 0 || rc > sizeof (wide_full_path_name))
 	return -1;
 
-    rc = GetLongPathName (full_path_name, full_path_name, sizeof (full_path_name));
+    rc = GetLongPathNameW (wide_full_path_name, wide_full_path_name, sizeof (wide_full_path_name) / sizeof(wide_full_path_name[0]));
+    if (rc == 0 || rc > sizeof(wide_full_path_name))
+    return -1;
+    if (WideCharToMultiByte (CP_UTF8, 0, wide_full_path_name, rc, full_path_name, MAX_PATH, NULL, NULL) == 0)
+    return -1;
     statb->st_ino = FcStringHash ((const FcChar8 *) full_path_name);
 
     statb->st_mode = _S_IREAD | _S_IWRITE;

@@ -69,7 +69,7 @@ FcDirCacheCreateUUID (FcChar8  *dir,
 	return FcFalse;
     }
 
-    if (force || access ((const char *) uuidname, F_OK) < 0)
+    if (force || FcAccess (uuidname, F_OK) < 0)
     {
 	FcAtomic *atomic;
 	int fd;
@@ -1309,7 +1309,7 @@ FcDirCacheWrite (FcCache *cache, FcConfig *config)
 	else
 	    d = FcStrCopyFilename (test_dir);
 
-	if (access ((char *) d, W_OK) == 0)
+	if (FcAccess (d, W_OK) == 0)
 	{
 	    cache_dir = FcStrCopyFilename (d);
 	    break;
@@ -1319,7 +1319,7 @@ FcDirCacheWrite (FcCache *cache, FcConfig *config)
 	    /*
 	     * If the directory doesn't exist, try to create it
 	     */
-	    if (access ((char *) d, F_OK) == -1) {
+	    if (FcAccess (d, F_OK) == -1) {
 		if (FcMakeDirectory (d))
 		{
 		    cache_dir = FcStrCopyFilename (d);
@@ -1331,7 +1331,7 @@ FcDirCacheWrite (FcCache *cache, FcConfig *config)
 	    /*
 	     * Otherwise, try making it writable
 	     */
-	    else if (chmod ((char *) d, 0755) == 0)
+	    else if (FcChmod (d, 0755) == 0)
 	    {
 		cache_dir = FcStrCopyFilename (d);
 		/* Try to create CACHEDIR.TAG too */
@@ -1454,11 +1454,11 @@ FcDirCacheClean (const FcChar8 *cache_dir, FcBool verbose)
 	fprintf (stderr, "Fontconfig error: %s: out of memory\n", cache_dir);
 	return FcFalse;
     }
-    if (access ((char *) dir, W_OK) != 0)
+    if (FcAccess ((char *) dir, W_OK) != 0)
     {
 	if (verbose || FcDebug () & FC_DBG_CACHE)
 	    printf ("%s: not cleaning %s cache directory\n", dir,
-		    access ((char *) dir, F_OK) == 0 ? "unwritable" : "non-existent");
+           FcAccess (dir, F_OK) == 0 ? "unwritable" : "non-existent");
 	goto bail0;
     }
     if (verbose || FcDebug () & FC_DBG_CACHE)
@@ -1930,7 +1930,7 @@ FcDirCacheCreateTagFile (const FcChar8 *cache_dir)
     if (!cache_dir)
 	return FcFalse;
 
-    if (access ((char *) cache_dir, W_OK) == 0)
+    if (FcAccess (cache_dir, W_OK) == 0)
     {
 	/* Create CACHEDIR.TAG */
 	cache_tag = FcStrBuildFilename (cache_dir, "CACHEDIR.TAG", NULL);

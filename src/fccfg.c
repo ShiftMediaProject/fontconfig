@@ -1902,12 +1902,14 @@ DllMain (HINSTANCE hinstDLL,
 	 DWORD     fdwReason,
 	 LPVOID    lpvReserved)
 {
+  WCHAR wide_fontconfig_path[1000];
   FcChar8 *p;
+  WCHAR *wp;
 
   switch (fdwReason) {
   case DLL_PROCESS_ATTACH:
-      if (!GetModuleFileName ((HMODULE) hinstDLL, (LPCH) fontconfig_path,
-			      sizeof (fontconfig_path)))
+      if (!GetModuleFileNameW ((HMODULE) hinstDLL, wide_fontconfig_path,
+			      sizeof (wide_fontconfig_path) / sizeof(WCHAR)))
 	  break;
 
       /* If the fontconfig DLL is in a "bin" or "lib" subfolder,
@@ -1915,14 +1917,16 @@ DllMain (HINSTANCE hinstDLL,
        * "etc/fonts" in there as FONTCONFIG_PATH. Otherwise use the
        * folder where the DLL is as FONTCONFIG_PATH.
        */
-      p = (FcChar8 *) strrchr ((const char *) fontconfig_path, '\\');
-      if (p)
+      wp = wcsrchr (wide_fontconfig_path, L'\\');
+      if (wp)
       {
-	  *p = '\0';
-	  p = (FcChar8 *) strrchr ((const char *) fontconfig_path, '\\');
-	  if (p && (FcStrCmpIgnoreCase (p + 1, (const FcChar8 *) "bin") == 0 ||
-		    FcStrCmpIgnoreCase (p + 1, (const FcChar8 *) "lib") == 0))
-	      *p = '\0';
+	  *wp = L'\0';
+      wp = wcsrchr (wide_fontconfig_path, L'\\');
+	  if (wp && (_wcsicmp (wp + 1, L"bin") == 0 ||
+          _wcsicmp (wp + 1, L"lib") == 0))
+	      *wp = L'\0';
+      if (WideCharToMultiByte (CP_UTF8, 0, wide_fontconfig_path, -1, (LPSTR) fontconfig_path, 1000, NULL, NULL) == 0)
+      break;
 	  strcat ((char *) fontconfig_instprefix, (char *) fontconfig_path);
 	  strcat ((char *) fontconfig_path, "\\etc\\fonts");
       }
@@ -1983,7 +1987,7 @@ FcConfigFileExists (const FcChar8 *dir, const FcChar8 *file)
 #endif
     strcat ((char *) path, (char *) file);
 
-    if (access ((char *) path, R_OK) == 0)
+    if (FcAccess (path, R_OK) == 0)
 	return path;
 
     FcStrFree (path);
@@ -2039,11 +2043,14 @@ FcConfigGetPath (void)
 #ifdef _WIN32
 	if (fontconfig_path[0] == '\0')
 	{
-		char *p;
-		if(!GetModuleFileName(NULL, (LPCH) fontconfig_path, sizeof(fontconfig_path)))
+        WCHAR wide_fontconfig_path[1000];
+        WCHAR *p;
+		if(!GetModuleFileNameW (NULL, wide_fontconfig_path, sizeof(wide_fontconfig_path) / sizeof(wide_fontconfig_path[0])))
 			goto bail1;
-		p = strrchr ((const char *) fontconfig_path, '\\');
-		if (p) *p = '\0';
+		p = wcsrchr(wide_fontconfig_path, L'\\');
+		if (p) *p = L'\0';
+        if (WideCharToMultiByte (CP_UTF8, 0, wide_fontconfig_path, -1, (LPSTR) fontconfig_path, 1000, NULL, NULL) == 0)
+            goto bail1;
 		strcat ((char *) fontconfig_path, "\\fonts");
 	}
 #endif

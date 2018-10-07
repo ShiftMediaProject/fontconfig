@@ -54,7 +54,7 @@
 #endif /* ENABLE_LIBXML2 */
 
 #ifdef _WIN32
-#include <mbstring.h>
+#include <Shlobj.h>
 extern FcChar8 fontconfig_instprefix[];
 #endif
 
@@ -2109,9 +2109,10 @@ FcParseDir (FcConfigParse *parse)
 #ifdef _WIN32
     if (strcmp ((const char *) data, "CUSTOMFONTDIR") == 0)
     {
-	FcChar8 *p;
+    WCHAR *p;
+    WCHAR wide_buffer[1000];
 	data = buffer;
-	if (!GetModuleFileName (NULL, (LPCH) buffer, sizeof (buffer) - 20))
+	if (!GetModuleFileNameW (NULL, wide_buffer, sizeof (buffer) / sizeof (buffer[0]) - 20))
 	{
 	    FcConfigMessage (parse, FcSevereError, "GetModuleFileName failed");
 	    goto bail;
@@ -2122,33 +2123,41 @@ FcParseDir (FcConfigParse *parse)
 	 * pages have characters with backslash as the second
 	 * byte.
 	 */
-	p = _mbsrchr (data, '\\');
-	if (p) *p = '\0';
+	p = wcsrchr (wide_buffer, L'\\');
+	if (p) *p = L'\0';
+    if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR) buffer, 1000, NULL, NULL) == 0)
+    goto bail;
 	strcat ((char *) data, "\\fonts");
     }
     else if (strcmp ((const char *) data, "APPSHAREFONTDIR") == 0)
     {
-	FcChar8 *p;
+    WCHAR *p;
+    WCHAR wide_buffer[1000];
 	data = buffer;
-	if (!GetModuleFileName (NULL, (LPCH) buffer, sizeof (buffer) - 20))
+	if (!GetModuleFileNameW (NULL, wide_buffer, sizeof (buffer) / sizeof (buffer[0]) - 20))
 	{
 	    FcConfigMessage (parse, FcSevereError, "GetModuleFileName failed");
 	    goto bail;
 	}
-	p = _mbsrchr (data, '\\');
-	if (p) *p = '\0';
+    p = wcsrchr(wide_buffer, L'\\');
+	if (p) *p = L'\0';
+    if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR) buffer, 1000, NULL, NULL) == 0)
+    goto bail;
 	strcat ((char *) data, "\\..\\share\\fonts");
     }
     else if (strcmp ((const char *) data, "WINDOWSFONTDIR") == 0)
     {
 	int rc;
+    WCHAR wide_buffer[1000];
 	data = buffer;
-	rc = pGetSystemWindowsDirectory ((LPSTR) buffer, sizeof (buffer) - 20);
-	if (rc == 0 || rc > sizeof (buffer) - 20)
+	rc = GetSystemWindowsDirectoryW (wide_buffer, sizeof (wide_buffer) / sizeof (wide_buffer[0]) - 20);
+	if (rc == 0 || rc > sizeof(wide_buffer) / sizeof(wide_buffer[0]) - 20)
 	{
 	    FcConfigMessage (parse, FcSevereError, "GetSystemWindowsDirectory failed");
 	    goto bail;
 	}
+    if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, rc, (LPSTR) buffer, 1000, NULL, NULL) == 0)
+    goto bail;
 	if (data [strlen ((const char *) data) - 1] != '\\')
 	    strcat ((char *) data, "\\");
 	strcat ((char *) data, "fonts");
@@ -2232,7 +2241,7 @@ FcParseCacheDir (FcConfigParse *parse)
     else if (strcmp ((const char *) data, "WINDOWSTEMPDIR_FONTCONFIG_CACHE") == 0)
     {
 	int rc;
-
+    WCHAR wide_buffer[800];
 	FcStrFree (data);
 	data = malloc (1000);
 	if (!data)
@@ -2240,12 +2249,14 @@ FcParseCacheDir (FcConfigParse *parse)
 	    FcConfigMessage (parse, FcSevereError, "out of memory");
 	    goto bail;
 	}
-	rc = GetTempPath (800, (LPSTR) data);
+	rc = GetTempPathW (800, wide_buffer);
 	if (rc == 0 || rc > 800)
 	{
 	    FcConfigMessage (parse, FcSevereError, "GetTempPath failed");
 	    goto bail;
 	}
+    if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, rc, (LPSTR) data, 1000, NULL, NULL) == 0)
+    goto bail;
 	if (data [strlen ((const char *) data) - 1] != '\\')
 	    strcat ((char *) data, "\\");
 	strcat ((char *) data, "fontconfig\\cache");
@@ -2253,13 +2264,18 @@ FcParseCacheDir (FcConfigParse *parse)
     else if (strcmp ((const char *) data, "LOCAL_APPDATA_FONTCONFIG_CACHE") == 0)
     {
 	char szFPath[MAX_PATH + 1];
+    WCHAR wide_buffer[MAX_PATH + 1];
 	size_t len;
 
-	if (!(pSHGetFolderPathA && SUCCEEDED(pSHGetFolderPathA(NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, szFPath))))
+# if !defined(WINAPI_FAMILY) || !(WINAPI_FAMILY == WINAPI_FAMILY_PC_APP || WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
+	if (!(SUCCEEDED(SHGetFolderPathW (NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, wide_buffer))))
+# endif
 	{
-	    FcConfigMessage (parse, FcSevereError, "SHGetFolderPathA failed");
+	    FcConfigMessage (parse, FcSevereError, "SHGetFolderPath failed");
 	    goto bail;
 	}
+    if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR) szFPath, MAX_PATH, NULL, NULL) == 0)
+    goto bail;
 	strncat(szFPath, "\\fontconfig\\cache", MAX_PATH - 1 - strlen(szFPath));
 	len = strlen(szFPath) + 1;
 	FcStrFree (data);
@@ -3265,11 +3281,6 @@ bail0:
     return ret || !complain;
 }
 
-#ifdef _WIN32
-pfnGetSystemWindowsDirectory pGetSystemWindowsDirectory = NULL;
-pfnSHGetFolderPathA pSHGetFolderPathA = NULL;
-#endif
-
 static FcBool
 FcConfigParseAndLoadFromMemoryInternal (FcConfig       *config,
 					const FcChar8  *filename,
@@ -3411,22 +3422,6 @@ _FcConfigParse (FcConfig	*config,
     FcStrBuf	    sbuf;
     char            buf[BUFSIZ];
     FcBool	    ret = FcFalse;
-
-#ifdef _WIN32
-    if (!pGetSystemWindowsDirectory)
-    {
-        HMODULE hk32 = GetModuleHandleA("kernel32.dll");
-        if (!(pGetSystemWindowsDirectory = (pfnGetSystemWindowsDirectory) GetProcAddress(hk32, "GetSystemWindowsDirectoryA")))
-            pGetSystemWindowsDirectory = (pfnGetSystemWindowsDirectory) GetWindowsDirectory;
-    }
-    if (!pSHGetFolderPathA)
-    {
-        HMODULE hSh = LoadLibraryA("shfolder.dll");
-        /* the check is done later, because there is no provided fallback */
-        if (hSh)
-            pSHGetFolderPathA = (pfnSHGetFolderPathA) GetProcAddress(hSh, "SHGetFolderPathA");
-    }
-#endif
 
     filename = FcConfigFilename (name);
     if (!filename)

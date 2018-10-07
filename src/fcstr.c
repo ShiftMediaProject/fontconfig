@@ -1072,27 +1072,27 @@ FcStrCanonAbsoluteFilename (const FcChar8 *s)
  * Convert '\\' to '/' , remove double '/'
  */
 static void
-FcConvertDosPath (char *str)
+FcConvertDosPath (WCHAR *str)
 {
-  size_t len = strlen (str);
-  char *p = str;
-  char *dest = str;
-  char *end = str + len;
-  char last = 0;
+  size_t len = wcslen (str);
+  WCHAR *p = str;
+  WCHAR *dest = str;
+  WCHAR *end = str + len;
+  WCHAR last = 0;
 
-  if (*p == '\\')
+  if (*p == L'\\')
     {
-      *p = '/';
+      *p = L'/';
       p++;
       dest++;
     }
   while (p < end)
     {
-      if (*p == '\\')
-	*p = '/';
+      if (*p == L'\\')
+	*p = L'/';
 
-      if (*p != '/'
-	  || last != '/')
+      if (*p != L'/'
+	  || last != L'/')
 	{
 	  *dest++ = *p;
 	}
@@ -1110,13 +1110,19 @@ FcStrCanonFilename (const FcChar8 *s)
 {
 #ifdef _WIN32
     FcChar8 full[FC_MAX_FILE_LEN + 2];
-    int size = GetFullPathName ((LPCSTR) s, sizeof (full) -1,
-				(LPSTR) full, NULL);
+    WCHAR wide_full[FC_MAX_FILE_LEN + 2];
+    WCHAR wide_s[FC_MAX_FILE_LEN + 2];
+    if (MultiByteToWideChar (CP_UTF8, 0, (LPSTR) s, -1, wide_s, FC_MAX_FILE_LEN) == 0)
+    perror ("GetFullPathName");
+    int size = GetFullPathNameW (wide_s, sizeof (wide_full) / sizeof(wide_full[0]) -1,
+				wide_full, NULL);
 
     if (size == 0)
 	perror ("GetFullPathName");
 
-    FcConvertDosPath ((char *) full);
+    FcConvertDosPath (wide_full);
+    if (WideCharToMultiByte (CP_UTF8, 0, wide_full, size, (LPSTR) full, FC_MAX_FILE_LEN, NULL, NULL) == 0)
+    perror("GetFullPathName");
     return FcStrCanonAbsoluteFilename (full);
 #else
     if (s[0] == '/')
