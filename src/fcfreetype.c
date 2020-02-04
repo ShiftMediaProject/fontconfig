@@ -1133,12 +1133,10 @@ static const FT_UShort platform_order[] = {
 
 static const FT_UShort nameid_order[] = {
     TT_NAME_ID_WWS_FAMILY,
-    TT_NAME_ID_PREFERRED_FAMILY,
+    TT_NAME_ID_TYPOGRAPHIC_FAMILY,
     TT_NAME_ID_FONT_FAMILY,
-    TT_NAME_ID_MAC_FULL_NAME,
-    TT_NAME_ID_FULL_NAME,
     TT_NAME_ID_WWS_SUBFAMILY,
-    TT_NAME_ID_PREFERRED_SUBFAMILY,
+    TT_NAME_ID_TYPOGRAPHIC_SUBFAMILY,
     TT_NAME_ID_FONT_SUBFAMILY,
     TT_NAME_ID_TRADEMARK,
     TT_NAME_ID_MANUFACTURER,
@@ -1272,8 +1270,6 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
     int		    nfamily_lang = 0;
     int		    nstyle = 0;
     int		    nstyle_lang = 0;
-    int		    nfullname = 0;
-    int		    nfullname_lang = 0;
     unsigned int    p, n;
 
     FcChar8	    *style = 0;
@@ -1495,8 +1491,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 		 * and treat the instance's nameid as FONT_SUBFAMILY.
 		 * Postscript name is automatically handled by FreeType. */
 		if (nameid == TT_NAME_ID_WWS_SUBFAMILY ||
-		    nameid == TT_NAME_ID_PREFERRED_SUBFAMILY ||
-		    nameid == TT_NAME_ID_FULL_NAME)
+		    nameid == TT_NAME_ID_TYPOGRAPHIC_SUBFAMILY)
 		    continue;
 
 		if (nameid == TT_NAME_ID_FONT_SUBFAMILY)
@@ -1512,7 +1507,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	    {
 		switch (nameid) {
 		case TT_NAME_ID_WWS_FAMILY:
-		case TT_NAME_ID_PREFERRED_FAMILY:
+		case TT_NAME_ID_TYPOGRAPHIC_FAMILY:
 		case TT_NAME_ID_FONT_FAMILY:
 #if 0	
 		case TT_NAME_ID_UNIQUE_ID:
@@ -1527,22 +1522,8 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 		    np = &nfamily;
 		    nlangp = &nfamily_lang;
 		    break;
-		case TT_NAME_ID_MAC_FULL_NAME:
-		case TT_NAME_ID_FULL_NAME:
-		    if (variable)
-			break;
-		    if (FcDebug () & FC_DBG_SCANV)
-			printf ("found full   (n %2d p %d e %d l 0x%04x)",
-				sname.name_id, sname.platform_id,
-				sname.encoding_id, sname.language_id);
-
-		    obj = FC_FULLNAME_OBJECT;
-		    objlang = FC_FULLNAMELANG_OBJECT;
-		    np = &nfullname;
-		    nlangp = &nfullname_lang;
-		    break;
 		case TT_NAME_ID_WWS_SUBFAMILY:
-		case TT_NAME_ID_PREFERRED_SUBFAMILY:
+		case TT_NAME_ID_TYPOGRAPHIC_SUBFAMILY:
 		case TT_NAME_ID_FONT_SUBFAMILY:
 		    if (variable)
 			break;
@@ -1686,7 +1667,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
     }
 
     /* Add the fullname into the cache */
-    if (!variable && !nfullname)
+    if (!variable)
     {
 	FcChar8 *family, *style, *lang;
 	int n = 0;
@@ -1728,8 +1709,11 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	memcpy (style, &style[i], len - i);
 	FcStrBufInit (&sbuf, NULL, 0);
 	FcStrBufString (&sbuf, family);
-	FcStrBufChar (&sbuf, ' ');
-	FcStrBufString (&sbuf, style);
+	if (FcStrCmpIgnoreBlanksAndCase(style, (const FcChar8 *) "Regular") != 0)
+	{
+	    FcStrBufChar (&sbuf, ' ');
+	    FcStrBufString (&sbuf, style);
+	}
 	if (!FcPatternObjectAddString (pat, FC_FULLNAME_OBJECT, FcStrBufDoneStatic (&sbuf)))
 	{
 	    FcStrBufDestroy (&sbuf);
@@ -1738,7 +1722,6 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	FcStrBufDestroy (&sbuf);
 	if (!FcPatternObjectAddString (pat, FC_FULLNAMELANG_OBJECT, (const FcChar8 *) "en"))
 	    goto bail1;
-	++nfullname;
     }
     /* Add the PostScript name into the cache */
     if (!variable)
