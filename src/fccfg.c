@@ -126,7 +126,7 @@ FcConfigFini (void)
 static FcChar8 *
 FcConfigRealPath(const FcChar8 *path)
 {
-    char	resolved_name[PATH_MAX+1];
+    char	resolved_name[FC_PATH_MAX+1];
     char	*resolved_ret;
 
     if (!path)
@@ -135,7 +135,7 @@ FcConfigRealPath(const FcChar8 *path)
 #ifndef _WIN32
     resolved_ret = realpath((const char *) path, resolved_name);
 #else
-    if (GetFullPathNameA ((LPCSTR) path, PATH_MAX, resolved_name, NULL) == 0)
+    if (GetFullPathNameA ((LPCSTR) path, FC_PATH_MAX, resolved_name, NULL) == 0)
     {
         fprintf (stderr, "Fontconfig warning: GetFullPathNameA failed.\n");
         return NULL;
