@@ -2200,6 +2200,17 @@ bail2:
     FcCharSetDestroy (cs);
 bail1:
     FcPatternDestroy (pat);
+    if (master)
+    {
+#ifdef HAVE_FT_DONE_MM_VAR
+	if (face->glyph)
+	    FT_Done_MM_Var (face->glyph->library, master);
+#else
+	free (master);
+#endif
+    }
+    if (!nm_share && name_mapping)
+	free (name_mapping);
     if (foundry_)
 	free (foundry_);
 bail0:
@@ -2360,6 +2371,8 @@ bail:
     if (face)
 	FT_Done_Face (face);
     FT_Done_FreeType (ftLibrary);
+    if (nm)
+	free (nm);
 
     return ret;
 }
