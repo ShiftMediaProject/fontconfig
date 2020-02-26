@@ -365,7 +365,6 @@ FcDirCacheProcess (FcConfig *config, const FcChar8 *dir,
     struct stat file_stat, dir_stat;
     FcBool	ret = FcFalse;
     const FcChar8 *sysroot = FcConfigGetSysRoot (config);
-    struct timeval latest_mtime = (struct timeval){ 0 };
 
     if (sysroot)
 	d = FcStrBuildFilename (sysroot, dir, NULL);
@@ -390,6 +389,8 @@ FcDirCacheProcess (FcConfig *config, const FcChar8 *dir,
 #ifndef _WIN32
 	FcBool retried = FcFalse;
 #endif
+	struct timeval latest_mtime = (struct timeval){ 0 };
+
 	if (sysroot)
 	    cache_hashed = FcStrBuildFilename (sysroot, cache_dir, cache_base, NULL);
 	else
@@ -1081,11 +1082,11 @@ FcDirCacheLoadFile (const FcChar8 *cache_file, struct stat *file_stat)
 
     if (!file_stat)
 	file_stat = &my_file_stat;
-    fd = FcDirCacheOpenFile (cache_file, file_stat);
-    if (fd < 0)
-	return NULL;
     config = FcConfigReference (NULL);
     if (!config)
+	return NULL;
+    fd = FcDirCacheOpenFile (cache_file, file_stat);
+    if (fd < 0)
 	return NULL;
     cache = FcDirCacheMapFd (config, fd, file_stat, NULL);
     FcConfigDestroy (config);
