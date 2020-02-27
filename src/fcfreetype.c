@@ -1294,7 +1294,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	if (!FcPatternObjectAddBool (pat, FC_OUTLINE_OBJECT, has_outline))
 	    goto bail1;
 
-	has_color = FT_HAS_COLOR (face);
+	has_color = !!FT_HAS_COLOR (face);
 	if (!FcPatternObjectAddBool (pat, FC_COLOR_OBJECT, has_color))
 	    goto bail1;
 
