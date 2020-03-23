@@ -365,6 +365,7 @@ FcDirCacheProcess (FcConfig *config, const FcChar8 *dir,
     struct stat file_stat, dir_stat;
     FcBool	ret = FcFalse;
     const FcChar8 *sysroot = FcConfigGetSysRoot (config);
+    struct timeval latest_mtime = (struct timeval){ 0 };
 
     if (sysroot)
 	d = FcStrBuildFilename (sysroot, dir, NULL);
@@ -389,7 +390,6 @@ FcDirCacheProcess (FcConfig *config, const FcChar8 *dir,
 #ifndef _WIN32
 	FcBool retried = FcFalse;
 #endif
-	struct timeval latest_mtime = (struct timeval){ 0 };
 
 	if (sysroot)
 	    cache_hashed = FcStrBuildFilename (sysroot, cache_dir, cache_base, NULL);
@@ -445,6 +445,8 @@ FcDirCacheProcess (FcConfig *config, const FcChar8 *dir,
     }
     FcStrListDone (list);
 
+    if (closure)
+	return !!(*((FcCache **)closure) != NULL);
     return ret;
 }
 
@@ -792,7 +794,18 @@ FcCacheFini (void)
     int		    i;
 
     for (i = 0; i < FC_CACHE_MAX_LEVEL; i++)
-	assert (fcCacheChains[i] == NULL);
+    {
+	if (FcDebug() & FC_DBG_CACHE)
+	{
+	    if (fcCacheChains[i] != NULL)
+	    {
+		FcCacheSkip *s = fcCacheChains[i];
+		printf("Fontconfig error: not freed %p (dir: %s, refcount %d)\n", s->cache, FcCacheDir(s->cache), s->ref.count);
+	    }
+	}
+	else
+	    assert (fcCacheChains[i] == NULL);
+    }
     assert (fcCacheMaxLevel == 0);
 
     free_lock ();
