@@ -1627,7 +1627,10 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	}
     }
     if (!nm_share)
+    {
 	free (name_mapping);
+	name_mapping = NULL;
+    }
 
     if (!nfamily && face->family_name &&
 	FcStrCmpIgnoreBlanksAndCase ((FcChar8 *) face->family_name, (FcChar8 *) "") != 0)
