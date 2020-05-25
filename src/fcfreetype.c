@@ -1824,6 +1824,8 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	if (!FcPatternObjectAddInteger (pat, FC_FONTVERSION_OBJECT, 0))
 	    goto bail1;
     }
+    if (!FcPatternObjectAddInteger (pat, FC_ORDER_OBJECT, 0))
+	goto bail1;
 
     if (os2 && os2->version >= 0x0001 && os2->version != 0xffff)
     {
