@@ -32,6 +32,10 @@
 #define R_OK 4
 #endif
 
+#if defined(_WIN32) && !defined(S_ISFIFO)
+#define S_ISFIFO(m) 0
+#endif
+
 static FcConfig    *_fcConfig; /* MT-safe */
 static FcMutex	   *_lock;
 

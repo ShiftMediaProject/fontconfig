@@ -33,6 +33,8 @@
 
 #ifndef _WIN32
   #include <sys/time.h>
+#else
+  #include <winsock2.h> /* for struct timeval */
 #endif
 
 #include <assert.h>
