@@ -200,7 +200,7 @@ func.refs: local-fontconfig-devel.sgml $(DOCS_DEPS)
 	$(RM) devel-man/manpage.* &&		\
 	rmdir devel-man || rm $@ || :
 confdir.sgml: $(srcdir)/confdir.sgml.in
-	$(AM_V_GEN) sed -e 's,@CONFDIR\@,${CONFDIR},' $(srcdir)/$@.in | awk '{if (NR > 1) printf("\n"); printf("%s", $$0);}' > $@
+	$(AM_V_GEN) sed -e 's,@BASECONFIGDIR\@,${BASECONFIGDIR},' $(srcdir)/$@.in | awk '{if (NR > 1) printf("\n"); printf("%s", $$0);}' > $@
 ##
 $(DOC_FUNCS_SGML): $(DOC_FUNCS_FNCS) edit-sgml$(EXEEXT) $(srcdir)/func.sgml
 $(TXT_FILES): $(DOCS_DEPS)
