@@ -71,6 +71,21 @@
 #define FC_O_NOINHERIT 0
 #endif
 
+#ifndef HAVE_UNISTD_H
+/* Values for the second argument to access. These may be OR'd together. */
+#ifndef R_OK
+#define R_OK    4       /* Test for read permission.  */
+#endif
+#ifndef W_OK
+#define W_OK    2       /* Test for write permission.  */
+#endif
+#ifndef F_OK
+#define F_OK    0       /* Test for existence.  */
+#endif
+
+typedef int mode_t;
+#endif /* !HAVE_UNISTD_H */
+
 #if !defined (HAVE_MKOSTEMP) && !defined(HAVE_MKSTEMP) && !defined(HAVE__MKTEMP_S)
 static int
 mkstemp (char *template)
