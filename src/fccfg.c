@@ -2297,7 +2297,7 @@ FcConfigXdgCacheHome (void)
 
     if (!_FcConfigHomeEnabled)
 	return NULL;
-    if (env)
+    if (env && env[0])
 	ret = FcStrCopy ((const FcChar8 *)env);
     else
     {

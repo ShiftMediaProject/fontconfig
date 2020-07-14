@@ -1412,6 +1412,8 @@ FcDirCacheWrite (FcCache *cache, FcConfig *config)
 	    }
 	}
     }
+    if (!test_dir)
+	fprintf (stderr, "Fontconfig error: No writable cache directories\n");
     if (d)
 	FcStrFree (d);
     FcStrListDone (list);
