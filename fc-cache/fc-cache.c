@@ -41,7 +41,9 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <fcntl.h>
+#ifdef HAVE_DIRENT_H
 #include <dirent.h>
+#endif
 #include <string.h>
 #include <locale.h>
 

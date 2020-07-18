@@ -26,7 +26,10 @@
 #include "fcint.h"
 #include <fcntl.h>
 #include <stdarg.h>
+
+#ifdef HAVE_DIRENT_H
 #include <dirent.h>
+#endif
 
 #ifdef ENABLE_LIBXML2
 

@@ -23,7 +23,10 @@
  */
 
 #include "fcint.h"
+
+#ifdef HAVE_DIRENT_H
 #include <dirent.h>
+#endif
 
 FcBool
 FcFileIsDir (const FcChar8 *file)
