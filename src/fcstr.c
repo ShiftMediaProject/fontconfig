@@ -409,7 +409,7 @@ FcStrContainsWord (const FcChar8 *s1, const FcChar8 *s2)
 }
 
 /*
- * returns the number of strings (ignoring delimitors and case) being matched
+ * returns the number of strings (ignoring delimiters and case) being matched
  */
 
 int

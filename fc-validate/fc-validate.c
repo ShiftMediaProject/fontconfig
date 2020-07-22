@@ -167,7 +167,7 @@ main (int argc, char **argv)
 
     if (FT_Init_FreeType (&ftlib))
     {
-	fprintf (stderr, _("Can't initalize FreeType library\n"));
+	fprintf (stderr, _("Can't initialize FreeType library\n"));
 	return 1;
     }
 

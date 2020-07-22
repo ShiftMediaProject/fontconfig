@@ -232,7 +232,7 @@ dist-local-check-docs-enabled:
 	@false
 endif
 
-# force doc rebulid after configure
+# force doc rebuild after configure
 dist-hook-local: dist-local-check-docs-enabled
 
 -include $(top_srcdir)/git.mk

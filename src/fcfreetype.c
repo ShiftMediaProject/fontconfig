@@ -1300,7 +1300,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 
 	/* All color fonts are designed to be scaled, even if they only have
 	 * bitmap strikes.  Client is responsible to scale the bitmaps.  This
-	 * is in constrast to non-color strikes... */
+	 * is in contrast to non-color strikes... */
 	if (!FcPatternObjectAddBool (pat, FC_SCALABLE_OBJECT, has_outline || has_color))
 	    goto bail1;
     }

@@ -81,7 +81,7 @@ extern int optind, opterr, optopt;
  * POSIX has broken stdio so that putc must do thread-safe locking,
  * this is a serious performance problem for applications doing large
  * amounts of IO with putc (as is done here).  If available, use
- * the putc_unlocked varient instead.
+ * the putc_unlocked variant instead.
  */
  
 #if defined(putc_unlocked) || defined(_IO_putc_unlocked)
