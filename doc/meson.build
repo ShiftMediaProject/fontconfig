@@ -1,3 +1,5 @@
+doc_targets = []
+
 docbook2man = find_program('docbook2man', required: get_option('doc-man'))
 docbook2txt = find_program('docbook2txt', required: get_option('doc-txt'))
 docbook2pdf = find_program('docbook2pdf', required: get_option('doc-pdf'))
@@ -83,6 +85,8 @@ foreach f : doc_funcs_fncs
 endforeach
 
 if docbook2man.found()
+  doc_targets += ['man']
+
   custom_target('devel-man',
     input: [fontconfig_devel_sgml, funcs_sgml],
     output: man_pages,
@@ -113,6 +117,8 @@ if docbook2man.found()
 endif
 
 if docbook2pdf.found()
+  doc_targets += ['PDF']
+
   custom_target('devel-pdf',
     input: [fontconfig_devel_sgml, funcs_sgml],
     output: 'fontconfig-devel.pdf',
@@ -131,6 +137,8 @@ if docbook2pdf.found()
 endif
 
 if docbook2txt.found()
+  doc_targets += ['Text']
+
   custom_target('devel-txt',
     input: [fontconfig_devel_sgml, funcs_sgml],
     output: 'fontconfig-devel.txt',
@@ -149,6 +157,8 @@ if docbook2txt.found()
 endif
 
 if docbook2html.found()
+  doc_targets += ['HTML']
+
   custom_target('devel-html',
     input: [fontconfig_devel_sgml, funcs_sgml],
     output: 'fontconfig-devel.html',
