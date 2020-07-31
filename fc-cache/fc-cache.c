@@ -66,6 +66,10 @@
 #define O_BINARY 0
 #endif
 
+#ifndef S_ISDIR
+#define S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
+#endif
+
 #ifndef HAVE_GETOPT
 #define HAVE_GETOPT 0
 #endif
