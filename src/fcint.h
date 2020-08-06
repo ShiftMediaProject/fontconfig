@@ -84,6 +84,10 @@ extern pfnSHGetFolderPathA pSHGetFolderPathA;
 #define FC_UNUSED
 #endif
 
+#ifndef FC_UINT64_FORMAT
+#define FC_UINT64_FORMAT	"llu"
+#endif
+
 #define FC_DBG_MATCH	1
 #define FC_DBG_MATCHV	2
 #define FC_DBG_EDIT	4

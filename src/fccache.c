@@ -808,7 +808,7 @@ FcCacheFini (void)
 	    if (fcCacheChains[i] != NULL)
 	    {
 		FcCacheSkip *s = fcCacheChains[i];
-		printf("Fontconfig error: not freed %p (dir: %s, refcount %d)\n", s->cache, FcCacheDir(s->cache), s->ref.count);
+		printf("Fontconfig error: not freed %p (dir: %s, refcount %" FC_ATOMIC_INT_FORMAT ")\n", s->cache, FcCacheDir(s->cache), s->ref.count);
 	    }
 	}
 	else
@@ -1157,14 +1157,14 @@ FcDirChecksum (struct stat *statb)
 	else if ((errno == ERANGE && (epoch == ULLONG_MAX || epoch == 0))
 		|| (errno != 0 && epoch == 0))
 	    fprintf (stderr,
-		     "Fontconfig: SOURCE_DATE_EPOCH: strtoull: %s: %llu\n",
+		     "Fontconfig: SOURCE_DATE_EPOCH: strtoull: %s: %" FC_UINT64_FORMAT "\n",
 		     strerror(errno), epoch);
 	else if (*endptr != '\0')
 	    fprintf (stderr,
 		     "Fontconfig: SOURCE_DATE_EPOCH has trailing garbage\n");
 	else if (epoch > ULONG_MAX)
 	    fprintf (stderr,
-		     "Fontconfig: SOURCE_DATE_EPOCH must be <= %lu but saw: %llu\n",
+		     "Fontconfig: SOURCE_DATE_EPOCH must be <= %lu but saw: %" FC_UINT64_FORMAT "\n",
 		     ULONG_MAX, epoch);
 	else if (epoch < ret)
 	    /* Only override if directory is newer */
