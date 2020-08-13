@@ -1210,7 +1210,7 @@ FcPStackPop (FcConfigParse *parse)
 	{
 	    if (attrs[0][0])
 	    {
-		FcConfigMessage (parse, FcSevereError, "invalid attribute '%s'", attrs[0]);
+		FcConfigMessage (parse, FcSevereWarning, "invalid attribute '%s'", attrs[0]);
 	    }
 	    attrs += 2;
 	}
