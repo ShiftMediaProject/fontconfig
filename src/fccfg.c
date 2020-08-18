@@ -1550,6 +1550,8 @@ FcConfigMatchValueList (FcPattern	*p,
 	    {
 		if (!ret)
 		    ret = v;
+                if (t->qual != FcQualAll)
+                    break;
 	    }
 	    else
 	    {
