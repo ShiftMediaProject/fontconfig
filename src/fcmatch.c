@@ -480,6 +480,109 @@ FcCompareValueList (FcObject	     object,
     return FcTrue;
 }
 
+/* The bulk of the time in FcFontMatch and FcFontSort goes to
+ * walking long lists of family names. We speed this up with a
+ * hash table.
+ */
+typedef struct
+{
+    double strong_value;
+    double weak_value;
+} FamilyEntry;
+
+typedef struct
+{
+    FcHashTable *family_hash;
+} FcCompareData;
+
+static void
+FcCompareDataClear (FcCompareData *data)
+{
+    FcHashTableDestroy (data->family_hash);
+}
+
+static void
+FcCompareDataInit (FcPattern     *pat,
+                   FcCompareData *data)
+{
+    FcHashTable *table;
+    FcPatternElt *elt;
+    FcValueListPtr l;
+    int i;
+    const void *key;
+    FamilyEntry *e;
+
+    table = FcHashTableCreate ((FcHashFunc)FcStrHashIgnoreBlanksAndCase,
+                               (FcCompareFunc)FcStrCmpIgnoreBlanksAndCase,
+                               NULL,
+                               NULL,
+                               NULL,
+                               free);
+
+    elt = FcPatternObjectFindElt (pat, FC_FAMILY_OBJECT);
+    for (l = FcPatternEltValues(elt), i = 0; l; l = FcValueListNext(l), i++)
+    {
+        key = FcValueString (&l->value);
+        if (!FcHashTableFind (table, key, (void **)&e))
+        {
+            e = malloc (sizeof (FamilyEntry));
+            e->strong_value = 1e99;
+            e->weak_value = 1e99;
+            FcHashTableAdd (table, (void *)key, e);
+        }
+        if (l->binding == FcValueBindingWeak)
+        {
+            if (i < e->weak_value)
+                e->weak_value = i;
+        }
+        else
+        {
+            if (i < e->strong_value)
+                e->strong_value = i;
+        }
+    }
+
+    data->family_hash = table;
+}
+
+static FcBool
+FcCompareFamilies (FcPattern       *pat,
+                   FcValueListPtr   v1orig,
+                   FcPattern       *fnt,
+                   FcValueListPtr   v2orig,
+                   double          *value,
+                   FcResult        *result,
+                   FcHashTable     *table)
+{
+    FcValueListPtr v2;
+    double strong_value;
+    double weak_value;
+    const void *key;
+    FamilyEntry *e;
+
+    assert (table != NULL);
+
+    strong_value = 1e99;
+    weak_value = 1e99;
+
+    for (v2 = v2orig; v2; v2 = FcValueListNext(v2))
+    {
+        key = FcValueString (&v2->value);
+        if (FcHashTableFind (table, key, (void **)&e))
+        {
+            if (e->strong_value < strong_value)
+                strong_value = e->strong_value;
+            if (e->weak_value < weak_value)
+                weak_value = e->weak_value;
+        }
+    }
+
+    value[PRI_FAMILY_STRONG] = strong_value;
+    value[PRI_FAMILY_WEAK] = weak_value;
+
+    return FcTrue;
+}
+
 /*
  * Return a value indicating the distance between the two lists of
  * values
@@ -489,7 +592,8 @@ static FcBool
 FcCompare (FcPattern	*pat,
 	   FcPattern	*fnt,
 	   double	*value,
-	   FcResult	*result)
+	   FcResult	*result,
+           FcCompareData *data)
 {
     int		    i, i1, i2;
 
@@ -508,8 +612,18 @@ FcCompare (FcPattern	*pat,
 	    i2++;
 	else if (i < 0)
 	    i1++;
-	else
-	{
+	else if (elt_i1->object == FC_FAMILY_OBJECT && data->family_hash)
+        {
+            if (!FcCompareFamilies (pat, FcPatternEltValues(elt_i1),
+                                    fnt, FcPatternEltValues(elt_i2),
+                                    value, result,
+                                    data->family_hash))
+                return FcFalse;
+	    i1++;
+	    i2++;
+        }
+        else
+        {
 	    const FcMatcher *match = FcObjectToMatcher (elt_i1->object, FcFalse);
 	    if (!FcCompareValueList (elt_i1->object, match,
 				     FcPatternEltValues(elt_i1),
@@ -734,6 +848,7 @@ FcFontSetMatchInternal (FcFontSet   **sets,
     FcPattern	    *best;
     int		    i;
     int		    set;
+    FcCompareData   data;
 
     for (i = 0; i < PRI_END; i++)
 	bestscore[i] = 0;
@@ -743,6 +858,9 @@ FcFontSetMatchInternal (FcFontSet   **sets,
 	printf ("Match ");
 	FcPatternPrint (p);
     }
+
+    FcCompareDataInit (p, &data);
+
     for (set = 0; set < nsets; set++)
     {
 	s = sets[set];
@@ -755,8 +873,11 @@ FcFontSetMatchInternal (FcFontSet   **sets,
 		printf ("Font %d ", f);
 		FcPatternPrint (s->fonts[f]);
 	    }
-	    if (!FcCompare (p, s->fonts[f], score, result))
+	    if (!FcCompare (p, s->fonts[f], score, result, &data))
+            {
+                FcCompareDataClear (&data);
 		return 0;
+            }
 	    if (FcDebug () & FC_DBG_MATCHV)
 	    {
 		printf ("Score");
@@ -780,6 +901,9 @@ FcFontSetMatchInternal (FcFontSet   **sets,
 	    }
 	}
     }
+
+    FcCompareDataClear (&data);
+
     if (FcDebug () & FC_DBG_MATCH)
     {
 	printf ("Best score");
@@ -1015,6 +1139,7 @@ FcFontSetSort (FcConfig	    *config FC_UNUSED,
     int		    nPatternLang;
     FcBool    	    *patternLangSat;
     FcValue	    patternLang;
+    FcCompareData   data;
 
     assert (sets != NULL);
     assert (p != NULL);
@@ -1059,6 +1184,8 @@ FcFontSetSort (FcConfig	    *config FC_UNUSED,
     nodeps = (FcSortNode **) (nodes + nnodes);
     patternLangSat = (FcBool *) (nodeps + nnodes);
 
+    FcCompareDataInit (p, &data);
+
     new = nodes;
     nodep = nodeps;
     for (set = 0; set < nsets; set++)
@@ -1074,7 +1201,7 @@ FcFontSetSort (FcConfig	    *config FC_UNUSED,
 		FcPatternPrint (s->fonts[f]);
 	    }
 	    new->pattern = s->fonts[f];
-	    if (!FcCompare (p, new->pattern, new->score, result))
+	    if (!FcCompare (p, new->pattern, new->score, result, &data))
 		goto bail1;
 	    if (FcDebug () & FC_DBG_MATCHV)
 	    {
@@ -1090,6 +1217,8 @@ FcFontSetSort (FcConfig	    *config FC_UNUSED,
 	    nodep++;
 	}
     }
+
+    FcCompareDataClear (&data);
 
     nnodes = new - nodes;
 
