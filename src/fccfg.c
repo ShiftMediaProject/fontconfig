@@ -1579,12 +1579,128 @@ FcConfigEvaluate (FcPattern *p, FcPattern *p_pat, FcMatchKind kind, FcExpr *e)
     return v;
 }
 
+/* The bulk of the time in FcConfigSubstitute is spent walking
+ * lists of family names. We speed this up with a hash table.
+ * Since we need to take the ignore-blanks option into account,
+ * we use two separate hash tables.
+ */
+typedef struct
+{
+  int count;
+} FamilyTableEntry;
+
+
+typedef struct
+{
+  FcHashTable *family_blank_hash;
+  FcHashTable *family_hash;
+} FamilyTable;
+
+static FcBool
+FamilyTableLookup (FamilyTable   *table,
+                   FcOp           _op,
+                   const FcChar8 *s)
+{
+    FamilyTableEntry *fe;
+    int flags = FC_OP_GET_FLAGS (_op);
+    FcHashTable *hash;
+
+    if (flags & FcOpFlagIgnoreBlanks)
+        hash = table->family_blank_hash;
+    else
+        hash = table->family_hash;
+
+    return FcHashTableFind (hash, (const void *)s, (void **)&fe);
+}
+
+static void
+FamilyTableAdd (FamilyTable    *table,
+                FcValueListPtr  values)
+{
+    FcValueListPtr ll;
+    for (ll = values; ll; ll = FcValueListNext (ll))
+        {
+            const FcChar8 *s = FcValueString (&ll->value);
+            FamilyTableEntry *fe;
+
+            if (!FcHashTableFind (table->family_hash, (const void *)s, (void **)&fe))
+            {
+                fe = malloc (sizeof (FamilyTableEntry));
+                fe->count = 0;
+                FcHashTableAdd (table->family_hash, (void *)s, fe);
+            }
+            fe->count++;
+
+            if (!FcHashTableFind (table->family_blank_hash, (const void *)s, (void **)&fe))
+            {
+                fe = malloc (sizeof (FamilyTableEntry));
+                fe->count = 0;
+                FcHashTableAdd (table->family_blank_hash, (void *)s, fe);
+            }
+            fe->count++;
+       }
+}
+
+static void
+FamilyTableDel (FamilyTable   *table,
+                const FcChar8 *s)
+{
+    FamilyTableEntry *fe;
+
+    if (FcHashTableFind (table->family_hash, (void *)s, (void **)&fe))
+    {
+        fe->count--;
+        if (fe->count == 0)
+            FcHashTableRemove (table->family_hash, (void *)s);
+    }
+
+    if (FcHashTableFind (table->family_blank_hash, (void *)s, (void **)&fe))
+    {
+        fe->count--;
+        if (fe->count == 0)
+            FcHashTableRemove (table->family_blank_hash, (void *)s);
+    }
+}
+
+static void
+FamilyTableInit (FamilyTable *table,
+                 FcPattern *p)
+{
+    FcPatternElt *e;
+
+    table->family_blank_hash = FcHashTableCreate ((FcHashFunc)FcStrHashIgnoreBlanksAndCase,
+                                          (FcCompareFunc)FcStrCmpIgnoreBlanksAndCase,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          free);
+    table->family_hash = FcHashTableCreate ((FcHashFunc)FcStrHashIgnoreCase,
+                                          (FcCompareFunc)FcStrCmpIgnoreCase,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          free);
+    e = FcPatternObjectFindElt (p, FC_FAMILY_OBJECT);
+    if (e)
+        FamilyTableAdd (table, FcPatternEltValues (e));
+}
+
+static void
+FamilyTableClear (FamilyTable *table)
+{
+    if (table->family_blank_hash)
+        FcHashTableDestroy (table->family_blank_hash);
+    if (table->family_hash)
+        FcHashTableDestroy (table->family_hash);
+}
+
 static FcValueList *
 FcConfigMatchValueList (FcPattern	*p,
 			FcPattern	*p_pat,
 			FcMatchKind      kind,
 			FcTest		*t,
-			FcValueList	*values)
+			FcValueList	*values,
+                        FamilyTable     *table)
 {
     FcValueList	    *ret = 0;
     FcExpr	    *e = t->expr;
@@ -1605,6 +1721,14 @@ FcConfigMatchValueList (FcPattern	*p,
 	    e = 0;
 	}
 
+        if (t->object == FC_FAMILY_OBJECT && table)
+        {
+            if (!FamilyTableLookup (table, t->op, FcValueString (&value)))
+            {
+                    ret = 0;
+                    goto done;
+            }
+        }
 	for (v = values; v; v = FcValueListNext(v))
 	{
 	    /* Compare the pattern value to the match expression value */
@@ -1624,6 +1748,7 @@ FcConfigMatchValueList (FcPattern	*p,
 		}
 	    }
 	}
+done:
 	FcValueDestroy (value);
     }
     return ret;
@@ -1666,7 +1791,8 @@ FcConfigAdd (FcValueListPtr *head,
 	     FcValueList    *position,
 	     FcBool	    append,
 	     FcValueList    *new,
-	     FcObject        object)
+	     FcObject        object,
+             FamilyTable    *table)
 {
     FcValueListPtr  *prev, l, last, v;
     FcValueBinding  sameBinding;
@@ -1690,6 +1816,11 @@ FcConfigAdd (FcValueListPtr *head,
 
 	    return FcFalse;
 	}
+    }
+
+    if (object == FC_FAMILY_OBJECT && table)
+    {
+        FamilyTableAdd (table, new);
     }
 
     if (position)
@@ -1758,9 +1889,16 @@ FcConfigAdd (FcValueListPtr *head,
 
 static void
 FcConfigDel (FcValueListPtr *head,
-	     FcValueList    *position)
+	     FcValueList    *position,
+             FcObject        object,
+             FamilyTable    *table)
 {
     FcValueListPtr *prev;
+
+    if (object == FC_FAMILY_OBJECT && table)
+    {
+        FamilyTableDel (table, FcValueString (&position->value));
+    }
 
     for (prev = head; *prev != NULL; prev = &(*prev)->next)
     {
@@ -1776,9 +1914,10 @@ FcConfigDel (FcValueListPtr *head,
 
 static void
 FcConfigPatternAdd (FcPattern	*p,
-		    FcObject	object,
+		    FcObject	 object,
 		    FcValueList	*list,
-		    FcBool	append)
+		    FcBool	 append,
+                    FamilyTable *table)
 {
     if (list)
     {
@@ -1786,7 +1925,7 @@ FcConfigPatternAdd (FcPattern	*p,
 
 	if (!e)
 	    return;
-	FcConfigAdd (&e->values, 0, append, list, object);
+	FcConfigAdd (&e->values, 0, append, list, object, table);
     }
 }
 
@@ -1795,13 +1934,14 @@ FcConfigPatternAdd (FcPattern	*p,
  */
 static void
 FcConfigPatternDel (FcPattern	*p,
-		    FcObject	object)
+		    FcObject	 object,
+                    FamilyTable *table)
 {
     FcPatternElt    *e = FcPatternObjectFindElt (p, object);
     if (!e)
 	return;
     while (e->values != NULL)
-	FcConfigDel (&e->values, e->values);
+	FcConfigDel (&e->values, e->values, object, table);
 }
 
 static void
@@ -1834,6 +1974,8 @@ FcConfigSubstituteWithPat (FcConfig    *config,
     int		    i, nobjs;
     FcBool	    retval = FcTrue;
     FcTest	    **tst = NULL;
+    FamilyTable     data;
+    FamilyTable     *table = &data;
 
     if (kind < FcMatchKindBegin || kind >= FcMatchKindEnd)
 	return FcFalse;
@@ -1931,6 +2073,9 @@ FcConfigSubstituteWithPat (FcConfig    *config,
 	printf ("FcConfigSubstitute ");
 	FcPatternPrint (p);
     }
+
+    FamilyTableInit (&data, p);
+
     FcPtrListIterInit (s, &iter);
     for (; FcPtrListIterIsValid (s, &iter); FcPtrListIterNext (s, &iter))
     {
@@ -1967,9 +2112,15 @@ FcConfigSubstituteWithPat (FcConfig    *config,
 			FcTestPrint (r->u.test);
 		    }
 		    if (kind == FcMatchFont && r->u.test->kind == FcMatchPattern)
+                    {
 			m = p_pat;
+                        table = NULL;
+                    }
 		    else
+                    {
 			m = p;
+                        table = &data;
+                    }
 		    if (m)
 			e = FcPatternObjectFindElt (m, r->u.test->object);
 		    else
@@ -2002,7 +2153,7 @@ FcConfigSubstituteWithPat (FcConfig    *config,
 		     * Check to see if there is a match, mark the location
 		     * to apply match-relative edits
 		     */
-		    vl = FcConfigMatchValueList (m, p_pat, kind, r->u.test, e->values);
+		    vl = FcConfigMatchValueList (m, p_pat, kind, r->u.test, e->values, table);
 		    /* different 'kind' won't be the target of edit */
 		    if (!value[object] && kind == r->u.test->kind)
 			value[object] = vl;
@@ -2026,7 +2177,7 @@ FcConfigSubstituteWithPat (FcConfig    *config,
 		    /*
 		     * Evaluate the list of expressions
 		     */
-		    l = FcConfigValues (p, p_pat,kind,  r->u.edit->expr, r->u.edit->binding);
+		    l = FcConfigValues (p, p_pat, kind, r->u.edit->expr, r->u.edit->binding);
 		    if (tst[object] && (tst[object]->kind == FcMatchFont || kind == FcMatchPattern))
 			elt[object] = FcPatternObjectFindElt (p, tst[object]->object);
 
@@ -2044,12 +2195,12 @@ FcConfigSubstituteWithPat (FcConfig    *config,
 			    /*
 			     * Append the new list of values after the current value
 			     */
-			    FcConfigAdd (&elt[object]->values, thisValue, FcTrue, l, r->u.edit->object);
+			    FcConfigAdd (&elt[object]->values, thisValue, FcTrue, l, r->u.edit->object, table);
 			    /*
 			     * Delete the marked value
 			     */
 			    if (thisValue)
-				FcConfigDel (&elt[object]->values, thisValue);
+				FcConfigDel (&elt[object]->values, thisValue, object, table);
 			    /*
 			     * Adjust a pointer into the value list to ensure
 			     * future edits occur at the same place
@@ -2063,8 +2214,8 @@ FcConfigSubstituteWithPat (FcConfig    *config,
 			 * Delete all of the values and insert
 			 * the new set
 			 */
-			FcConfigPatternDel (p, r->u.edit->object);
-			FcConfigPatternAdd (p, r->u.edit->object, l, FcTrue);
+			FcConfigPatternDel (p, r->u.edit->object, table);
+			FcConfigPatternAdd (p, r->u.edit->object, l, FcTrue, table);
 			/*
 			 * Adjust a pointer into the value list as they no
 			 * longer point to anything valid
@@ -2074,33 +2225,33 @@ FcConfigSubstituteWithPat (FcConfig    *config,
 		    case FcOpPrepend:
 			if (value[object])
 			{
-			    FcConfigAdd (&elt[object]->values, value[object], FcFalse, l, r->u.edit->object);
+			    FcConfigAdd (&elt[object]->values, value[object], FcFalse, l, r->u.edit->object, table);
 			    break;
 			}
 			/* fall through ... */
 		    case FcOpPrependFirst:
-			FcConfigPatternAdd (p, r->u.edit->object, l, FcFalse);
+			FcConfigPatternAdd (p, r->u.edit->object, l, FcFalse, table);
 			break;
 		    case FcOpAppend:
 			if (value[object])
 			{
-			    FcConfigAdd (&elt[object]->values, value[object], FcTrue, l, r->u.edit->object);
+			    FcConfigAdd (&elt[object]->values, value[object], FcTrue, l, r->u.edit->object, table);
 			    break;
 			}
 			/* fall through ... */
 		    case FcOpAppendLast:
-			FcConfigPatternAdd (p, r->u.edit->object, l, FcTrue);
+			FcConfigPatternAdd (p, r->u.edit->object, l, FcTrue, table);
 			break;
 		    case FcOpDelete:
 			if (value[object])
 			{
-			    FcConfigDel (&elt[object]->values, value[object]);
+			    FcConfigDel (&elt[object]->values, value[object], object, table);
 			    FcValueListDestroy (l);
 			    break;
 			}
 			/* fall through ... */
 		    case FcOpDeleteAll:
-			FcConfigPatternDel (p, r->u.edit->object);
+			FcConfigPatternDel (p, r->u.edit->object, table);
 			FcValueListDestroy (l);
 			break;
 		    default:
@@ -2130,6 +2281,7 @@ FcConfigSubstituteWithPat (FcConfig    *config,
 	FcPatternPrint (p);
     }
 bail1:
+    FamilyTableClear (&data);
     if (elt)
 	free (elt);
     if (value)
