@@ -408,6 +408,7 @@ FcCompareValueList (FcObject	     object,
     FcValueListPtr  v1, v2;
     double    	    v, best, bestStrong, bestWeak;
     int		    j, k, pos = 0;
+    int weak, strong;
 
     if (!match)
     {
@@ -418,11 +419,13 @@ FcCompareValueList (FcObject	     object,
 	return FcTrue;
     }
 
+    weak    = match->weak;
+    strong  = match->strong;
+
     best = 1e99;
     bestStrong = 1e99;
     bestWeak = 1e99;
-    j = 0;
-    for (v1 = v1orig; v1; v1 = FcValueListNext(v1))
+    for (v1 = v1orig, j = 0; v1; v1 = FcValueListNext(v1), j++)
     {
 	for (v2 = v2orig, k = 0; v2; v2 = FcValueListNext(v2), k++)
 	{
@@ -441,7 +444,13 @@ FcCompareValueList (FcObject	     object,
 		best = v;
 		pos = k;
 	    }
-	    if (v1->binding == FcValueBindingStrong)
+            if (weak == strong)
+            {
+                /* found the best possible match */
+                if (best < 1000)
+                    goto done;
+            }
+            else if (v1->binding == FcValueBindingStrong)
 	    {
 		if (v < bestStrong)
 		    bestStrong = v;
@@ -452,8 +461,8 @@ FcCompareValueList (FcObject	     object,
 		    bestWeak = v;
 	    }
 	}
-	j++;
     }
+done:
     if (FcDebug () & FC_DBG_MATCHV)
     {
 	printf (" %s: %g ", FcObjectName (object), best);
@@ -464,8 +473,6 @@ FcCompareValueList (FcObject	     object,
     }
     if (value)
     {
-	int weak    = match->weak;
-	int strong  = match->strong;
 	if (weak == strong)
 	    value[strong] += best;
 	else
