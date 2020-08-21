@@ -104,30 +104,27 @@ static double
 FcCompareLang (const FcValue *v1, const FcValue *v2, FcValue *bestValue)
 {
     FcLangResult    result;
-    FcValue value1 = FcValueCanonicalize(v1), value2 = FcValueCanonicalize(v2);
 
-    switch ((int) value1.type) {
+    switch ((int) v1->type) {
     case FcTypeLangSet:
-	switch ((int) value2.type) {
+	switch ((int) v2->type) {
 	case FcTypeLangSet:
-	    result = FcLangSetCompare (value1.u.l, value2.u.l);
+	    result = FcLangSetCompare (FcValueLangSet (v1), FcValueLangSet (v2));
 	    break;
 	case FcTypeString:
-	    result = FcLangSetHasLang (value1.u.l,
-				       value2.u.s);
+	    result = FcLangSetHasLang (FcValueLangSet (v1), FcValueString (v2));
 	    break;
 	default:
 	    return -1.0;
 	}
 	break;
     case FcTypeString:
-	switch ((int) value2.type) {
+	switch ((int) v2->type) {
 	case FcTypeLangSet:
-	    result = FcLangSetHasLang (value2.u.l, value1.u.s);
+	    result = FcLangSetHasLang (FcValueLangSet (v2), FcValueString (v1));
 	    break;
 	case FcTypeString:
-	    result = FcLangCompare (value1.u.s,
-				    value2.u.s);
+	    result = FcLangCompare (FcValueString (v1), FcValueString (v2));
 	    break;
 	default:
 	    return -1.0;
@@ -154,10 +151,11 @@ FcCompareBool (const FcValue *v1, const FcValue *v2, FcValue *bestValue)
     if (v2->type != FcTypeBool || v1->type != FcTypeBool)
 	return -1.0;
 
+    bestValue->type = FcTypeBool;
     if (v2->u.b != FcDontCare)
-	*bestValue = FcValueCanonicalize (v2);
+	bestValue->u.b = v2->u.b;
     else
-	*bestValue = FcValueCanonicalize (v1);
+	bestValue->u.b = v1->u.b;
 
     return (double) ((v2->u.b ^ v1->u.b) == 1);
 }
