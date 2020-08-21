@@ -1328,6 +1328,9 @@ FcStrLastSlash (const FcChar8  *path);
 FcPrivate FcChar32
 FcStrHashIgnoreCase (const FcChar8 *s);
 
+FcPrivate FcChar32
+FcStrHashIgnoreBlanksAndCase (const FcChar8 *s);
+
 FcPrivate FcChar8 *
 FcStrCanonFilename (const FcChar8 *s);
 

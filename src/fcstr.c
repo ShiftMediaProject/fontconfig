@@ -320,6 +320,19 @@ FcStrHashIgnoreCase (const FcChar8 *s)
     return h;
 }
 
+FcChar32
+FcStrHashIgnoreBlanksAndCase (const FcChar8 *s)
+{
+    FcChar32	    h = 0;
+    FcCaseWalker    w;
+    FcChar8	    c;
+
+    FcStrCaseWalkerInit (s, &w);
+    while ((c = FcStrCaseWalkerNextNonBlank (&w)))
+	h = ((h << 3) ^ (h >> 3)) ^ c;
+    return h;
+}
+
 /*
  * Is the head of s1 equal to s2?
  */
