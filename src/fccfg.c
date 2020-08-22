@@ -939,6 +939,13 @@ FcConfigPromote (FcValue v, FcValue u, FcValuePromotionBuffer *buf)
     case FcTypeInteger:
         v.type = FcTypeDouble;
         v.u.d = (double) v.u.i;
+        /* Fallthrough */
+    case FcTypeDouble:
+        if (u.type == FcTypeRange && buf)
+        {
+            v.u.r = FcRangePromote (v.u.d, buf);
+            v.type = FcTypeRange;
+        }
         break;
     case FcTypeVoid:
         if (u.type == FcTypeMatrix)
@@ -962,13 +969,6 @@ FcConfigPromote (FcValue v, FcValue u, FcValuePromotionBuffer *buf)
         {
             v.u.l = FcLangSetPromote (v.u.s, buf);
             v.type = FcTypeLangSet;
-        }
-        break;
-    case FcTypeDouble:
-        if (u.type == FcTypeRange && buf)
-        {
-            v.u.r = FcRangePromote (v.u.d, buf);
-            v.type = FcTypeRange;
         }
         break;
     default:
