@@ -164,7 +164,7 @@ FcStrCaseWalkerNextNonDelim (FcCaseWalker *w, const char *delims)
 {
     FcChar8	r;
 
-    if (__builtin_expect (w->read != NULL, 0))
+    if (FC_UNLIKELY (w->read != NULL))
     {
 	if ((r = *w->read++))
 	    return r;
@@ -175,7 +175,7 @@ FcStrCaseWalkerNextNonDelim (FcCaseWalker *w, const char *delims)
 	r = *w->src++;
     } while (r != 0 && delims && strchr (delims, r));
 
-    if (__builtin_expect ((r & 0xc0) == 0xc0, 0))
+    if (FC_UNLIKELY ((r & 0xc0) == 0xc0))
 	return FcStrCaseWalkerLong (w, r);
     if ('A' <= r && r <= 'Z')
         r = r - 'A' + 'a';
@@ -187,7 +187,7 @@ FcStrCaseWalkerNextNonBlank (FcCaseWalker *w)
 {
     FcChar8	r;
 
-    if (__builtin_expect (w->read != NULL, 0))
+    if (FC_UNLIKELY (w->read != NULL))
     {
 	if ((r = *w->read++))
 	    return r;
@@ -198,7 +198,7 @@ FcStrCaseWalkerNextNonBlank (FcCaseWalker *w)
 	r = *w->src++;
     } while (r == ' ');
 
-    if (__builtin_expect ((r & 0xc0) == 0xc0, 0))
+    if (FC_UNLIKELY ((r & 0xc0) == 0xc0))
 	return FcStrCaseWalkerLong (w, r);
     if ('A' <= r && r <= 'Z')
         r = r - 'A' + 'a';
@@ -210,7 +210,7 @@ FcStrCaseWalkerNext (FcCaseWalker *w)
 {
     FcChar8	r;
 
-    if (__builtin_expect (w->read != NULL, 0))
+    if (FC_UNLIKELY (w->read != NULL))
     {
 	if ((r = *w->read++))
 	    return r;
@@ -219,7 +219,7 @@ FcStrCaseWalkerNext (FcCaseWalker *w)
 
     r = *w->src++;
 
-    if (__builtin_expect ((r & 0xc0) == 0xc0, 0))
+    if (FC_UNLIKELY ((r & 0xc0) == 0xc0))
 	return FcStrCaseWalkerLong (w, r);
     if ('A' <= r && r <= 'Z')
         r = r - 'A' + 'a';
