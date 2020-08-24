@@ -58,6 +58,14 @@
 #endif
 
 #ifdef _WIN32
+#define FC_LIKELY(expr) (expr)
+#define FC_UNLIKELY(expr) (expr)
+#else
+#define FC_LIKELY(expr) (__builtin_expect (expr, 1))
+#define FC_UNLIKELY(expr) (__builtin_expect (expr, 0))
+#endif
+
+#ifdef _WIN32
 #  include "fcwindows.h"
 typedef UINT (WINAPI *pfnGetSystemWindowsDirectory)(LPSTR, UINT);
 typedef HRESULT (WINAPI *pfnSHGetFolderPathA)(HWND, int, HANDLE, DWORD, LPSTR);
