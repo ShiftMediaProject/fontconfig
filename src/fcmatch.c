@@ -525,25 +525,28 @@ FcCompareDataInit (FcPattern     *pat,
                                free);
 
     elt = FcPatternObjectFindElt (pat, FC_FAMILY_OBJECT);
-    for (l = FcPatternEltValues(elt), i = 0; l; l = FcValueListNext(l), i++)
+    if (elt)
     {
-        key = FcValueString (&l->value);
-        if (!FcHashTableFind (table, key, (void **)&e))
+        for (l = FcPatternEltValues(elt), i = 0; l; l = FcValueListNext(l), i++)
         {
-            e = malloc (sizeof (FamilyEntry));
-            e->strong_value = 1e99;
-            e->weak_value = 1e99;
-            FcHashTableAdd (table, (void *)key, e);
-        }
-        if (l->binding == FcValueBindingWeak)
-        {
-            if (i < e->weak_value)
-                e->weak_value = i;
-        }
-        else
-        {
-            if (i < e->strong_value)
-                e->strong_value = i;
+            key = FcValueString (&l->value);
+            if (!FcHashTableFind (table, key, (void **)&e))
+            {
+                e = malloc (sizeof (FamilyEntry));
+                e->strong_value = 1e99;
+                e->weak_value = 1e99;
+                FcHashTableAdd (table, (void *)key, e);
+            }
+            if (l->binding == FcValueBindingWeak)
+            {
+                if (i < e->weak_value)
+                    e->weak_value = i;
+            }
+            else
+            {
+                if (i < e->strong_value)
+                    e->strong_value = i;
+            }
         }
     }
 
