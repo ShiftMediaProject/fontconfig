@@ -61,8 +61,8 @@
 #define FC_LIKELY(expr) (expr)
 #define FC_UNLIKELY(expr) (expr)
 #else
-#define FC_LIKELY(expr) (__builtin_expect (expr, 1))
-#define FC_UNLIKELY(expr) (__builtin_expect (expr, 0))
+#define FC_LIKELY(expr) (__builtin_expect (((expr) ? 1 : 0), 1))
+#define FC_UNLIKELY(expr) (__builtin_expect (((expr) ? 1 : 0), 0))
 #endif
 
 #ifdef _WIN32
