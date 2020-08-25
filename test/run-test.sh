@@ -44,6 +44,17 @@ fi
 
 FONT1=$TESTDIR/4x6.pcf
 FONT2=$TESTDIR/8x16.pcf
+TEST=""
+
+clean_exit() {
+    rc=$?
+    trap - SIGINT SIGTERM SIGABRT EXIT
+    if [ "x$TEST" != "x" ]; then
+        echo "Aborting from '$TEST' with the exit code $rc"
+    fi
+    exit $rc
+}
+trap clean_exit SIGINT SIGTERM SIGABRT EXIT
 
 check () {
     {
@@ -454,3 +465,5 @@ unset temp_HOME
 fi # if [ "x$EXEEXT" = "x" ]
 
 rm -rf "$FONTDIR" "$CACHEFILE" "$CACHEDIR" "$BASEDIR" "$FONTCONFIG_FILE" out
+
+TEST=""
