@@ -1662,6 +1662,13 @@ FamilyTableDel (FamilyTable   *table,
     }
 }
 
+static FcBool
+copy_string (const void *src, void **dest)
+{
+  *dest = strdup ((char *)src);
+  return FcTrue;
+}
+
 static void
 FamilyTableInit (FamilyTable *table,
                  FcPattern *p)
@@ -1670,15 +1677,15 @@ FamilyTableInit (FamilyTable *table,
 
     table->family_blank_hash = FcHashTableCreate ((FcHashFunc)FcStrHashIgnoreBlanksAndCase,
                                           (FcCompareFunc)FcStrCmpIgnoreBlanksAndCase,
+                                          (FcCopyFunc)copy_string,
                                           NULL,
-                                          NULL,
-                                          NULL,
+                                          free,
                                           free);
     table->family_hash = FcHashTableCreate ((FcHashFunc)FcStrHashIgnoreCase,
                                           (FcCompareFunc)FcStrCmpIgnoreCase,
+                                          (FcCopyFunc)copy_string,
                                           NULL,
-                                          NULL,
-                                          NULL,
+                                          free,
                                           free);
     e = FcPatternObjectFindElt (p, FC_FAMILY_OBJECT);
     if (e)
