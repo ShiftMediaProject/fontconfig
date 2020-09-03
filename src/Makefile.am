@@ -85,7 +85,7 @@ LDADD  = $(LIBINTL)
 
 EXTRA_DIST += makealias
 
-noinst_HEADERS=fcint.h fcftint.h fcdeprecate.h fcstdint.h
+noinst_HEADERS=fcint.h fcftint.h fcdeprecate.h fcmd5.h fcstdint.h
 
 ALIAS_FILES = fcalias.h fcaliastail.h fcftalias.h fcftaliastail.h
 
