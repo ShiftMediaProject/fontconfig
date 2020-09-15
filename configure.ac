@@ -89,14 +89,17 @@ PKGCONFIG_REQUIRES=
 PKGCONFIG_REQUIRES_PRIVATELY=
 
 dnl ==========================================================================
-case "$host" in
-  *-*-mingw*)
-    os_win32=yes
-    ;;
-  *)
-    os_win32=no
+AC_CANONICAL_HOST
+case "${host_os}" in
+	cygwin*|mingw*)
+		os_win32=yes
+		;;
+	darwin*)
+		os_darwin=yes
+		;;
 esac
 AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
+AM_CONDITIONAL(OS_DARWIN, test "$os_darwin" = "yes")
 
 dnl ==========================================================================
 dnl gettext stuff
@@ -474,28 +477,40 @@ esac
 #
 
 AC_ARG_WITH(default-fonts,
-	[AC_HELP_STRING([--with-default-fonts=DIR],
-			[Use fonts from DIR when config is busted])],
+	[AC_HELP_STRING([--with-default-fonts=DIR1,DIR2,...],
+			[Use fonts from DIR1,DIR2,... when config is busted])],
 	default_fonts="$withval", default_fonts=yes)
 
 case "$default_fonts" in
 yes)
 	if test "$os_win32" = "yes"; then
-		FC_DEFAULT_FONTS="WINDOWSFONTDIR"
-		AC_DEFINE_UNQUOTED(FC_DEFAULT_FONTS, "WINDOWSFONTDIR", 
-				   [Windows font directory])
+		FC_DEFAULT_FONTS_IN="WINDOWSFONTDIR"
+	elif test "$os_darwin" = "yes"; then
+		FC_DEFAULT_FONTS_IN="/System/Library/Fonts,/Library/Fonts,~/Library/Fonts,/System/Library/Assets/com_apple_MobileAsset_Font3,/System/Library/Assets/com_apple_MobileAsset_Font4"
 	else
-		FC_DEFAULT_FONTS="/usr/share/fonts"
-		AC_DEFINE_UNQUOTED(FC_DEFAULT_FONTS, "/usr/share/fonts", 
-				   [System font directory])
+		FC_DEFAULT_FONTS_IN="/usr/share/fonts"
 	fi
 	;;
 *)
-	FC_DEFAULT_FONTS="$default_fonts"
-	AC_DEFINE_UNQUOTED(FC_DEFAULT_FONTS, "$default_fonts",
-			   [System font directory])
+	FC_DEFAULT_FONTS_IN="$default_fonts"
 	;;
 esac
+			   
+AC_SUBST(FC_DEFAULT_FONTS_IN)
+
+case "$FC_DEFAULT_FONTS_IN" in
+"")
+	FC_DEFAULT_FONTS=""
+	;;
+*)
+	FC_DEFAULT_FONTS=`echo $FC_DEFAULT_FONTS_IN | 
+			sed -e 's/^/<dir>/' -e 's/$/<\/dir>/' -e 's/,/<\/dir> <dir>/g'`
+	;;
+esac
+
+
+AC_DEFINE_UNQUOTED(FC_DEFAULT_FONTS, "$FC_DEFAULT_FONTS",
+			   [System font directory])
 
 AC_SUBST(FC_DEFAULT_FONTS)
 
