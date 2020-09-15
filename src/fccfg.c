@@ -2627,6 +2627,14 @@ FcConfigGetFilename (FcConfig      *config,
 
     if (FcStrIsAbsoluteFilename(url))
     {
+	if (sysroot)
+	{
+	    size_t len = strlen ((const char *) sysroot);
+
+	    /* Workaround to avoid adding sysroot repeatedly */
+	    if (strncmp ((const char *) url, (const char *) sysroot, len) == 0)
+		sysroot = NULL;
+	}
 	file = FcConfigFileExists (sysroot, url);
 	goto bail;
     }
