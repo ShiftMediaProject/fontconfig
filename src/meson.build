@@ -19,6 +19,7 @@ fc_sources = [
   'fcmatrix.c',
   'fcname.c',
   'fcobjs.c',
+  'fcopentype.c',
   'fcpat.c',
   'fcrange.c',
   'fcserialize.c',
