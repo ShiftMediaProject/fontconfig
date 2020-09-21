@@ -1675,6 +1675,11 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	    free (family);
 	    goto bail1;
 	}
+	if (!FcPatternObjectAddString (pat, FC_FAMILYLANG_OBJECT, (FcChar8 *) "en"))
+	{
+	    free (family);
+	    goto bail1;
+	}
 	free (family);
 	++nfamily;
     }
