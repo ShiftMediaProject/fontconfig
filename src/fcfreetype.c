@@ -1625,13 +1625,26 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	++nfamily;
     }
 
-    if (!variable && !nstyle && face->style_name &&
-	FcStrCmpIgnoreBlanksAndCase ((FcChar8 *) face->style_name, (FcChar8 *) "") != 0)
+    if (!variable && !nstyle)
     {
-	if (FcDebug () & FC_DBG_SCANV)
-	    printf ("using FreeType style \"%s\"\n", face->style_name);
+	const FcChar8 *style_regular = (const FcChar8 *) "Regular";
+	const FcChar8 *ss;
 
-	if (!FcPatternObjectAddString (pat, FC_STYLE_OBJECT, (FcChar8 *) face->style_name))
+	if (face->style_name &&
+	    FcStrCmpIgnoreBlanksAndCase ((FcChar8 *) face->style_name, (FcChar8 *) "") != 0)
+	{
+	    if (FcDebug () & FC_DBG_SCANV)
+		printf ("using FreeType style \"%s\"\n", face->style_name);
+
+	    ss = (const FcChar8 *) face->style_name;
+	}
+	else
+	{
+	    if (FcDebug () & FC_DBG_SCANV)
+		printf ("applying default style Regular\n");
+	    ss = style_regular;
+	}
+	if (!FcPatternObjectAddString (pat, FC_STYLE_OBJECT, ss))
 	    goto bail1;
 	if (!FcPatternObjectAddString (pat, FC_STYLELANG_OBJECT, (FcChar8 *) "en"))
 	    goto bail1;
