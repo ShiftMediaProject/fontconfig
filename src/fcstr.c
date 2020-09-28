@@ -1117,11 +1117,18 @@ FcStrCanonFilename (const FcChar8 *s)
     int size = GetFullPathNameW (wide_s, sizeof (wide_full) / sizeof(wide_full[0]) -1,
 				wide_full, NULL);
 
+    // WideCharToMultiByte below needs an input buffer size that includes nul terminator,
+    // otherwise it doesn't include a nul terminator in the output (full).
+    // GetFullPathNameW returns a size that doesn't include the nul terminator.
+    // Use size_bytes to hold this value, but only if size is a valid positive length.
+    int size_bytes = size;
     if (size == 0)
 	perror ("GetFullPathName");
+    else if (size > 0)
+       size_bytes++;
 
     FcConvertDosPath (wide_full);
-    if (WideCharToMultiByte (CP_UTF8, 0, wide_full, size, (LPSTR) full, FC_MAX_FILE_LEN, NULL, NULL) == 0)
+    if (WideCharToMultiByte (CP_UTF8, 0, wide_full, size_bytes, (LPSTR) full, FC_MAX_FILE_LEN, NULL, NULL) == 0)
     perror("GetFullPathName");
     return FcStrCanonAbsoluteFilename (full);
 #else
