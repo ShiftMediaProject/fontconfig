@@ -20,14 +20,22 @@ defversion = '@0@.@1@'.format(curversion, fc_version_micro)
 osxversion = curversion + 1
 
 freetype_req = '>= 21.0.15'
+freetype_req_cmake = '>= 2.8.1'
 
-freetype_dep = dependency('freetype2', version: freetype_req,
-  fallback: ['freetype2', 'freetype_dep'])
+cc = meson.get_compiler('c')
+
+
+freetype_dep = dependency('freetype2', method: 'pkg-config', version: freetype_req, required: false)
+
+# Give another shot using CMake
+if not freetype_dep.found()
+  freetype_dep = dependency('freetype', method: 'cmake', version: freetype_req_cmake,
+    fallback: ['freetype2', 'freetype_dep'])
+endif
 
 expat_dep = dependency('expat',
   fallback: ['expat', 'expat_dep'])
 
-cc = meson.get_compiler('c')
 i18n = import('i18n')
 pkgmod = import('pkgconfig')
 python3 = import('python').find_installation()
