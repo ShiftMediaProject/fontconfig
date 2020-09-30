@@ -212,8 +212,8 @@ else
     conf.set_quoted('FC_DEFAULT_FONTS', '<dir>/System/Library/Fonts</dir> <dir>/Library/Fonts</dir> <dir>~/Library/Fonts</dir> <dir>/System/Library/Assets/com_apple_MobileAsset_Font3</dir> <dir>/System/Library/Assets/com_apple_MobileAsset_Font4</dir>')
     fonts_conf.set('FC_DEFAULT_FONTS', '<dir>/System/Library/Fonts</dir> <dir>/Library/Fonts</dir> <dir>~/Library/Fonts</dir> <dir>/System/Library/Assets/com_apple_MobileAsset_Font3</dir> <dir>/System/Library/Assets/com_apple_MobileAsset_Font4</dir>')
   else
-    conf.set_quoted('FC_DEFAULT_FONTS', '/usr/share/fonts')
-    fonts_conf.set('FC_DEFAULT_FONTS', '/usr/share/fonts')
+    conf.set_quoted('FC_DEFAULT_FONTS', '<dir>/usr/share/fonts</dir>')
+    fonts_conf.set('FC_DEFAULT_FONTS', '<dir>/usr/share/fonts</dir>')
   endif
   fc_cachedir = join_paths(prefix, get_option('localstatedir'), 'cache', meson.project_name())
   thread_dep = dependency('threads')
