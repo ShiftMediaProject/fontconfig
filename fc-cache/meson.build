@@ -6,3 +6,4 @@ fccache = executable('fc-cache', ['fc-cache.c', fcstdint_h, alias_headers, ft_al
 )
 
 tools_man_pages += ['fc-cache']
+meson.add_install_script('../install-cache.py', fccache.full_path())

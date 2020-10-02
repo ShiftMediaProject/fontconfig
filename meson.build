@@ -367,8 +367,6 @@ fc_headers = [
 
 install_headers(fc_headers, subdir: meson.project_name())
 
-meson.add_install_script('install-cache.py', fccache.full_path())
-
 # Summary
 if meson.version() >= '0.53'
   doc_targets = get_variable('doc_targets', [])
