@@ -368,7 +368,7 @@ fc_headers = [
 install_headers(fc_headers, subdir: meson.project_name())
 
 # Summary
-if meson.version() >= '0.53'
+if meson.version().version_compare('>= 0.53')
   doc_targets = get_variable('doc_targets', [])
 
   summary({
