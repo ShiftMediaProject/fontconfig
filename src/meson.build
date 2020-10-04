@@ -31,12 +31,13 @@ fc_sources = [
 ]
 
 # FIXME: obviously fragile, cc.preprocess would be sweet
+cpp = cc.cmd_array()
 if cc.get_id() == 'gcc'
-  cpp = ['gcc', '-E', '-P']
+  cpp += ['-E', '-P']
 elif cc.get_id() == 'msvc'
-  cpp = ['cl', '/EP']
+  cpp += ['/EP']
 elif cc.get_id() == 'clang'
-  cpp = ['clang', '-E', '-P']
+  cpp += ['-E', '-P']
 else
   error('FIXME: implement cc.preprocess')
 endif
