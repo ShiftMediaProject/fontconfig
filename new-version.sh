@@ -130,6 +130,7 @@ fi
 $test git commit -m"Bump version to $version" \
 	configure.ac \
 	fontconfig/fontconfig.h \
+	meson.build \
 	README
 
 # tag the tree
