@@ -90,6 +90,8 @@ PKGCONFIG_REQUIRES_PRIVATELY=
 
 dnl ==========================================================================
 AC_CANONICAL_HOST
+os_win32=no
+os_darwin=no
 case "${host_os}" in
 	cygwin*|mingw*)
 		os_win32=yes
