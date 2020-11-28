@@ -49,6 +49,8 @@ sed -i fontconfig/fontconfig.h \
 	-e "/^#define FC_MINOR/s/[0-9][0-9]*/$minor/" \
 	-e "/^#define FC_REVISION/s/[0-9][0-9]*/$revision/"
 
+sed -i meson.build -e "/version: /s/2\.[0-9.]*/$version/"
+
 #
 # Compute pretty form of new version number
 #
