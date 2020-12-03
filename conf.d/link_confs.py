@@ -12,7 +12,14 @@ if __name__=='__main__':
     parser.add_argument('links', nargs='+')
     args = parser.parse_args()
 
-    confpath = os.path.join(os.environ['MESON_INSTALL_DESTDIR_PREFIX'], args.confpath)
+    if os.path.isabs(args.confpath):
+        destdir = os.environ.get('DESTDIR')
+        if destdir:
+            confpath = os.path.join(destdir, args.confpath[1:])
+        else:
+            confpath = args.confpath
+    else:
+        confpath = os.path.join(os.environ['MESON_INSTALL_DESTDIR_PREFIX'], args.confpath)
 
     if not os.path.exists(confpath):
         os.makedirs(confpath)
