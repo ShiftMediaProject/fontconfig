@@ -76,12 +76,14 @@ FcPatternAddFullname (FcPattern *pat)
 	    FcStrBufChar (&sbuf, ' ');
 	    FcStrBufString (&sbuf, style);
 	}
+	FcPatternObjectDel (pat, FC_FULLNAME_OBJECT);
 	if (!FcPatternObjectAddString (pat, FC_FULLNAME_OBJECT, FcStrBufDoneStatic (&sbuf)))
 	{
 	    FcStrBufDestroy (&sbuf);
 	    return FcFalse;
 	}
 	FcStrBufDestroy (&sbuf);
+	FcPatternObjectDel (pat, FC_FULLNAMELANG_OBJECT);
 	if (!FcPatternObjectAddString (pat, FC_FULLNAMELANG_OBJECT, (const FcChar8 *) "en"))
 	    return FcFalse;
     }
