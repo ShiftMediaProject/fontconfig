@@ -66,8 +66,7 @@ FcPatternAddFullname (FcPattern *pat)
 	if (FcPatternObjectGetString (pat, FC_STYLE_OBJECT, n, &style) != FcResultMatch)
 	    return FcFalse;
 	len = strlen ((const char *) style);
-	for (i = 0; style[i] != 0 && isspace (style[i]); i++)
-	    break;
+	for (i = 0; style[i] != 0 && isspace (style[i]); i++);
 	memcpy (style, &style[i], len - i);
 	FcStrBufInit (&sbuf, NULL, 0);
 	FcStrBufString (&sbuf, family);
