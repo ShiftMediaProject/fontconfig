@@ -48,13 +48,13 @@ TEST=""
 
 clean_exit() {
     rc=$?
-    trap - SIGINT SIGTERM SIGABRT EXIT
+    trap - INT TERM ABRT EXIT
     if [ "x$TEST" != "x" ]; then
         echo "Aborting from '$TEST' with the exit code $rc"
     fi
     exit $rc
 }
-trap clean_exit SIGINT SIGTERM SIGABRT EXIT
+trap clean_exit INT TERM ABRT EXIT
 
 check () {
     {
