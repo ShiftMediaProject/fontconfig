@@ -101,8 +101,8 @@ if ENABLE_JSONC
 check_PROGRAMS += test-conf
 test_conf_CFLAGS = $(JSONC_CFLAGS)
 test_conf_LDADD = $(top_builddir)/src/libfontconfig.la $(JSONC_LIBS)
-TESTS += run-test-conf.sh
 endif
+TESTS += run-test-conf.sh
 
 check_PROGRAMS += test-bz106618
 test_bz106618_LDADD = $(top_builddir)/src/libfontconfig.la
