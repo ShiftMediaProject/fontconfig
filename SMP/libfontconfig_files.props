@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="..\fontconfig\fcfreetype.h" />
+    <ClInclude Include="..\fontconfig\fcprivate.h" />
+    <ClInclude Include="..\fontconfig\fontconfig.h" />
+    <ClInclude Include="..\src\fcarch.h" />
+    <ClInclude Include="..\src\fcatomic.h" />
+    <ClInclude Include="..\src\fcdeprecate.h" />
+    <ClInclude Include="..\src\fcftint.h" />
+    <ClInclude Include="..\src\fcint.h" />
+    <ClInclude Include="..\src\fcmutex.h" />
+    <ClInclude Include="..\src\fcobjs.h" />
+    <ClInclude Include="..\src\fcwindows.h" />
+    <ClInclude Include="..\src\ftglue.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="fc-case\fccase.h" />
+    <ClInclude Include="fc-lang\fclang.h" />
+    <ClInclude Include="src\fcalias.h" />
+    <ClInclude Include="src\fcaliastail.h" />
+    <ClInclude Include="src\fcftalias.h" />
+    <ClInclude Include="src\fcftaliastail.h" />
+    <ClInclude Include="src\fcstdint.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\fcatomic.c" />
+    <ClCompile Include="..\src\fccache.c">
+      <ForcedIncludeFiles>io.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\src\fccfg.c">
+      <ForcedIncludeFiles>io.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\src\fccharset.c" />
+    <ClCompile Include="..\src\fccompat.c">
+      <ForcedIncludeFiles>io.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\src\fcdbg.c" />
+    <ClCompile Include="..\src\fcdefault.c" />
+    <ClCompile Include="..\src\fcdir.c" />
+    <ClCompile Include="..\src\fcformat.c" />
+    <ClCompile Include="..\src\fcfreetype.c" />
+    <ClCompile Include="..\src\fcfs.c" />
+    <ClCompile Include="..\src\fchash.c" />
+    <ClCompile Include="..\src\fcinit.c" />
+    <ClCompile Include="..\src\fclang.c" />
+    <ClCompile Include="..\src\fclist.c" />
+    <ClCompile Include="..\src\fcmatch.c" />
+    <ClCompile Include="..\src\fcmatrix.c" />
+    <ClCompile Include="..\src\fcname.c" />
+    <ClCompile Include="..\src\fcobjs.c" />
+    <ClCompile Include="..\src\fcpat.c" />
+    <ClCompile Include="..\src\fcptrlist.c" />
+    <ClCompile Include="..\src\fcrange.c" />
+    <ClCompile Include="..\src\fcserialize.c" />
+    <ClCompile Include="..\src\fcstat.c">
+      <ForcedIncludeFiles>io.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\src\fcstr.c" />
+    <ClCompile Include="..\src\fcweight.c" />
+    <ClCompile Include="..\src\fcxml.c">
+      <ForcedIncludeFiles>io.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\src\ftglue.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libfontconfig.def" />
+  </ItemGroup>
+</Project>
