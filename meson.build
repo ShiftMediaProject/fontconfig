@@ -301,7 +301,6 @@ fcstdint_h = configure_file(
   output: 'fcstdint.h',
   copy: true)
 
-stdinwrapper = files('stdin_wrapper.py')[0]
 makealias = files('src/makealias.py')[0]
 
 alias_headers = custom_target('alias_headers',

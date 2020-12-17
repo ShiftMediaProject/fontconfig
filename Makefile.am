@@ -47,7 +47,6 @@ MESON_FILES = \
 	src/fcwindows.h \
 	src/fontconfig.def.in \
 	src/makealias.py \
-	stdin_wrapper.py \
 	$(wildcard $(srcdir)/*/meson.build) \
 	$(wildcard $(srcdir)/meson-cc-tests/*) \
 	$(wildcard $(srcdir)/subprojects/*.wrap)
