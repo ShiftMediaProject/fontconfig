@@ -12,7 +12,7 @@ if __name__== '__main__':
     print (args[0].output)
 
     cpp = args[1]
-    ret = subprocess.run(cpp + [args[0].input], stdout=subprocess.PIPE)
+    ret = subprocess.run(cpp + [args[0].input], stdout=subprocess.PIPE, check=True)
 
     stdout = ret.stdout.decode('utf8')
 
