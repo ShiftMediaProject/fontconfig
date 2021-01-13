@@ -54,6 +54,7 @@ retry:
 	if (!fc_atomic_ptr_cmpexch (&_lock, NULL, lock))
 	{
 	    FcMutexFinish (lock);
+	    free (lock);
 	    goto retry;
 	}
 	FcMutexLock (lock);
