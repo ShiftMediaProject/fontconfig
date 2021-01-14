@@ -1,6 +1,6 @@
 project('fontconfig', 'c',
   version: '2.13.93',
-  meson_version : '>= 0.50.0',
+  meson_version : '>= 0.56.0',
   default_options: [ 'buildtype=debugoptimized'],
 )
 
@@ -241,11 +241,8 @@ if fc_configdir.startswith(fc_baseconfigdir + '/')
   fonts_conf.set('CONFIGDIR', fc_configdir.split(fc_baseconfigdir + '/')[1])
 endif
 
-gperf = find_program('gperf', required: build_machine.system() != 'windows')
-if not gperf.found()
-  subproject('gperf', required: true)
-  gperf = find_program('gperf')
-endif
+# It will automatically fallback to subproject if not found on system
+gperf = find_program('gperf')
 
 sh = find_program('sh', required : false)
 
