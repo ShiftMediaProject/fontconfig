@@ -44,10 +44,13 @@ endif
 
 cpp += ['-I', join_paths(meson.current_source_dir(), '..')]
 
+# Can use meson.project_build_dir() once we require Meson 0.56
+project_build_dir = meson.current_build_dir() / '..'
+
 fcobjshash_gperf = custom_target('fcobjshash.gperf',
   input: 'fcobjshash.gperf.h',
   output: 'fcobjshash.gperf',
-  command: [python3, files('cutout.py')[0], '@INPUT@', '@OUTPUT@', cpp],
+  command: [python3, files('cutout.py')[0], '@INPUT@', '@OUTPUT@', project_build_dir, cpp],
   build_by_default: true,
 )
 
