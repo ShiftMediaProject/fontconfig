@@ -39,7 +39,6 @@ MESON_FILES = \
 	doc/run-quiet.py \
 	fc-case/fc-case.py \
 	fc-lang/fc-lang.py \
-	install-cache.py \
 	meson.build \
 	meson_options.txt \
 	src/cutout.py \
