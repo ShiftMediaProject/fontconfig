@@ -21,6 +21,15 @@
                 "family": "math",
                 "lang": "und-zmth"
             }
+        },
+        {
+            "method": "match",
+            "query": {
+                "lang": [ "en", "fr" ]
+            },
+            "result": {
+                // Exercise complex value promotion. No ASAN issues.
+            }
         }
     ]
 }
