@@ -21,6 +21,10 @@ if __name__=='__main__':
         src = os.path.join(args.availpath, link)
         dst = os.path.join(confpath, link)
         try:
+            os.remove(dst)
+        except FileNotFoundError:
+            pass
+        try:
             os.symlink(src, dst)
         except NotImplementedError:
             # Not supported on this version of Windows
@@ -30,5 +34,3 @@ if __name__=='__main__':
             if platform.system().lower() == 'windows' and e.winerror == 1314:
                 break
             raise
-        except FileExistsError:
-            pass
