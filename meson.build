@@ -204,22 +204,30 @@ prefix = get_option('prefix')
 fonts_conf = configuration_data()
 
 if host_machine.system() == 'windows'
-  conf.set_quoted('FC_DEFAULT_FONTS', 'WINDOWSFONTDIR')
-  fonts_conf.set('FC_DEFAULT_FONTS', 'WINDOWSFONTDIR')
+  fc_fonts_path = ['WINDOWSFONTDIR']
   fc_cachedir = 'LOCAL_APPDATA_FONTCONFIG_CACHE'
 else
   if host_machine.system() == 'darwin'
-    conf.set_quoted('FC_DEFAULT_FONTS', '<dir>/System/Library/Fonts</dir> <dir>/Library/Fonts</dir> <dir>~/Library/Fonts</dir> <dir>/System/Library/Assets/com_apple_MobileAsset_Font3</dir> <dir>/System/Library/Assets/com_apple_MobileAsset_Font4</dir>')
-    fonts_conf.set('FC_DEFAULT_FONTS', '<dir>/System/Library/Fonts</dir> <dir>/Library/Fonts</dir> <dir>~/Library/Fonts</dir> <dir>/System/Library/Assets/com_apple_MobileAsset_Font3</dir> <dir>/System/Library/Assets/com_apple_MobileAsset_Font4</dir>')
+    fc_fonts_path = ['/System/Library/Fonts', '/Library/Fonts', '~/Library/Fonts', '/System/Library/Assets/com_apple_MobileAsset_Font3', '/System/Library/Assets/com_apple_MobileAsset_Font4']
   else
-    conf.set_quoted('FC_DEFAULT_FONTS', '<dir>/usr/share/fonts</dir>')
-    fonts_conf.set('FC_DEFAULT_FONTS', '<dir>/usr/share/fonts</dir>')
+    fc_fonts_path = ['/usr/share/fonts', '/usr/local/share/fonts']
   endif
   fc_cachedir = join_paths(prefix, get_option('localstatedir'), 'cache', meson.project_name())
   thread_dep = dependency('threads')
   conf.set('HAVE_PTHREAD', 1)
   deps += [thread_dep]
 endif
+xml_path = ''
+escaped_xml_path = ''
+foreach p : fc_fonts_path
+  s = '\t<dir>' + p + '</dir>\n'
+  xml_path += s
+  # No substitution method for string
+  s = '\\t<dir>' + p + '</dir>\\n'
+  escaped_xml_path += s
+endforeach
+conf.set_quoted('FC_DEFAULT_FONTS', escaped_xml_path)
+fonts_conf.set('FC_DEFAULT_FONTS', xml_path)
 
 fc_templatedir = join_paths(prefix, get_option('datadir'), 'fontconfig/conf.avail')
 fc_baseconfigdir = join_paths(prefix, get_option('sysconfdir'), 'fonts')
