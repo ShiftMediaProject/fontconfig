@@ -157,7 +157,7 @@ meson-mingw-w64-build:
     #   -Dbar=disabled
   before_script:
     # Make sure meson is up to date, so we don't need to rebuild the image with each release
-    - pip3 install -U meson
+    - pip3 install -U meson certifi
   script:
     # For some reason, options are separated by newline instead of space, so we
     # have to replace them first.
@@ -166,6 +166,9 @@ meson-mingw-w64-build:
     # Environment variables substitutions is done by PowerShell before calling
     # cmd.exe, that's why we use $env:FOO instead of %FOO%
     - cmd.exe /C "C:\BuildTools\Common7\Tools\VsDevCmd.bat -host_arch=amd64 -arch=$env:ARCH &&
+        SET CERT_PATH=$(python -m certifi) &&
+        SET SSL_CERT_FILE=$(python -m certifi) &&
+        SET REQUESTS_CA_BUNDLE=$(python -m certifi) &&
         meson build $env:MESON_ARGS &&
         ninja -C build &&
         ninja -C build test"
