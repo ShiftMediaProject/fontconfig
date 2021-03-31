@@ -1299,10 +1299,15 @@ _get_real_paths_from_prefix(FcConfigParse *parse, const FcChar8 *path, const FcC
 	if (FcStrCmp (prefix, (const FcChar8 *) "xdg") == 0)
 	{
 	    parent = FcConfigXdgDataHome ();
-	    e = FcConfigXdgDataDirs ();
-	    if (!parent || !e)
+	    if (!parent)
 	    {
 		/* Home directory might be disabled */
+		return NULL;
+	    }
+	    e = FcConfigXdgDataDirs ();
+	    if (!e)
+	    {
+		FcStrFree (parent);
 		return NULL;
 	    }
 	}
