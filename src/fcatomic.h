@@ -51,6 +51,25 @@ typedef <type> fc_atomic_int_t;
 #define fc_atomic_ptr_cmpexch(P,O,N)	*(P) == (O) ? (*(P) = (N), FcTrue) : FcFalse // atomic release
 
 
+#elif !defined(FC_NO_MT) && defined(HAVE_STDATOMIC_PRIMITIVES)
+
+#include <stdatomic.h>
+
+typedef atomic_int fc_atomic_int_t;
+#define FC_ATOMIC_INT_FORMAT		"d"
+#define fc_atomic_int_add(AI, V)	atomic_fetch_add (&(AI), (V))
+
+#define fc_atomic_ptr_get(P)		atomic_load ((_Atomic(void *)*) (P))
+static inline FcBool _fc_atomic_ptr_cmpexch(_Atomic(void *)*P, void * O, _Atomic(void *) N) {
+  return atomic_compare_exchange_strong(P, &O, N);
+}
+#define fc_atomic_ptr_cmpexch(P,O,N)	_fc_atomic_ptr_cmpexch ((_Atomic(void *)*) (P), (O), (N))
+
+/* Casting -1 to _Atomic(int) produces a compiler error with Clang (but not GCC)
+ * so we have to override FC_REF_CONSTANT_VALUE for stdatomic.h atomics.
+ * See https://bugs.llvm.org/show_bug.cgi?id=40249. */
+#define FC_REF_CONSTANT_VALUE (-1)
+
 #elif !defined(FC_NO_MT) && defined(_MSC_VER) || defined(__MINGW32__)
 
 #include "fcwindows.h"
@@ -137,7 +156,9 @@ typedef int fc_atomic_int_t;
 #endif
 
 /* reference count */
+#ifndef FC_REF_CONSTANT_VALUE
 #define FC_REF_CONSTANT_VALUE ((fc_atomic_int_t) -1)
+#endif
 #define FC_REF_CONSTANT {FC_REF_CONSTANT_VALUE}
 typedef struct _FcRef { fc_atomic_int_t count; } FcRef;
 static inline void   FcRefInit     (FcRef *r, int v) { r->count = v; }
