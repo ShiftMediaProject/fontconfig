@@ -19,6 +19,7 @@ conf.d/30-metric-aliases.conf
 conf.d/40-nonlatin.conf
 conf.d/45-generic.conf
 conf.d/45-latin.conf
+conf.d/48-spacing.conf
 conf.d/49-sansserif.conf
 conf.d/50-user.conf
 conf.d/51-local.conf
