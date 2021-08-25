@@ -1111,7 +1111,7 @@ FcCache *
 FcDirCacheLoadFile (const FcChar8 *cache_file, struct stat *file_stat)
 {
     int	fd;
-    FcCache *cache;
+    FcCache *cache = NULL;
     struct stat	my_file_stat;
     FcConfig *config;
 
@@ -1121,11 +1121,13 @@ FcDirCacheLoadFile (const FcChar8 *cache_file, struct stat *file_stat)
     if (!config)
 	return NULL;
     fd = FcDirCacheOpenFile (cache_file, file_stat);
-    if (fd < 0)
-	return NULL;
-    cache = FcDirCacheMapFd (config, fd, file_stat, NULL);
+    if (fd >= 0)
+    {
+	cache = FcDirCacheMapFd (config, fd, file_stat, NULL);
+	close (fd);
+    }
     FcConfigDestroy (config);
-    close (fd);
+
     return cache;
 }
 
