@@ -495,6 +495,7 @@ retry:
     FcMutexInit (lock);
     if (!fc_atomic_ptr_cmpexch (&cache_lock, NULL, lock)) {
       FcMutexFinish (lock);
+      free (lock);
       goto retry;
     }
 
