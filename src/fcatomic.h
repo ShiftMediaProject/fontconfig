@@ -57,11 +57,11 @@ typedef <type> fc_atomic_int_t;
 
 typedef atomic_int fc_atomic_int_t;
 #define FC_ATOMIC_INT_FORMAT		"d"
-#define fc_atomic_int_add(AI, V)	atomic_fetch_add (&(AI), (V))
+#define fc_atomic_int_add(AI, V)	atomic_fetch_add_explicit (&(AI), (V), memory_order_acq_rel)
 
-#define fc_atomic_ptr_get(P)		atomic_load ((_Atomic(void *)*) (P))
+#define fc_atomic_ptr_get(P)		atomic_load_explicit ((_Atomic(void *)*) (P), memory_order_acquire)
 static inline FcBool _fc_atomic_ptr_cmpexch(_Atomic(void *)*P, void * O, _Atomic(void *) N) {
-  return atomic_compare_exchange_strong(P, &O, N);
+  return atomic_compare_exchange_strong_explicit(P, &O, N, memory_order_release, memory_order_relaxed);
 }
 #define fc_atomic_ptr_cmpexch(P,O,N)	_fc_atomic_ptr_cmpexch ((_Atomic(void *)*) (P), (O), (N))
 
