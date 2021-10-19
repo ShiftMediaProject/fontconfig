@@ -164,7 +164,7 @@ rmdir /s /q $(OutDir)\fonts
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>HAVE_CONFIG_H;LIBXML_STATIC;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\;.\;..\;.\src;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4267;4090;4244;4018;4101;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
@@ -242,7 +242,7 @@ rmdir /s /q $(OutDir)\fonts
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>HAVE_CONFIG_H;LIBXML_STATIC;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\;.\;..\;.\src;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4267;4090;4244;4018;4101;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
@@ -474,7 +474,7 @@ rmdir /s /q $(OutDir)\fonts
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>HAVE_CONFIG_H;LIBXML_STATIC;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\;.\;..\;.\src;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4267;4090;4244;4018;4101;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
@@ -630,7 +630,7 @@ rmdir /s /q $(OutDir)\fonts
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>HAVE_CONFIG_H;LIBXML_STATIC;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\;.\;..\;.\src;$(OutDir)\include\libxml2;$(OutDir)\include\freetype2;$(ProjectDir)\..\..\prebuilt\include\libxml2;$(ProjectDir)\..\..\prebuilt\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4267;4090;4244;4018;4101;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
