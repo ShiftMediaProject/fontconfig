@@ -1257,16 +1257,15 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	    goto bail1;
     }
 
+    if (FT_Get_MM_Var (face, &master))
+	goto bail1;
+
     if (id >> 16)
     {
-      if (FT_Get_MM_Var (face, &master))
-	  goto bail1;
-
       if (id >> 16 == 0x8000)
       {
 	  /* Query variable font itself. */
 	  unsigned int i;
-
 	  for (i = 0; i < master->num_axis; i++)
 	  {
 	      double min_value = master->axis[i].minimum / (double) (1U << 16);
@@ -1351,6 +1350,22 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	}
         else
 	    goto bail1;
+    }
+    else
+    {
+	  unsigned int i;
+	  for (i = 0; i < master->num_axis; i++)
+	  {
+	      switch (master->axis[i].tag)
+	      {
+		case FT_MAKE_TAG ('o','p','s','z'):
+		  if (!FcPatternObjectAddDouble (pat, FC_SIZE_OBJECT, master->axis[i].def / (double) (1U << 16)))
+		      goto bail1;
+		  variable_size = FcTrue;
+		  break;
+	      }
+
+	  }
     }
     if (!FcPatternObjectAddBool (pat, FC_VARIABLE_OBJECT, variable))
 	goto bail1;
