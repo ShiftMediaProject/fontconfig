@@ -1717,8 +1717,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	if (FcPatternObjectGetString (pat, FC_STYLE_OBJECT, n, &style) != FcResultMatch)
 	    goto bail1;
 	len = strlen ((const char *) style);
-	for (i = 0; style[i] != 0 && isspace (style[i]); i++)
-	    break;
+	for (i = 0; style[i] != 0 && isspace (style[i]); i++);
 	memcpy (style, &style[i], len - i);
 	FcStrBufInit (&sbuf, NULL, 0);
 	FcStrBufString (&sbuf, family);
