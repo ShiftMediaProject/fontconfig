@@ -1705,6 +1705,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 		break;
 	}
 	family[i] = 0;
+	n = 0;
 	while (FcPatternObjectGetString (pat, FC_STYLELANG_OBJECT, n, &lang) == FcResultMatch)
 	{
 	    if (FcStrCmp (lang, (const FcChar8 *) "en") == 0)
