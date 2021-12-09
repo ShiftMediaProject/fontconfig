@@ -1701,7 +1701,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	len = strlen ((const char *) family);
 	for (i = len; i > 0; i--)
 	{
-	    if (!isspace (family[i]))
+	    if (!isspace (family[i-1]))
 		break;
 	}
 	family[i] = 0;
