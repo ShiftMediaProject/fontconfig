@@ -1682,7 +1682,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
     /* Add the fullname into the cache */
     if (!variable && !nfullname)
     {
-	FcChar8 *family, *style, *lang;
+	FcChar8 *family, *style, *lang = NULL;
 	int n = 0;
 	size_t len, i;
 	FcStrBuf sbuf;
