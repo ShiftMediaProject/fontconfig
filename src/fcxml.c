@@ -1370,6 +1370,16 @@ _get_real_paths_from_prefix(FcConfigParse *parse, const FcChar8 *path, const FcC
 	if (p) *p = '\0';
 	strcat ((char *) path, "\\..\\share\\fonts");
     }
+    else if (strcmp ((const char *) path, "WINDOWSUSERFONTDIR") == 0)
+    {
+        path = buffer;
+        if (!(pSHGetFolderPathA && SUCCEEDED(pSHGetFolderPathA(NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, (char *) buffer))))
+        {
+            FcConfigMessage(parse, FcSevereError, "SHGetFolderPathA failed");
+            return NULL;
+        }
+        strcat((char *) path, "\\Microsoft\\Windows\\Fonts");
+    }
     else if (strcmp ((const char *) path, "WINDOWSFONTDIR") == 0)
     {
 	int rc;

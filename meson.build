@@ -208,7 +208,7 @@ prefix = get_option('prefix')
 fonts_conf = configuration_data()
 
 if host_machine.system() == 'windows'
-  fc_fonts_path = ['WINDOWSFONTDIR']
+  fc_fonts_path = ['WINDOWSFONTDIR', 'WINDOWSUSERFONTDIR']
   fc_cachedir = 'LOCAL_APPDATA_FONTCONFIG_CACHE'
 else
   if host_machine.system() == 'darwin'

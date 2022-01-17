@@ -486,7 +486,7 @@ AC_ARG_WITH(default-fonts,
 case "$default_fonts" in
 yes)
 	if test "$os_win32" = "yes"; then
-		default_fonts="WINDOWSFONTDIR"
+		default_fonts="WINDOWSFONTDIR,WINDOWSUSERFONTDIR"
 	elif test "$os_darwin" = "yes"; then
 		default_fonts="/System/Library/Fonts,/Library/Fonts,~/Library/Fonts,/System/Library/Assets/com_apple_MobileAsset_Font3,/System/Library/Assets/com_apple_MobileAsset_Font4"
 	else
