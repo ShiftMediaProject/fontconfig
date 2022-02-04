@@ -82,6 +82,7 @@ template_DATA =				\
 	40-nonlatin.conf		\
 	45-generic.conf			\
 	45-latin.conf			\
+	48-spacing.conf			\
 	49-sansserif.conf		\
 	50-user.conf			\
 	51-local.conf			\
