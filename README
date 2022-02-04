@@ -1,11 +1,17 @@
                               Fontconfig
              Font configuration and customization library
-                      Version 2.13.95 (2.14 RC5)
-                              2022-02-01
+                      Version 2.13.96 (2.14 RC6)
+                              2022-02-04
 
 
 Check INSTALL for compilation and installation instructions.
 Report bugs to https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/new.
+
+2.13.96 (2.14 RC6)
+
+Akira TAGOH (2):
+      Add a missing file 48-spacing.conf
+      Merge branch 'main' of ssh://gitlab.freedesktop.org/fontconfig/fontconfig
 
 2.13.95 (2.14 RC5)
 
