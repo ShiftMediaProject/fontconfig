@@ -7,8 +7,10 @@
     <ClInclude Include="..\src\fcarch.h" />
     <ClInclude Include="..\src\fcatomic.h" />
     <ClInclude Include="..\src\fcdeprecate.h" />
+    <ClInclude Include="..\src\fcfoundry.h" />
     <ClInclude Include="..\src\fcftint.h" />
     <ClInclude Include="..\src\fcint.h" />
+    <ClInclude Include="..\src\fcmd5.h" />
     <ClInclude Include="..\src\fcmutex.h" />
     <ClInclude Include="..\src\fcobjs.h" />
     <ClInclude Include="..\src\fcwindows.h" />

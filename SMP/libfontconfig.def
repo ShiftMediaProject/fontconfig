@@ -53,6 +53,7 @@ EXPORTS
 	FcConfigGetConfigDirs
 	FcConfigGetConfigFiles
 	FcConfigGetCurrent
+	FcConfigGetFilename
 	FcConfigGetFontDirs
 	FcConfigGetFonts
 	FcConfigGetRescanInterval
@@ -197,6 +198,7 @@ EXPORTS
 	FcRangeDestroy
 	FcRangeGetDouble
 	FcStrBasename
+	FcStrBuildFilename
 	FcStrCmp
 	FcStrCmpIgnoreCase
 	FcStrCopy
