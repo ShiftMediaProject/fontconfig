@@ -2402,7 +2402,7 @@ FcConfigFileExists (const FcChar8 *dir, const FcChar8 *file)
 #endif
     strcat ((char *) path, (char *) file);
 
-    if (FcAccess (path, R_OK) == 0)
+    if (access (path, R_OK) == 0)
 	return path;
 
     FcStrFree (path);

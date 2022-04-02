@@ -848,19 +848,10 @@ FcRandom (void);
 FcPrivate FcBool
 FcMakeDirectory (const FcChar8 *dir);
 
-FcPrivate FcBool
-FcMakeDirectoryMode (const FcChar8 *dir, mode_t mode);
-
 FcPrivate ssize_t
 FcReadLink (const FcChar8 *pathname,
 	    FcChar8       *buf,
 	    size_t         bufsiz);
-
-FcPrivate int
-FcAccess (const FcChar8 *path, int amode);
-
-FcPrivate int
-FcChmod(const FcChar8 *filename, int pmode);
 
 /* fcdbg.c */
 

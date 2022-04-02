@@ -143,12 +143,12 @@ FcAtomicLock (FcAtomic *atomic)
 	/* the filesystem where atomic->lck points to may not supports
 	 * the hard link. so better try to fallback
 	 */
-	ret = FcMakeDirectory (atomic->lck, 0600);
+	ret = mkdir ((char *) atomic->lck, 0600);
 	no_link = FcTrue;
     }
     (void) unlink ((char *) atomic->tmp);
 #else
-    ret = FcMakeDirectoryMode (atomic->lck, 0600);
+    ret = mkdir ((char *) atomic->lck, 0600);
 #endif
     if (ret < 0)
     {

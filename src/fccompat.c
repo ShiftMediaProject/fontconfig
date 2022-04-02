@@ -123,68 +123,6 @@ mkstemp (char *template)
 #define HAVE_MKSTEMP 1
 #endif
 
-#ifdef _WIN32
-#include <direct.h>
-int fcopen (const char *filename, int oflag, ...)
-{
-    int fd = -1;
-    WCHAR wide_buffer[MAX_PATH];
-    if (MultiByteToWideChar (CP_UTF8, 0, filename, -1, wide_buffer, MAX_PATH) == 0)
-        return fd;
-
-    if (oflag & O_CREAT)
-    {
-        va_list ap;
-        mode_t mode;
-
-        va_start(ap, oflag);
-        mode = (mode_t)va_arg(ap, int);
-        va_end(ap);
-
-        fd = _wopen(wide_buffer, oflag, mode);
-    }
-    else
-    {
-        fd = _wopen(wide_buffer, oflag);
-    }
-    return fd;
-}
-#define open(filename,oflag,...) fcopen(filename,oflag,__VA_ARGS__)
-int fcmkdir (const char *dirname, mode_t mode)
-{
-    WCHAR wide_buffer[MAX_PATH];
-    if (MultiByteToWideChar (CP_UTF8, 0, dirname, -1, wide_buffer, MAX_PATH) == 0)
-        return -1;
-    return _wmkdir (wide_buffer);
-}
-#define mkdir(path,mode) fcmkdir(path,mode)
-errno_t fc_mktemp_s (char *template, size_t size)
-{
-    WCHAR wide_buffer[MAX_PATH];
-    int len;
-    if ((len = MultiByteToWideChar (CP_UTF8, 0, template, -1, wide_buffer, MAX_PATH)) == 0)
-        return -1;
-    return _wmktemp_s (wide_buffer, len);
-}
-#define _mktemp_s(template,sizeInChars) fc_mktemp_s(template,sizeInChars)
-int fcaccess (const char *path, int mode)
-{
-    WCHAR wide_buffer[MAX_PATH];
-    if (MultiByteToWideChar (CP_UTF8, 0, path, -1, wide_buffer, MAX_PATH) == 0)
-        return -1;
-    return _waccess (wide_buffer, mode);
-}
-#define access(path,mode) fcaccess(path,mode)
-int fcchmod (const char *filename, int pmode)
-{
-    WCHAR wide_buffer[MAX_PATH];
-    if (MultiByteToWideChar (CP_UTF8, 0, filename, -1, wide_buffer, MAX_PATH) == 0)
-        return -1;
-    return _wchmod (wide_buffer, pmode);
-}
-#define chmod(filename,pmode) fcchmod(filename,pmode)
-#endif
-
 int
 FcOpen(const char *pathname, int flags, ...)
 {
@@ -309,14 +247,13 @@ FcRandom(void)
     return result;
 }
 
-FcBool
-FcMakeDirectory (const FcChar8 *dir)
-{
-    return FcMakeDirectoryMode (dir, 0755);
-}
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path,mode) _mkdir(path)
+#endif
 
 FcBool
-FcMakeDirectoryMode (const FcChar8 *dir, mode_t mode)
+FcMakeDirectory (const FcChar8 *dir)
 {
     FcChar8 *parent;
     FcBool  ret;
@@ -328,9 +265,9 @@ FcMakeDirectoryMode (const FcChar8 *dir, mode_t mode)
     if (!parent)
 	return FcFalse;
     if (access ((char *) parent, F_OK) == 0)
-	ret = mkdir ((char *) dir, mode) == 0 && chmod ((char *) dir, mode) == 0;
+	ret = mkdir ((char *) dir, 0755) == 0 && chmod ((char *) dir, 0755) == 0;
     else if (access ((char *) parent, F_OK) == -1)
-	ret = FcMakeDirectory (parent) && (mkdir ((char *) dir, mode) == 0) && chmod ((char *) dir, mode) == 0;
+	ret = FcMakeDirectory (parent) && (mkdir ((char *) dir, 0755) == 0) && chmod ((char *) dir, 0755) == 0;
     else
 	ret = FcFalse;
     FcStrFree (parent);
@@ -359,7 +296,7 @@ FcReadLink (const FcChar8 *pathname,
 struct DIR {
     struct dirent d_ent;
     HANDLE handle;
-    WIN32_FIND_DATA fdata;
+    WIN32_FIND_DATAW fdata;
     FcBool valid;
 };
 
@@ -369,6 +306,7 @@ FcCompatOpendirWin32 (const char *dirname)
     size_t len;
     char *name;
     DIR *dir;
+    WCHAR wide_buffer[FC_MAX_FILE_LEN];
 
     dir = calloc (1, sizeof (struct DIR));
     if (dir == NULL)
@@ -386,7 +324,9 @@ FcCompatOpendirWin32 (const char *dirname)
     name[len++] = '*';
     name[len] = '\0';
 
-    dir->handle = FindFirstFileEx (name, FindExInfoBasic, &dir->fdata, FindExSearchNameMatch, NULL, 0);
+    if (MultiByteToWideChar (CP_UTF8, 0, (LPSTR)name, -1, wide_buffer, FC_MAX_FILE_LEN) == 0)
+    return NULL;
+    dir->handle = FindFirstFileExW (wide_buffer, FindExInfoBasic, &dir->fdata, FindExSearchNameMatch, NULL, 0);
 
     free (name);
 
@@ -408,10 +348,16 @@ FcCompatOpendirWin32 (const char *dirname)
 FcPrivate struct dirent *
 FcCompatReaddirWin32 (DIR *dir)
 {
+    size_t len;
+
     if (dir->valid != FcTrue)
         return NULL;
 
-    dir->d_ent.d_name = dir->fdata.cFileName;
+    len = WideCharToMultiByte(CP_UTF8, 0, dir->fdata.cFileName, -1, NULL, 0, NULL, NULL);
+    dir->d_ent.d_name = malloc(len + 3);
+
+    if(WideCharToMultiByte(CP_UTF8, 0, dir->fdata.cFileName, -1, (LPSTR)dir->d_ent.d_name, len+3, NULL, NULL) == 0)
+        return NULL;
 
     if ((dir->fdata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
         dir->d_ent.d_type = DT_DIR;
@@ -420,7 +366,7 @@ FcCompatReaddirWin32 (DIR *dir)
     else
         dir->d_ent.d_type = DT_UNKNOWN;
 
-    if (!FindNextFile (dir->handle, &dir->fdata))
+    if (!FindNextFileW (dir->handle, &dir->fdata))
         dir->valid = FcFalse;
 
     return &dir->d_ent;
