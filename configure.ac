@@ -736,7 +736,13 @@ dnl ===========================================================================
 # Let people not build/install docs if they don't have docbook
 #
 
-AC_CHECK_PROG(HASDOCBOOK, docbook2html, yes, no)
+AC_ARG_ENABLE(docbook,
+	[AS_HELP_STRING([--disable-docbook],
+		[Disable building docs with docbook2html (default: no)])],,)
+
+if test x$enable_docbook != xno; then
+	AC_CHECK_PROG(HASDOCBOOK, docbook2html, yes, no)
+fi
 
 AM_CONDITIONAL(USEDOCBOOK, test "x$HASDOCBOOK" = xyes)
 
