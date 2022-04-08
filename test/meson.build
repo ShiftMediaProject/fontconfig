@@ -57,4 +57,14 @@ if host_machine.system() != 'windows'
   test('run_test_sh', find_program('run-test.sh'), timeout: 600, env: ['srcdir=@0@'.format(meson.current_source_dir()), 'builddir=@0@'.format(meson.current_build_dir()), 'EXEEXT=@0@'.format(conf.get('EXEEXT')), 'VERBOSE=1'])
 endif
 
-# FIXME: jsonc test-conf
+if jsonc_dep.found()
+  test_conf = executable('test-conf', 'test-conf.c',
+                         dependencies: [fontconfig_dep, jsonc_dep])
+  test('run_test_conf_sh', find_program('run-test-conf.sh'),
+       timeout: 120,
+       env: [
+         'srcdir=@0@'.format(meson.current_source_dir()),
+         'builddir=@0@'.format(meson.current_build_dir())
+       ],
+       depends: test_conf)
+endif

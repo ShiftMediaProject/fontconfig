@@ -48,6 +48,8 @@ else
   endif
 endif
 
+jsonc_dep = dependency('json-c', required: false)
+
 xml_dep = dependency('', required: false)
 xmlbackend = get_option('xml-backend')
 xmltype = ''
