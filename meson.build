@@ -33,8 +33,14 @@ if not freetype_dep.found()
     fallback: ['freetype2', 'freetype_dep'])
 endif
 
-expat_dep = dependency('expat',
-  fallback: ['expat', 'expat_dep'])
+# Linking expat should not be so difficult... see: https://github.com/mesonbuild/meson/issues/10516
+expat_dep = dependency('expat', required: false)
+if not expat_dep.found()
+  expat_dep = cc.find_library('expat', required : false)
+  if not expat_dep.found()
+    expat_dep = dependency('expat', method: 'system', fallback: ['expat', 'expat_dep'])
+  endif
+endif
 
 i18n = import('i18n')
 pkgmod = import('pkgconfig')
