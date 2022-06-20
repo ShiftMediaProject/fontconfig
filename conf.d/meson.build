@@ -65,7 +65,7 @@ conf_links = [
 install_data(conf_files, install_dir: fc_templatedir)
 
 meson.add_install_script('link_confs.py', fc_templatedir,
-  join_paths(fc_baseconfigdir, 'conf.d'),
+  fc_configdir,
   conf_links,
 )
 
@@ -90,5 +90,5 @@ readme_cdata.set('TEMPLATEDIR', fc_templatedir)
 configure_file(output: 'README',
   input: 'README.in',
   configuration: readme_cdata,
-  install_dir: join_paths(fc_baseconfigdir, 'conf.d'),
+  install_dir: fc_configdir,
   install: true)
