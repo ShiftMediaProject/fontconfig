@@ -27,3 +27,15 @@ option('additional-fonts-dirs', type: 'array', value: ['yes'],
 # Configuration paths
 option('cache-dir', type: 'string', value: 'default',
   description: 'Use DIR to store cache files (default=LOCALSTATEDIR/cache/fontconfig)')
+
+option('template-dir', type: 'string', value: 'default',
+  description: 'Use DIR to store the configuration template files (default=DATADIR/fontconfig/conf.avail)')
+
+option('baseconfig-dir', type: 'string', value: 'default',
+  description: 'Use DIR to store the base configuration files (default=SYSCONFDIR/fonts)')
+
+option('config-dir', type: 'string', value: 'default',
+  description: 'Use DIR to store active configuration files (default=BASECONFIGDIR/conf.d)')
+
+option('xml-dir', type: 'string', value: 'default',
+  description: 'Use DIR to store XML schema files (default=DATADIR/xml/fontconfig)')

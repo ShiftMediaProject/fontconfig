@@ -281,11 +281,25 @@ if host_machine.system() != 'windows'
   deps += [thread_dep]
 endif
 
-fc_templatedir = join_paths(prefix, get_option('datadir'), 'fontconfig/conf.avail')
-fc_baseconfigdir = join_paths(prefix, get_option('sysconfdir'), 'fonts')
-fc_configdir = join_paths(fc_baseconfigdir, 'conf.d')
-fc_xmldir = join_paths(prefix, get_option('datadir'), 'xml/fontconfig')
+fc_templatedir = get_option('template-dir')
+if fc_templatedir in ['default', 'yes', 'no']
+  fc_templatedir = prefix / get_option('datadir') / 'fontconfig/conf.avail'
+endif
 
+fc_baseconfigdir = get_option('baseconfig-dir')
+if fc_baseconfigdir in ['default', 'yes', 'no']
+fc_baseconfigdir = prefix / get_option('sysconfdir') / 'fonts'
+endif
+
+fc_configdir = get_option('config-dir')
+if fc_configdir in ['default', 'yes', 'no']
+  fc_configdir = fc_baseconfigdir / 'conf.d'
+endif
+
+fc_xmldir = get_option('xml-dir')
+if fc_xmldir in ['default', 'yes', 'no']
+  fc_xmldir = prefix / get_option('datadir') / 'xml/fontconfig'
+endif
 
 conf.set_quoted('CONFIGDIR', fc_configdir)
 conf.set_quoted('FC_CACHEDIR', fc_cachedir)
@@ -444,4 +458,8 @@ summary({
        }, section: 'Defaults', bool_yn: true, list_sep: ', ')
 summary({
        'Cache directory': fc_cachedir,
+       'Template directory': fc_templatedir,
+       'Base config directory': fc_baseconfigdir,
+       'Config directory': fc_configdir,
+       'XML directory': fc_xmldir,
        }, section: 'Paths', bool_yn: true, list_sep: ', ')
