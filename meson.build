@@ -237,6 +237,35 @@ endforeach
 conf.set_quoted('FC_DEFAULT_FONTS', escaped_xml_path)
 fonts_conf.set('FC_DEFAULT_FONTS', xml_path)
 
+# Add more fonts if available.  By default, add only the directories
+# with outline fonts; those with bitmaps can be added as desired in
+# local.conf or ~/.fonts.conf
+fc_add_fonts = []
+additional_fonts_dirs = get_option('additional-fonts-dirs')
+if additional_fonts_dirs == ['yes']
+  fs = import('fs')
+  foreach dir : ['/usr/X11R6/lib/X11', '/usr/X11/lib/X11', '/usr/lib/X11']
+    if fs.is_dir(dir / 'fonts')
+      fc_add_fonts += [dir / 'fonts']
+    endif
+  endforeach
+elif additional_fonts_dirs == ['no']
+  # nothing to do
+else
+  fc_add_fonts = additional_fonts_dirs
+endif
+xml_path = ''
+escaped_xml_path = ''
+foreach p : fc_add_fonts
+  s = '\t<dir>' + p + '</dir>\n'
+  xml_path += s
+  # No substitution method for string
+  s = '\\t<dir>' + p + '</dir>\\n'
+  escaped_xml_path += s
+endforeach
+conf.set_quoted('FC_FONTPATH', escaped_xml_path)
+fonts_conf.set('FC_FONTPATH', xml_path)
+
 if host_machine.system() == 'windows'
   fc_cachedir = 'LOCAL_APPDATA_FONTCONFIG_CACHE'
 else
@@ -405,4 +434,5 @@ summary({
 summary({
        'Hinting': preferred_hinting,
        'Font directories': fc_fonts_paths,
+       'Additional font directories': fc_add_fonts,
        }, section: 'Defaults', bool_yn: true, list_sep: ', ')

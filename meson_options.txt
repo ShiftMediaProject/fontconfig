@@ -20,3 +20,6 @@ option('default-hinting', type: 'combo', choices: ['none', 'slight', 'medium', '
 
 option('default-fonts-dirs', type: 'array', value: ['yes'],
   description: 'Use fonts from DIR1,DIR2,... when config is busted (set to "yes" for generic system-specific defaults)')
+
+option('additional-fonts-dirs', type: 'array', value: ['yes'],
+  description: 'Find additional fonts in DIR1,DIR2,... (set to "yes" for generic system-specific defaults)')
