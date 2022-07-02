@@ -17,3 +17,6 @@ option('cache-build', type : 'feature', value : 'enabled',
 # Defaults
 option('default-hinting', type: 'combo', choices: ['none', 'slight', 'medium', 'full'], value: 'slight',
   description: 'Preferred hinting configuration')
+
+option('default-fonts-dirs', type: 'array', value: ['yes'],
+  description: 'Use fonts from DIR1,DIR2,... when config is busted (set to "yes" for generic system-specific defaults)')

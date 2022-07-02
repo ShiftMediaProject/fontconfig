@@ -213,23 +213,21 @@ prefix = get_option('prefix')
 
 fonts_conf = configuration_data()
 
-if host_machine.system() == 'windows'
-  fc_fonts_path = ['WINDOWSFONTDIR', 'WINDOWSUSERFONTDIR']
-  fc_cachedir = 'LOCAL_APPDATA_FONTCONFIG_CACHE'
-else
-  if host_machine.system() == 'darwin'
-    fc_fonts_path = ['/System/Library/Fonts', '/Library/Fonts', '~/Library/Fonts', '/System/Library/Assets/com_apple_MobileAsset_Font3', '/System/Library/Assets/com_apple_MobileAsset_Font4']
+default_fonts_dirs = get_option('default-fonts-dirs')
+if default_fonts_dirs == ['yes']
+  if host_machine.system() == 'windows'
+    fc_fonts_paths = ['WINDOWSFONTDIR', 'WINDOWSUSERFONTDIR']
+  elif host_machine.system() == 'darwin'
+    fc_fonts_paths = ['/System/Library/Fonts', '/Library/Fonts', '~/Library/Fonts', '/System/Library/Assets/com_apple_MobileAsset_Font3', '/System/Library/Assets/com_apple_MobileAsset_Font4']
   else
-    fc_fonts_path = ['/usr/share/fonts', '/usr/local/share/fonts']
+    fc_fonts_paths = ['/usr/share/fonts', '/usr/local/share/fonts']
   endif
-  fc_cachedir = join_paths(prefix, get_option('localstatedir'), 'cache', meson.project_name())
-  thread_dep = dependency('threads')
-  conf.set('HAVE_PTHREAD', 1)
-  deps += [thread_dep]
+else
+  fc_fonts_paths = default_fonts_dirs
 endif
 xml_path = ''
 escaped_xml_path = ''
-foreach p : fc_fonts_path
+foreach p : fc_fonts_paths
   s = '\t<dir>' + p + '</dir>\n'
   xml_path += s
   # No substitution method for string
@@ -238,6 +236,15 @@ foreach p : fc_fonts_path
 endforeach
 conf.set_quoted('FC_DEFAULT_FONTS', escaped_xml_path)
 fonts_conf.set('FC_DEFAULT_FONTS', xml_path)
+
+if host_machine.system() == 'windows'
+  fc_cachedir = 'LOCAL_APPDATA_FONTCONFIG_CACHE'
+else
+  fc_cachedir = join_paths(prefix, get_option('localstatedir'), 'cache', meson.project_name())
+  thread_dep = dependency('threads')
+  conf.set('HAVE_PTHREAD', 1)
+  deps += [thread_dep]
+endif
 
 fc_templatedir = join_paths(prefix, get_option('datadir'), 'fontconfig/conf.avail')
 fc_baseconfigdir = join_paths(prefix, get_option('sysconfdir'), 'fonts')
@@ -396,5 +403,6 @@ summary({
        'Tools': not get_option('tools').disabled(),
        }, section: 'General', bool_yn: true, list_sep: ', ')
 summary({
-       'Hinting': get_option('default-hinting'),
+       'Hinting': preferred_hinting,
+       'Font directories': fc_fonts_paths,
        }, section: 'Defaults', bool_yn: true, list_sep: ', ')
