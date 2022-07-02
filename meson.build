@@ -266,10 +266,16 @@ endforeach
 conf.set_quoted('FC_FONTPATH', escaped_xml_path)
 fonts_conf.set('FC_FONTPATH', xml_path)
 
-if host_machine.system() == 'windows'
-  fc_cachedir = 'LOCAL_APPDATA_FONTCONFIG_CACHE'
-else
-  fc_cachedir = join_paths(prefix, get_option('localstatedir'), 'cache', meson.project_name())
+fc_cachedir = get_option('cache-dir')
+if fc_cachedir in ['yes', 'no', 'default']
+  if host_machine.system() == 'windows'
+    fc_cachedir = 'LOCAL_APPDATA_FONTCONFIG_CACHE'
+  else
+    fc_cachedir = join_paths(prefix, get_option('localstatedir'), 'cache', meson.project_name())
+  endif
+endif
+
+if host_machine.system() != 'windows'
   thread_dep = dependency('threads')
   conf.set('HAVE_PTHREAD', 1)
   deps += [thread_dep]
@@ -436,3 +442,6 @@ summary({
        'Font directories': fc_fonts_paths,
        'Additional font directories': fc_add_fonts,
        }, section: 'Defaults', bool_yn: true, list_sep: ', ')
+summary({
+       'Cache directory': fc_cachedir,
+       }, section: 'Paths', bool_yn: true, list_sep: ', ')

@@ -23,3 +23,7 @@ option('default-fonts-dirs', type: 'array', value: ['yes'],
 
 option('additional-fonts-dirs', type: 'array', value: ['yes'],
   description: 'Find additional fonts in DIR1,DIR2,... (set to "yes" for generic system-specific defaults)')
+
+# Configuration paths
+option('cache-dir', type: 'string', value: 'default',
+  description: 'Use DIR to store cache files (default=LOCALSTATEDIR/cache/fontconfig)')
