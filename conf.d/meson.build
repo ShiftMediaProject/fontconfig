@@ -38,7 +38,7 @@ conf_files = [
   '90-synthetic.conf',
 ]
 
-preferred_hinting = 'slight'
+preferred_hinting = get_option('default-hinting')
 
 conf_links = [
   '10-hinting-@0@.conf'.format(preferred_hinting),

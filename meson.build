@@ -395,3 +395,6 @@ summary({
        'Tests': not get_option('tests').disabled(),
        'Tools': not get_option('tools').disabled(),
        }, section: 'General', bool_yn: true, list_sep: ', ')
+summary({
+       'Hinting': get_option('default-hinting'),
+       }, section: 'Defaults', bool_yn: true, list_sep: ', ')
