@@ -143,13 +143,15 @@ meson-mingw-w64-build:
       - prefix-*
 
 # FIXME: fontconfig should probably get its own image
+# In the meantime, the latest GStreamer image tag can be found here:
+# https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/main/.gitlab-image-tags.yml#L10
 .build meson windows:
-  image: 'registry.freedesktop.org/gstreamer/gst-ci/amd64/windows:v10'
+  image: 'registry.freedesktop.org/gstreamer/gstreamer/amd64/windows:2022-09-23.0-main'
   stage: 'build'
   tags:
     - 'docker'
     - 'windows'
-    - '1809'
+    - '2022'
   variables:
     # Make sure any failure in PowerShell scripts is fatal
     ErrorActionPreference: 'Stop'
@@ -177,12 +179,12 @@ meson-mingw-w64-build:
         ninja -C build &&
         ninja -C build test"
 
-meson vs2017 amd64:
+meson vs2019 amd64:
   extends: '.build meson windows'
   variables:
     ARCH: 'amd64'
 
-meson vs2017 x86:
+meson vs2019 x86:
   extends: '.build meson windows'
   variables:
     ARCH: 'x86'
