@@ -46,6 +46,7 @@ conf_links = [
   '10-hinting-@0@.conf'.format(preferred_hinting),
   '10-scale-bitmap-fonts.conf',
   '10-yes-antialias.conf',
+  '10-sub-pixel-rgb.conf',
   '11-lcdfilter-default.conf',
   '20-unhint-small-vera.conf',
   '30-metric-aliases.conf',

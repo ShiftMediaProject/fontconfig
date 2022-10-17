@@ -33,6 +33,7 @@ CONF_LINKS = \
 	10-hinting-$(PREFERRED_HINTING).conf	\
 	10-scale-bitmap-fonts.conf \
 	10-yes-antialias.conf	\
+	10-sub-pixel-rgb.conf		\
 	11-lcdfilter-default.conf \
 	20-unhint-small-vera.conf \
 	30-metric-aliases.conf \
