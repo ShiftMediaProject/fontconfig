@@ -1,5 +1,5 @@
 project('fontconfig', 'c',
-  version: '2.14.0',
+  version: '2.14.1',
   meson_version : '>= 0.57.0',
   default_options: [ 'buildtype=debugoptimized'],
 )
