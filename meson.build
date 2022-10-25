@@ -30,7 +30,7 @@ freetype_dep = dependency('freetype2', method: 'pkg-config', version: freetype_r
 # Give another shot using CMake
 if not freetype_dep.found()
   freetype_dep = dependency('freetype', method: 'cmake', version: freetype_req_cmake,
-    fallback: ['freetype2', 'freetype_dep'])
+    fallback: ['freetype2', 'freetype_dep'], default_options: 'werror=false')
 endif
 
 # Linking expat should not be so difficult... see: https://github.com/mesonbuild/meson/issues/10516
