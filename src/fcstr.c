@@ -1480,7 +1480,6 @@ FcStrSetAddFilenamePairWithSalt (FcStrSet *set, const FcChar8 *a, const FcChar8 
 {
     FcChar8 *new_a = NULL;
     FcChar8 *new_b = NULL;
-    FcChar8 *rs = NULL;
     FcBool  ret;
 
     if (a)
@@ -1500,10 +1499,7 @@ FcStrSetAddFilenamePairWithSalt (FcStrSet *set, const FcChar8 *a, const FcChar8 
 	}
     }
     /* Override maps with new one if exists */
-    if (FcStrSetMemberAB (set, new_a, new_b, &rs))
-    {
-	FcStrSetDel (set, rs);
-    }
+    FcStrSetDel (set, new_a);
     ret = FcStrSetAddTriple (set, new_a, new_b, salt);
     if (new_a)
 	FcStrFree (new_a);
