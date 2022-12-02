@@ -41,6 +41,7 @@ ORTH = \
 	ab.orth \
 	af.orth \
 	am.orth \
+	anp.orth \
 	ar.orth \
 	as.orth \
 	ast.orth \
@@ -53,6 +54,7 @@ ORTH = \
 	be.orth \
 	bg.orth \
 	bh.orth \
+	bhb.orth \
 	bho.orth \
 	bi.orth \
 	bin.orth \
@@ -99,6 +101,7 @@ ORTH = \
 	haw.orth \
 	he.orth \
 	hi.orth \
+	hif.orth \
 	ho.orth \
 	hr.orth \
 	hu.orth \
@@ -136,6 +139,7 @@ ORTH = \
 	lo.orth \
 	lt.orth \
 	lv.orth \
+	mag.orth \
 	mg.orth \
 	mh.orth \
 	mi.orth \
@@ -164,6 +168,7 @@ ORTH = \
 	ps_af.orth \
 	ps_pk.orth \
 	pt.orth \
+	raj.orth \
 	rm.orth \
 	ro.orth \
 	ru.orth \
@@ -194,6 +199,7 @@ ORTH = \
 	te.orth \
 	tg.orth \
 	th.orth \
+	the.orth \
 	ti_er.orth \
 	ti_et.orth \
 	tig.orth \
