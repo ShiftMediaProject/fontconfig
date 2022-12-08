@@ -62,7 +62,17 @@ retry:
 	if (!langs || !langs[0])
 	    langs = getenv ("LC_ALL");
 	if (!langs || !langs[0])
-	    langs = getenv ("LC_CTYPE");
+        {
+            langs = getenv ("LC_CTYPE");
+            // On some macOS systems, LC_CTYPE is set to "UTF-8", which doesn't
+            // give any languge information. In this case, ignore LC_CTYPE and
+            // continue the search with LANG.
+            if (langs && (FcStrCmpIgnoreCase((const FcChar8 *) langs,
+                                             (const FcChar8 *)"UTF-8") == 0))
+            {
+                langs = NULL;
+            }
+        }
 	if (!langs || !langs[0])
 	    langs = getenv ("LANG");
 	if (langs && langs[0])
