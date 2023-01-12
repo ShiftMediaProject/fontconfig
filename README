@@ -1433,7 +1433,7 @@ Akira TAGOH (60):
       Bug 26830 - Add search for libiconv non-default directory
       Bug 28491 - Allow matching on FC_FILE
       Bug 48573 - platform without regex do not have also REG_XXX defines
-      Bug 27526 - Compatibility fix for old windows sytems
+      Bug 27526 - Compatibility fix for old windows systems
       Add --with-expat, --with-expat-includes and --with-expat-lib back.
       doc: Fix a typo of the environment variable name.
       Bug 25151 - Move cleanCacheDirectory() from fc-cache.c into
