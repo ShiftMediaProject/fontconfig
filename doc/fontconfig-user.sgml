@@ -396,7 +396,8 @@ pattern elements which are used to match fonts.
   </para></refsect2>
   <refsect2><title><literal>&lt;glob&gt;</literal></title><para>
 Glob elements hold shell-style filename matching patterns (including ? and
-*) which match fonts based on their complete pathnames.  This can be used to
+*) which match fonts based on their complete pathnames. If it starts with '~',
+it refers to a directory in the users home directory.  This can be used to
 exclude a set of directories (/usr/share/fonts/uglyfont*), or particular
 font file types (*.pcf.gz), but the latter mechanism relies rather heavily
 on filenaming conventions which can't be relied upon.  Note that globs

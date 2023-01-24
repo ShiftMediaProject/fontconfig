@@ -2923,8 +2923,13 @@ FcConfigGlobAdd (FcConfig	*config,
 		 FcBool		accept)
 {
     FcStrSet	*set = accept ? config->acceptGlobs : config->rejectGlobs;
+	FcChar8	*realglob = FcStrCopyFilename(glob);
+	if (!realglob)
+		return FcFalse;
 
-    return FcStrSetAdd (set, glob);
+    FcBool	 ret = FcStrSetAdd (set, realglob);
+    FcStrFree(realglob);
+    return ret;
 }
 
 static FcBool
