@@ -2960,7 +2960,10 @@ FcParseAcceptRejectFont (FcConfigParse *parse, FcElement element)
 						      vstack->u.string,
 						      element == FcElementAcceptfont))
 	    {
-		FcConfigMessage (parse, FcSevereError, "out of memory");
+			if (FcStrUsesHome(vstack->u.string) && FcConfigHome() == NULL)
+				FcConfigMessage (parse, FcSevereWarning, "Home is disabled");
+			else
+				FcConfigMessage (parse, FcSevereError, "out of memory");
 	    }
 	    else
 	    {
