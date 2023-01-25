@@ -47,6 +47,16 @@ Deprecated.  Does nothing.  Returns FcFalse.
 Return the FcConstant structure related to symbolic constant <parameter>string</parameter>.
 @@
 
+@RET@           const FcConstant *
+@FUNC@          FcNameGetConstantFor
+@TYPE1@         FcChar8 *                       @ARG1@          string
+@TYPE2@         char *                          @ARG2@          object
+@PURPOSE@       Lookup symbolic constant For object
+@DESC@
+Return the FcConstant structure related to symbolic constant <parameter>string</parameter>
+for <parameter>object</parameter>.
+@@
+
 @RET@           FcBool
 @FUNC@          FcNameConstant
 @TYPE1@         FcChar8 *                       @ARG1@          string
