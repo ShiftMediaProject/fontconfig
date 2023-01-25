@@ -843,6 +843,9 @@ FcNameUnregisterConstants (const FcConstant *consts, int nconsts);
 FcPublic const FcConstant *
 FcNameGetConstant (const FcChar8 *string);
 
+FcPublic const FcConstant *
+FcNameGetConstantFor (const FcChar8 *string, const char *object);
+
 FcPublic FcBool
 FcNameConstant (const FcChar8 *string, int *result);
 
