@@ -1,11 +1,43 @@
                               Fontconfig
              Font configuration and customization library
-                            Version 2.14.1
-                              2022-10-21
+                            Version 2.14.2
+                              2023-01-27
 
 
 Check INSTALL for compilation and installation instructions.
 Report bugs to https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/new.
+
+2.14.2
+
+Akira TAGOH (13):
+      Fix the build issue on meson when -g option is added to c_args
+      Store artifacts for meson windows CI
+      Add FC_DESKTOP_NAME property
+      Add --with-default-sub-pixel-rendering option
+      Update po-conf/POTFILES.in
+      Ignore null pointer on Fc*Destroy functions
+      Convert tabs to spaces
+      Convert more tabs to spaces in docs
+      src/meson.build: Store correct paths to fontconfig.pc.
+      Fix a typo in description for HAVE_STDATOMIC_PRIMITIVES
+      Report more detailed logs instead of assertion.
+      Add some missing constant names for weight.
+      Adujst indentation between programlisting in fontconfig-user.sgml
+
+Christopher Degawa (1):
+      meson: modify gperf test to remove sh dependency
+
+Jason Francis (1):
+      meson: Update freetype2 git repository to upstream
+
+Jean Abou Samra (1):
+      Ignore LC_CTYPE if set to "UTF-8"
+
+Ondrej Balaz (1):
+      Expand ~ in glob
+
+lilinjie (1):
+      fix typo
 
 2.14.1
 
