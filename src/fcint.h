@@ -408,8 +408,8 @@ typedef struct _FcStrBuf {
 
 typedef struct _FcHashTable	FcHashTable;
 
-typedef FcChar32 (* FcHashFunc)	   (const void *data);
-typedef int	 (* FcCompareFunc) (const void *v1, const void *v2);
+typedef FcChar32 (* FcHashFunc)	   (const FcChar8 *data);
+typedef int	 (* FcCompareFunc) (const FcChar8 *v1, const FcChar8 *v2);
 typedef FcBool	 (* FcCopyFunc)	   (const void *src, void **dest);
 
 
