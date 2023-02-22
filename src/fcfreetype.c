@@ -2350,12 +2350,26 @@ skip:
 	    cs = NULL;
 	    FT_Done_Face (face);
 	    face = NULL;
+#ifdef HAVE_FT_DONE_MM_VAR
+	    FT_Done_MM_Var (ftLibrary, mm_var);
+#else
+	    free (mm_var);
+#endif
+	    mm_var = NULL;
 
 	    face_num++;
 	    instance_num = set_instance_num;
 
 	    if (FT_New_Face (ftLibrary, (const char *) file, face_num, &face))
 	      break;
+
+	    num_instances = face->style_flags >> 16;
+	    if (num_instances && (!index_set || instance_num))
+	    {
+		FT_Get_MM_Var (face, &mm_var);
+		if (!mm_var)
+		    num_instances = 0;
+	    }
 	}
     } while (!err && (!index_set || face_num == set_face_num) && face_num < num_faces);
 
