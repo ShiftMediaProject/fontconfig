@@ -178,6 +178,12 @@ meson-mingw-w64-build:
         meson build $env:MESON_ARGS &&
         ninja -C build &&
         ninja -C build test"
+  artifacts:
+    name: fontconfig-$CI_COMMIT_SHA-$CI_JOB_ID
+    when: always
+    paths:
+      - build-*/meson-logs/*txt
+      - prefix-*
 
 meson vs2019 amd64:
   extends: '.build meson windows'

@@ -366,7 +366,7 @@ typedef enum _FcElement {
     FcElementDescription,
     FcElementRemapDir,
     FcElementResetDirs,
-	
+
     FcElementRescan,
 
     FcElementPrefer,
@@ -730,7 +730,7 @@ FcTypecheckExpr (FcConfigParse *parse, FcExpr *expr, FcType type)
 	    if (o)
 		FcTypecheckValue (parse, o->type, type);
 	}
-        else
+	else
             FcConfigMessage (parse, FcSevereWarning,
                              "invalid constant used : %s",
                              expr->u.constant);
@@ -793,7 +793,7 @@ FcTestCreate (FcConfigParse *parse,
     if (test)
     {
 	const FcObjectType	*o;
-	
+
 	test->kind = kind;
 	test->qual = qual;
 	test->object = FcObjectFromName ((const char *) field);
@@ -1549,7 +1549,7 @@ FcStrtod (char *s, char **end)
     {
 	char	buf[128];
 	int	slen = strlen (s);
-	
+
 	if (slen + dlen > (int) sizeof (buf))
 	{
 	    if (end)
@@ -2983,7 +2983,10 @@ FcParseAcceptRejectFont (FcConfigParse *parse, FcElement element)
 						      vstack->u.string,
 						      element == FcElementAcceptfont))
 	    {
-		FcConfigMessage (parse, FcSevereError, "out of memory");
+			if (FcStrUsesHome(vstack->u.string) && FcConfigHome() == NULL)
+				FcConfigMessage (parse, FcSevereWarning, "Home is disabled");
+			else
+				FcConfigMessage (parse, FcSevereError, "out of memory");
 	    }
 	    else
 	    {
@@ -3124,7 +3127,7 @@ FcParsePattern (FcConfigParse *parse)
 	FcConfigMessage (parse, FcSevereError, "out of memory");
 	return;
     }
-	
+
     while ((vstack = FcVStackPeek (parse)))
     {
 	switch ((int) vstack->tag) {
@@ -3199,7 +3202,7 @@ FcEndElement(void *userData, const XML_Char *name FC_UNUSED)
     case FcElementRescan:
 	FcParseRescan (parse);
 	break;
-	
+
     case FcElementPrefer:
 	FcParseFamilies (parse, FcVStackPrefer);
 	break;
@@ -3535,7 +3538,7 @@ FcConfigParseAndLoadFromMemoryInternal (FcConfig       *config,
     XML_SetDoctypeDeclHandler (p, FcStartDoctypeDecl, FcEndDoctypeDecl);
     XML_SetElementHandler (p, FcStartElement, FcEndElement);
     XML_SetCharacterDataHandler (p, FcCharacterData);
-	
+
 #endif /* ENABLE_LIBXML2 */
 
 #ifndef ENABLE_LIBXML2
