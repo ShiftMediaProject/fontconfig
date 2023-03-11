@@ -135,6 +135,7 @@ EXPORTS
 	FcMatrixShear
 	FcNameConstant
 	FcNameGetConstant
+	FcNameGetConstantFor
 	FcNameGetObjectType
 	FcNameParse
 	FcNameRegisterConstants

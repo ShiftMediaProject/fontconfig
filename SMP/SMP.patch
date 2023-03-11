@@ -1,8 +1,8 @@
 diff --git a/src/fccfg.c b/src/fccfg.c
-index eb174a4..2c0000c 100644
+index f62e228..3649b38 100644
 --- a/src/fccfg.c
 +++ b/src/fccfg.c
-@@ -2317,12 +2317,14 @@ DllMain (HINSTANCE hinstDLL,
+@@ -2320,12 +2320,14 @@ DllMain (HINSTANCE hinstDLL,
  	 DWORD     fdwReason,
  	 LPVOID    lpvReserved)
  {
@@ -19,7 +19,7 @@ index eb174a4..2c0000c 100644
  	  break;
  
        /* If the fontconfig DLL is in a "bin" or "lib" subfolder,
-@@ -2330,14 +2332,16 @@ DllMain (HINSTANCE hinstDLL,
+@@ -2333,14 +2335,16 @@ DllMain (HINSTANCE hinstDLL,
         * "etc/fonts" in there as FONTCONFIG_PATH. Otherwise use the
         * folder where the DLL is as FONTCONFIG_PATH.
         */
@@ -43,7 +43,7 @@ index eb174a4..2c0000c 100644
  	  strcat ((char *) fontconfig_instprefix, (char *) fontconfig_path);
  	  strcat ((char *) fontconfig_path, "\\etc\\fonts");
        }
-@@ -2398,7 +2402,7 @@ FcConfigFileExists (const FcChar8 *dir, const FcChar8 *file)
+@@ -2401,7 +2405,7 @@ FcConfigFileExists (const FcChar8 *dir, const FcChar8 *file)
  #endif
      strcat ((char *) path, (char *) file);
  
@@ -52,7 +52,7 @@ index eb174a4..2c0000c 100644
  	return path;
  
      FcStrFree (path);
-@@ -2454,11 +2458,14 @@ FcConfigGetPath (void)
+@@ -2457,11 +2461,14 @@ FcConfigGetPath (void)
  #ifdef _WIN32
  	if (fontconfig_path[0] == '\0')
  	{
@@ -131,10 +131,10 @@ index 65ac84c..18b33f2 100644
  
      return &dir->d_ent;
 diff --git a/src/fcdefault.c b/src/fcdefault.c
-index a9a3b72..316106c 100644
+index d00c494..3d7d24e 100644
 --- a/src/fcdefault.c
 +++ b/src/fcdefault.c
-@@ -117,29 +117,35 @@ retry:
+@@ -127,29 +127,35 @@ retry:
      if (!prgname)
      {
  #ifdef _WIN32
@@ -203,7 +203,7 @@ index ae8c59c..b6d9834 100644
      FcChar8        buf_static[8192];
      FcBool         ret;
 diff --git a/src/fcint.h b/src/fcint.h
-index c615b66..4a155cd 100644
+index 78cee54..40adae6 100644
 --- a/src/fcint.h
 +++ b/src/fcint.h
 @@ -67,10 +67,6 @@
@@ -259,7 +259,7 @@ index 4f69eae..231b15d 100644
  
      statb->st_mode = _S_IREAD | _S_IWRITE;
 diff --git a/src/fcstr.c b/src/fcstr.c
-index 3fe518f..9d9e887 100644
+index 8f756af..6760128 100644
 --- a/src/fcstr.c
 +++ b/src/fcstr.c
 @@ -1173,27 +1173,27 @@ FcStrCanonAbsoluteFilename (const FcChar8 *s)
@@ -349,7 +349,7 @@ index 23331f5..a575729 100644
  #  define WIN32_LEAN_AND_MEAN
  #  define WIN32_EXTRA_LEAN
 diff --git a/src/fcxml.c b/src/fcxml.c
-index 82a46f2..7d54d31 100644
+index c700f64..680f3b7 100644
 --- a/src/fcxml.c
 +++ b/src/fcxml.c
 @@ -57,10 +57,9 @@
@@ -499,7 +499,7 @@ index 82a46f2..7d54d31 100644
  	strncat(szFPath, "\\fontconfig\\cache", MAX_PATH - 1 - strlen(szFPath));
  	len = strlen(szFPath) + 1;
  	FcStrFree (data);
-@@ -3728,19 +3751,6 @@ FcConfigParseAndLoadFromMemory (FcConfig       *config,
+@@ -3731,19 +3754,6 @@ FcConfigParseAndLoadFromMemory (FcConfig       *config,
  static void
  _ensureWin32GettersReady()
  {
