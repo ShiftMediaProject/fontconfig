@@ -34,7 +34,7 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:  '2023-03-31.0-b3f8fc5f8b0d'
+  FEDORA_TAG:  '2023-03-31.0-b6a9c5563c63'
 
   FEDORA_EXEC: 'bash .gitlab-ci/fedora-install.sh'
 
@@ -118,7 +118,7 @@ fedora:36@container-prep:
   script:
     - ci-fairy -v --authfile $AUTHFILE delete-image
             --repository $FDO_DISTRIBUTION_NAME/$FDO_DISTRIBUTION_VERSION
-	    --exclude-tag $FDO_DISTRIBUTION_TAG
+            --exclude-tag $FDO_DISTRIBUTION_TAG
   dependencies: []
   allow_failure: true
   only:

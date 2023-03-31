@@ -100,7 +100,7 @@ variables:
   script:
     - ci-fairy -v --authfile $AUTHFILE delete-image
             --repository $FDO_DISTRIBUTION_NAME/$FDO_DISTRIBUTION_VERSION
-	    --exclude-tag $FDO_DISTRIBUTION_TAG
+            --exclude-tag $FDO_DISTRIBUTION_TAG
   dependencies: []
   allow_failure: true
   only:
