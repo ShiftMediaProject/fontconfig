@@ -1,0 +1,43 @@
+.default_tag: &default_tag "2023-03-31.0"
+
+distributions:
+  - name: fedora
+    tag: *default_tag
+    base_type: fedora
+    versions:
+      - "rawhide"
+      - "38"
+      - "37"
+      - "36"
+    buildsys:
+      - "autotools shared expat"
+      - "autotools shared libxml2"
+      - "autotools static expat"
+      - "autotools static libxml2"
+      - "meson shared"
+      - "meson static"
+
+packages:
+  fedora:
+    needed:
+      [
+        "@buildsys-build",
+        "autoconf",
+        "automake",
+        "libtool",
+        "gettext",
+        "gettext-devel",
+        "gperf",
+        "expat-devel",
+        "libxml2-devel",
+        "freetype-devel",
+        "json-c-devel",
+        "git",
+        "docbook-utils",
+        "docbook-utils-pdf",
+        "bubblewrap",
+        "ninja-build",
+        "wget",
+        "python3-pip",
+      ]
+    use_qemu: false

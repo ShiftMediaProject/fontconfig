@@ -1,0 +1,267 @@
+# vim: set expandtab shiftwidth=2 tabstop=8 textwidth=0 filetype=yaml:
+
+{# You're looking at the template here, so you can ignore the below
+   warning. This is the right file to edit #}
+#######################################
+#                                     #
+# THIS FILE IS GENERATED, DO NOT EDIT #
+#                                     #
+#######################################
+
+# To change the gitlab CI, edit .gitlab-ci/ci.template and/or .gitlab-ci/config.yml
+# and run ci-fairy generate-template. For details, see
+# https://freedesktop.pages.freedesktop.org/ci-templates/ci-fairy.html#templating-gitlab-ci-yml
+
+.templates_sha: &template_sha dd90ac0d7a03b574eb4f18d7358083f0c97825f3
+
+include:
+  {% for distro in distributions|sort(attribute="name") %}
+  # {{ distro.name.capitalize() }} container builder template
+  - project: 'freedesktop/ci-templates'
+    ref: *template_sha
+    file: '/templates/{{distro.name}}.yml'
+  {% endfor %}
+  - project: 'freedesktop/ci-templates'
+    ref: *template_sha
+    file: '/templates/ci-fairy.yml'
+
+stages:
+  - prep
+  - test
+  - container_clean
+
+variables:
+  FDO_UPSTREAM_REPO: fontconfig/fontconfig
+  GIT_DEPTH: 1
+
+# these tags should be updated each time the list of packages is updated
+# changing these will force rebuilding the associated image
+# Note: these tags have no meaning and are not tied to a particular
+# fontconfig version
+{% for distro in distributions %}
+  {{"%-13s"| format(distro.name.upper() + '_TAG:')}}'{{distro.tag}}-{{
+    (ci_fairy.hashfiles('.gitlab-ci/config.yml',
+                        '.gitlab-ci/' + distro.name + '-install.sh'))[0:12]
+  }}'
+{% endfor %}
+
+{% for distro in distributions %}
+  {{"%-13s"| format(distro.name.upper() + '_EXEC:')}}'bash .gitlab-ci/{{distro.name}}-install.sh'
+{% endfor %}
+
+#######################################
+#                                     #
+#          containers stage           #
+#                                     #
+#######################################
+
+# Build a container for each distribution + version. The ci-templates
+# will re-use the containers if the tag doesn't change.
+{% for distro in distributions %}
+{% for version in distro.versions %}
+
+{{distro.name}}:{{version}}@container-prep:
+  extends:
+    - .fdo.container-build@{{distro.name}}
+  stage: prep
+  variables:
+    GIT_STRATEGY: none
+    FDO_DISTRIBUTION_VERSION: '{{version}}'
+    FDO_DISTRIBUTION_PACKAGES: '{{' '.join(packages[distro.name].needed)}}'
+    FDO_DISTRIBUTION_TAG: ${{distro.name.upper()}}_TAG
+    FDO_DISTRIBUTION_EXEC: ${{distro.name.upper()}}_EXEC
+{% endfor %}
+{% endfor %}
+
+#######################################
+#                                     #
+#        container clean stage        #
+#                                     #
+#######################################
+
+#
+# This stage will look for the container images e currently have in
+# the registry and will remove any that are not tagged with the provided
+# $container_image:$tag
+#
+# This job only runs for a scheduled pipeline.
+#
+# Go to your Profile, Settings, Access Tokens
+# Create a personal token with `api' scope, copy the value.
+# Go to CI/CD, Schedules, schedule a monthly job.
+# Define a variable of type File named AUTHFILE. Content is that token
+# value.
+.container-clean:
+  stage: container_clean
+  image: golang:alpine
+  before_script:
+    - apk add python3 py-pip git
+    - pip3 install git+http://gitlab.freedesktop.org/freedesktop/ci-templates
+  script:
+    - ci-fairy -v --authfile $AUTHFILE delete-image
+            --repository $FDO_DISTRIBUTION_NAME/$FDO_DISTRIBUTION_VERSION
+	    --exclude-tag $FDO_DISTRIBUTION_TAG
+  dependencies: []
+  allow_failure: true
+  only:
+    - schedules
+
+{% for distro in distributions %}
+{% for version in distro.versions %}
+{{distro.name}}:{{version}}@container-clean:
+  extends:
+    - .container-clean
+  variables:
+    GIT_STRATEGY: none
+    CURRENT_CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/{{distro.name}}/$FDO_DISTRIBUTION_VERSION:$FDO_DISTRIBUTION_TAG
+    FDO_DISTRIBUTION_VERSION: '{{version}}'
+    FDO_DISTRIBUTION_TAG: ${{distro.name.upper()}}_TAG
+
+{% endfor %}
+{% endfor %}
+
+#######################################
+#                                     #
+#             build stage             #
+#                                     #
+#######################################
+
+.build autotools shared expat:
+  stage: test
+  script:
+    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
+    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
+    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
+    - export MAKEFLAGS="-j4"
+    - mkdir "$BUILDDIR" "$PREFIX"
+    - cd "$BUILDDIR"
+    - env
+    - r=0
+    - ../autogen.sh --prefix="$PREFIX" --enable-shared --disable-static --disable-libxml2 2>&1 | tee /tmp/fc-build.log || r=$?
+    - make install V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+    - make distcheck V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+    - mv /tmp/fc-build.log .
+    - exit $r
+.build autotools shared libxml2:
+  stage: test
+  script:
+    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
+    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
+    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
+    - export MAKEFLAGS="-j4"
+    - mkdir "$BUILDDIR" "$PREFIX"
+    - cd "$BUILDDIR"
+    - env
+    - r=0
+    - ../autogen.sh --prefix="$PREFIX" --enable-shared --disable-static --enable-libxml2 2>&1 | tee /tmp/fc-build.log || r=$?
+    - make install V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+    - make distcheck V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+    - mv /tmp/fc-build.log .
+    - exit $r
+.build autotools static expat:
+  stage: test
+  script:
+    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
+    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
+    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
+    - export MAKEFLAGS="-j4"
+    - mkdir "$BUILDDIR" "$PREFIX"
+    - cd "$BUILDDIR"
+    - env
+    - r=0
+    - ../autogen.sh --prefix="$PREFIX" --disable-shared --enable-static --disable-libxml2 2>&1 | tee /tmp/fc-build.log || r=$?
+    - make check V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+    - make install V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+    - mv /tmp/fc-build.log .
+    - exit $r
+.build autotools static libxml2:
+  stage: test
+  script:
+    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
+    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
+    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
+    - export MAKEFLAGS="-j4"
+    - mkdir "$BUILDDIR" "$PREFIX"
+    - cd "$BUILDDIR"
+    - env
+    - r=0
+    - ../autogen.sh --prefix="$PREFIX" --disable-shared --enable-static --enable-libxml2 2>&1 | tee /tmp/fc-build.log || r=$?
+    - make check V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+    - make install V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+    - mv /tmp/fc-build.log .
+    - exit $r
+.build meson shared:
+  stage: test
+  before_script:
+    - pip install meson
+  script:
+    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
+    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
+    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
+    - export MAKEFLAGS="-j4"
+    - env
+    - r=0
+    - meson --prefix="$PREFIX" --default-library=shared "$BUILDDIR" 2>&1 | tee /tmp/fc-build.log || r=$?
+    - meson compile -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
+    - meson test -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
+    - meson install -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
+    - meson dist -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
+    - mv /tmp/fc-build.log .
+    - exit $r
+.build meson static:
+  stage: test
+  before_script:
+    - pip install meson
+  script:
+    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
+    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
+    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
+    - export MAKEFLAGS="-j4"
+    - env
+    - r=0
+    - meson --prefix="$PREFIX" --default-library=static "$BUILDDIR" 2>&1 | tee /tmp/fc-build.log || r=$?
+    - meson compile -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
+    - meson test -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
+    - meson install -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
+    - mv /tmp/fc-build.log .
+    - exit $r
+.fc_artifacts:
+  artifacts:
+    name: fontconfig-$CI_COMMIT_SHA-$CI_JOB_ID
+    when: always
+    expire_in: 5 days
+    paths:
+      - fc-build.log
+      - build-*/fontconfig-*.tar.*
+      - build-*/fontconfig*/_build
+
+#######################################
+#                                     #
+#              test stage             #
+#                                     #
+#######################################
+
+{% for distro in distributions %}
+{% for version in distro.versions %}
+{% for bs in distro.buildsys %}
+
+t_{{distro.name}}:{{version}}:{{bs}}:
+  extends:
+    - .build {{bs}}
+    - .fdo.distribution-image@{{distro.name}}
+    - .fc_artifacts
+  variables:
+    FDO_DISTRIBUTION_VERSION: '{{version}}'
+    FDO_DISTRIBUTION_TAG: ${{distro.name.upper()}}_TAG
+    {# Where we have extra_variables defined, add them to the list #}
+    {% if distro.build is defined and distro.build.extra_variables is defined %}
+    {% for var in distro.build.extra_variables %}
+    {{var}}
+    {% endfor %}
+    {% endif %}
+  needs:
+    - '{{distro.name}}:{{version}}@container-prep'
+
+{% endfor %}
+{% endfor %}
+{% endfor %}
