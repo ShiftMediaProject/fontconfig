@@ -24,6 +24,7 @@ include:
   - project: 'freedesktop/ci-templates'
     ref: *template_sha
     file: '/templates/ci-fairy.yml'
+  - local: '.gitlab-ci/other.yml'
 
 stages:
   - prep
@@ -61,8 +62,7 @@ variables:
 {% for version in distro.versions %}
 
 {{distro.name}}:{{version}}@container-prep:
-  extends:
-    - .fdo.container-build@{{distro.name}}
+  extends: .fdo.container-build@{{distro.name}}
   stage: prep
   variables:
     GIT_STRATEGY: none
@@ -126,72 +126,7 @@ variables:
 #                                     #
 #######################################
 
-.build autotools shared expat:
-  stage: test
-  script:
-    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
-    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
-    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
-    - export MAKEFLAGS="-j4"
-    - mkdir "$BUILDDIR" "$PREFIX"
-    - cd "$BUILDDIR"
-    - env
-    - r=0
-    - ../autogen.sh --prefix="$PREFIX" --enable-shared --disable-static --disable-libxml2 2>&1 | tee /tmp/fc-build.log || r=$?
-    - make install V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
-    - make distcheck V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
-    - mv /tmp/fc-build.log .
-    - exit $r
-.build autotools shared libxml2:
-  stage: test
-  script:
-    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
-    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
-    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
-    - export MAKEFLAGS="-j4"
-    - mkdir "$BUILDDIR" "$PREFIX"
-    - cd "$BUILDDIR"
-    - env
-    - r=0
-    - ../autogen.sh --prefix="$PREFIX" --enable-shared --disable-static --enable-libxml2 2>&1 | tee /tmp/fc-build.log || r=$?
-    - make install V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
-    - make distcheck V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
-    - mv /tmp/fc-build.log .
-    - exit $r
-.build autotools static expat:
-  stage: test
-  script:
-    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
-    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
-    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
-    - export MAKEFLAGS="-j4"
-    - mkdir "$BUILDDIR" "$PREFIX"
-    - cd "$BUILDDIR"
-    - env
-    - r=0
-    - ../autogen.sh --prefix="$PREFIX" --disable-shared --enable-static --disable-libxml2 2>&1 | tee /tmp/fc-build.log || r=$?
-    - make check V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
-    - make install V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
-    - mv /tmp/fc-build.log .
-    - exit $r
-.build autotools static libxml2:
-  stage: test
-  script:
-    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
-    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
-    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
-    - export MAKEFLAGS="-j4"
-    - mkdir "$BUILDDIR" "$PREFIX"
-    - cd "$BUILDDIR"
-    - env
-    - r=0
-    - ../autogen.sh --prefix="$PREFIX" --disable-shared --enable-static --enable-libxml2 2>&1 | tee /tmp/fc-build.log || r=$?
-    - make check V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
-    - make install V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
-    - mv /tmp/fc-build.log .
-    - exit $r
-.build meson shared:
-  stage: test
+.build@template:
   before_script:
     - pip install meson
   script:
@@ -199,32 +134,28 @@ variables:
     - export PREFIX="$(pwd)/prefix-$BUILD_ID"
     - export BUILDDIR="$(pwd)/build-$BUILD_ID"
     - export MAKEFLAGS="-j4"
-    - env
-    - r=0
-    - meson --prefix="$PREFIX" --default-library=shared "$BUILDDIR" 2>&1 | tee /tmp/fc-build.log || r=$?
-    - meson compile -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
-    - meson test -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
-    - meson install -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
-    - meson dist -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
-    - mv /tmp/fc-build.log .
-    - exit $r
-.build meson static:
-  stage: test
-  before_script:
-    - pip install meson
-  script:
-    - export BUILD_ID="fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-$CI_JOB_ID"
-    - export PREFIX="$(pwd)/prefix-$BUILD_ID"
-    - export BUILDDIR="$(pwd)/build-$BUILD_ID"
-    - export MAKEFLAGS="-j4"
-    - env
-    - r=0
-    - meson --prefix="$PREFIX" --default-library=static "$BUILDDIR" 2>&1 | tee /tmp/fc-build.log || r=$?
-    - meson compile -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
-    - meson test -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
-    - meson install -v -C "$BUILDDIR" | tee -a /tmp/fc-build.log || r=$?
-    - mv /tmp/fc-build.log .
-    - exit $r
+    - |
+      buildopt=()
+      for bo in $FC_BUILD_ENABLED; do
+        buildopt+=(-e $bo)
+      done
+      for bo in $FC_BUILD_DISABLED; do
+        buildopt+=(-d $bo)
+      done
+      [ -n "$FC_BUILD_ARCH" ] && buildopt+=(-a $FC_BUILD_ARCH)
+      [ $FC_BUILD_DISTCHECK -eq 1 ] && buildopt+=(-c)
+      [ $FC_BUILD_NO_INSTALL -eq 1 ] && buildopt+=(-I)
+      buildopt+=(-s $FC_BUILDSYS)
+      buildopt+=(-t $FC_BUILD_TYPE)
+      buildopt+=(-X $FC_XML_BACKEND)
+      sh .gitlab-ci/build.sh ${buildopt[*]}
+  variables:
+    FC_BUILDSYS: autotools
+    FC_XML_BACKEND: expat
+    FC_BUILD_TYPE: both
+    FC_BUILD_DISTCHECK: 0
+    FC_BUILD_NO_INSTALL: 0
+
 .fc_artifacts:
   artifacts:
     name: fontconfig-$CI_COMMIT_SHA-$CI_JOB_ID
@@ -243,20 +174,21 @@ variables:
 
 {% for distro in distributions %}
 {% for version in distro.versions %}
-{% for bs in distro.buildsys %}
+{% for build in distro.builds %}
 
-t_{{distro.name}}:{{version}}:{{bs}}:
+t_{{distro.name}}:{{version}}:{{build.name}}:
   extends:
-    - .build {{bs}}
+    - .build@template
     - .fdo.distribution-image@{{distro.name}}
     - .fc_artifacts
   variables:
+    FC_DISTRO_NAME: {{distro.name}}
     FDO_DISTRIBUTION_VERSION: '{{version}}'
     FDO_DISTRIBUTION_TAG: ${{distro.name.upper()}}_TAG
     {# Where we have extra_variables defined, add them to the list #}
-    {% if distro.build is defined and distro.build.extra_variables is defined %}
-    {% for var in distro.build.extra_variables %}
-    {{var}}
+    {% if build.variables is defined %}
+    {% for key, value in build.variables.items() %}
+    {{key}}: {{value}}
     {% endfor %}
     {% endif %}
   needs:
@@ -265,3 +197,4 @@ t_{{distro.name}}:{{version}}:{{bs}}:
 {% endfor %}
 {% endfor %}
 {% endfor %}
+
