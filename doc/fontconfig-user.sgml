@@ -141,8 +141,12 @@ fontfeatures    String  List of the feature tags in OpenType to be enabled
 prgname         String  String  Name of the running program
 postscriptname  String  Font family name in PostScript
 color           Bool    Whether any glyphs have color
+symbol          Bool    Whether font uses MS symbol-font encoding
+fontvariations  String  comma-separated string of axes in variable font
+variable        Bool    Wheter font is Variable Font
 fonthashint     Bool    Whether the font has hinting
 order           Int     Order number of the font
+desktop         String  Current desktop name
     </programlisting>
   </refsect2>
   <refsect2>

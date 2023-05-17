@@ -183,6 +183,7 @@ convenience for the application's rendering mechanism.
                                                   conversions (deprecated)
     minspace       FC_MINSPACE            Bool    Eliminate leading from line
                                                   spacing
+    matrix         FC_MATRIX              Matrix  Hold an affine transformation
     charset        FC_CHARSET             CharSet Unicode chars encoded by
                                                   the font
     lang           FC_LANG                LangSet Set of RFC-3066-style
@@ -213,6 +214,7 @@ convenience for the application's rendering mechanism.
     variable       FC_VARIABLE            Bool    Whether font is Variable Font
     fonthashint    FC_FONT_HAS_HINT       Bool    Whether font has hinting
     order          FC_ORDER               Int     Order number of the font
+    desktop        FC_DESKTOP_NAME        String  Current desktop name
     </programlisting>
   </sect2>
 </sect1>
