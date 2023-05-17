@@ -207,8 +207,8 @@ convenience for the application's rendering mechanism.
     hash           FC_HASH                String  SHA256 hash value of the font data
                                                   with "sha256:" prefix (deprecated)
     postscriptname FC_POSTSCRIPT_NAME     String  Font name in PostScript
-    symbol         FC_SYMBOL              Bool    Whether font uses MS symbol-font encoding
     color          FC_COLOR               Bool    Whether any glyphs have color
+    symbol         FC_SYMBOL              Bool    Whether font uses MS symbol-font encoding
     fontvariations FC_FONT_VARIATIONS     String  comma-separated string of axes in variable font
     variable       FC_VARIABLE            Bool    Whether font is Variable Font
     fonthashint    FC_FONT_HAS_HINT       Bool    Whether font has hinting
