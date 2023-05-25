@@ -748,7 +748,7 @@ FcSfntNameTranscode (FT_SfntName *sname)
 	int	    ilen, olen;
 	FcChar8	    *u8;
 	FcChar32    ucs4;
-	
+
 	/*
 	 * Convert Utf16 to Utf8
 	 */
@@ -782,7 +782,7 @@ FcSfntNameTranscode (FT_SfntName *sname)
 	int	    olen;
 	FcChar8	    *u8;
 	FcChar32    ucs4;
-	
+
 	/*
 	 * Convert Latin1 to Utf8. Freed below
 	 */
@@ -837,17 +837,17 @@ FcSfntNameTranscode (FT_SfntName *sname)
 	size_t	    in_bytes_left = sname->string_len;
 	size_t	    out_bytes_left = sname->string_len * FC_UTF8_MAX_LEN;
 	char	    *inbuf, *outbuf;
-	
+
 	utf8 = malloc (out_bytes_left + 1);
 	if (!utf8)
 	{
 	    iconv_close (cd);
 	    return 0;
 	}
-	
+
 	outbuf = (char *) utf8;
 	inbuf = (char *) sname->string;
-	
+
 	while (in_bytes_left)
 	{
 	    size_t	did = iconv (cd,
@@ -1490,7 +1490,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 		case TT_NAME_ID_WWS_FAMILY:
 		case TT_NAME_ID_TYPOGRAPHIC_FAMILY:
 		case TT_NAME_ID_FONT_FAMILY:
-#if 0	
+#if 0
 		case TT_NAME_ID_UNIQUE_ID:
 #endif
 		    if (FcDebug () & FC_DBG_SCANV)
@@ -1650,7 +1650,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
     {
 	FcChar8	*start, *end;
 	FcChar8	*family;
-	
+
 	start = (FcChar8 *) strrchr ((char *) file, '/');
 	if (start)
 	    start++;
@@ -1971,7 +1971,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	     prop.type == BDF_PROPERTY_TYPE_CARDINAL))
 	{
 	    FT_Int32	value;
-	
+
 	    if (prop.type == BDF_PROPERTY_TYPE_INTEGER)
 		value = prop.u.integer;
 	    else
@@ -2175,6 +2175,8 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 		goto bail2;
     }
 #endif
+    if (!FcPatternObjectAddBool (pat, FC_NAMED_INSTANCE_OBJECT, !!(id > 0xffff)))
+	    goto bail2;
 
     /*
      * Drop our reference to the charset
@@ -2657,7 +2659,7 @@ FcFreeTypeCharSetAndSpacing (FT_Face face, FcBlanks *blanks FC_UNUSED, int *spac
 #define FcIsSpace(x)	    (040 == (x))
 #define FcIsDigit(c)	    (('0' <= (c) && (c) <= '9'))
 #define FcIsValidScript(x)  (FcIsLower(x) || FcIsUpper (x) || FcIsDigit(x) || FcIsSpace(x))
-			
+
 static void
 addtag(FcChar8 *complex_, FT_ULong tag)
 {

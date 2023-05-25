@@ -147,6 +147,7 @@ variable        Bool    Wheter font is Variable Font
 fonthashint     Bool    Whether the font has hinting
 order           Int     Order number of the font
 desktop         String  Current desktop name
+namedinstance   Bool    Whether font is a named-instance
     </programlisting>
   </refsect2>
   <refsect2>

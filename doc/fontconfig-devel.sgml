@@ -215,6 +215,7 @@ convenience for the application's rendering mechanism.
     fonthashint    FC_FONT_HAS_HINT       Bool    Whether font has hinting
     order          FC_ORDER               Int     Order number of the font
     desktop        FC_DESKTOP_NAME        String  Current desktop name
+    namedinstance  FC_NAMED_INSTANCE      Bool    Whether font is a named-instance
     </programlisting>
   </sect2>
 </sect1>
