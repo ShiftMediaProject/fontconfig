@@ -1204,7 +1204,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
     int		    spacing;
 
     /* Support for glyph-variation named-instances. */
-    FT_MM_Var       *master = NULL;
+    FT_MM_Var       *mmvar = NULL;
     FT_Var_Named_Style *instance = NULL;
     double          weight_mult = 1.0;
     double          width_mult = 1.0;
@@ -1258,7 +1258,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	    goto bail1;
     }
 
-    ftresult = FT_Get_MM_Var (face, &master);
+    ftresult = FT_Get_MM_Var (face, &mmvar);
 
     if (id >> 16)
     {
@@ -1269,17 +1269,17 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
       {
 	  /* Query variable font itself. */
 	  unsigned int i;
-	  for (i = 0; i < master->num_axis; i++)
+	  for (i = 0; i < mmvar->num_axis; i++)
 	  {
-	      double min_value = master->axis[i].minimum / (double) (1U << 16);
-	      double def_value = master->axis[i].def / (double) (1U << 16);
-	      double max_value = master->axis[i].maximum / (double) (1U << 16);
+	      double min_value = mmvar->axis[i].minimum / (double) (1U << 16);
+	      double def_value = mmvar->axis[i].def / (double) (1U << 16);
+	      double max_value = mmvar->axis[i].maximum / (double) (1U << 16);
 	      FcObject obj = FC_INVALID_OBJECT;
 
 	      if (min_value > def_value || def_value > max_value || min_value == max_value)
 		  continue;
 
-	      switch (master->axis[i].tag)
+	      switch (mmvar->axis[i].tag)
 	      {
 		case FT_MAKE_TAG ('w','g','h','t'):
 		  obj = FC_WEIGHT_OBJECT;
@@ -1321,20 +1321,20 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 
 	  id &= 0xFFFF;
       }
-      else if ((id >> 16) - 1 < master->num_namedstyles)
+      else if ((id >> 16) - 1 < mmvar->num_namedstyles)
       {
 	  /* Pull out weight and width from named-instance. */
 	  unsigned int i;
 
-	  instance = &master->namedstyle[(id >> 16) - 1];
+	  instance = &mmvar->namedstyle[(id >> 16) - 1];
 
-	  for (i = 0; i < master->num_axis; i++)
+	  for (i = 0; i < mmvar->num_axis; i++)
 	  {
 	      double value = instance->coords[i] / (double) (1U << 16);
-	      double default_value = master->axis[i].def / (double) (1U << 16);
+	      double default_value = mmvar->axis[i].def / (double) (1U << 16);
 	      double mult = default_value ? value / default_value : 1;
-	      //printf ("named-instance, axis %d tag %lx value %g\n", i, master->axis[i].tag, value);
-	      switch (master->axis[i].tag)
+	      //printf ("named-instance, axis %d tag %lx value %g\n", i, mmvar->axis[i].tag, value);
+	      switch (mmvar->axis[i].tag)
 	      {
 		case FT_MAKE_TAG ('w','g','h','t'):
 		  weight_mult = mult;
@@ -1359,12 +1359,12 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	if (!ftresult)
 	{
 	    unsigned int i;
-	    for (i = 0; i < master->num_axis; i++)
+	    for (i = 0; i < mmvar->num_axis; i++)
 	    {
-		switch (master->axis[i].tag)
+		switch (mmvar->axis[i].tag)
 		{
 		case FT_MAKE_TAG ('o','p','s','z'):
-		    if (!FcPatternObjectAddDouble (pat, FC_SIZE_OBJECT, master->axis[i].def / (double) (1U << 16)))
+		    if (!FcPatternObjectAddDouble (pat, FC_SIZE_OBJECT, mmvar->axis[i].def / (double) (1U << 16)))
 			goto bail1;
 		    variable_size = FcTrue;
 		    break;
@@ -2185,13 +2185,13 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
     if (foundry_)
 	free (foundry_);
 
-    if (master)
+    if (mmvar)
     {
 #ifdef HAVE_FT_DONE_MM_VAR
 	if (face->glyph)
-	    FT_Done_MM_Var (face->glyph->library, master);
+	    FT_Done_MM_Var (face->glyph->library, mmvar);
 #else
-	free (master);
+	free (mmvar);
 #endif
     }
 
@@ -2201,13 +2201,13 @@ bail2:
     FcCharSetDestroy (cs);
 bail1:
     FcPatternDestroy (pat);
-    if (master)
+    if (mmvar)
     {
 #ifdef HAVE_FT_DONE_MM_VAR
 	if (face->glyph)
-	    FT_Done_MM_Var (face->glyph->library, master);
+	    FT_Done_MM_Var (face->glyph->library, mmvar);
 #else
-	free (master);
+	free (mmvar);
 #endif
     }
     if (!nm_share && name_mapping)

@@ -384,18 +384,18 @@ Fontconfig will validate all of the configuration files and directories and
 automatically rebuild the internal datastructures when this interval passes.
   </para></refsect2>
   <refsect2><title><literal>&lt;selectfont&gt;</literal></title><para>
-This element is used to black/white list fonts from being listed or matched
+This element is used to deny/allow list fonts from being listed or matched
 against.  It holds acceptfont and rejectfont elements.
   </para></refsect2>
   <refsect2><title><literal>&lt;acceptfont&gt;</literal></title><para>
-Fonts matched by an acceptfont element are "whitelisted"; such fonts are
+Fonts matched by an acceptfont element are "allowlisted"; such fonts are
 explicitly included in the set of fonts used to resolve list and match
-requests; including them in this list protects them from being "blacklisted"
+requests; including them in this list protects them from being "denylisted"
 by a rejectfont element.  Acceptfont elements include glob and pattern
 elements which are used to match fonts.
   </para></refsect2>
   <refsect2><title><literal>&lt;rejectfont&gt;</literal></title><para>
-Fonts matched by an rejectfont element are "blacklisted"; such fonts are
+Fonts matched by an rejectfont element are "denylisted"; such fonts are
 excluded from the set of fonts used to resolve list and match requests as if
 they didn't exist in the system.  Rejectfont elements include glob and
 pattern elements which are used to match fonts.
