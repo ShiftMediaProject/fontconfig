@@ -385,7 +385,10 @@ automatically rebuild the internal datastructures when this interval passes.
   </para></refsect2>
   <refsect2><title><literal>&lt;selectfont&gt;</literal></title><para>
 This element is used to deny/allow list fonts from being listed or matched
-against.  It holds acceptfont and rejectfont elements.
+against.  It holds acceptfont and rejectfont elements.  This list is applied
+only once when caches is loaded.  So if you want to filter out by some patterns,
+patterns is evaluated with something in cache only.
+In other words, target patterns except "scan" won't takes any effects.
   </para></refsect2>
   <refsect2><title><literal>&lt;acceptfont&gt;</literal></title><para>
 Fonts matched by an acceptfont element are "allowlisted"; such fonts are
