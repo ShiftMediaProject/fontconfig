@@ -118,7 +118,7 @@ index           Int     The index of the font within the file
 ftface          FT_Face Use the specified FreeType face object
 rasterizer      String  Which rasterizer is in use (deprecated)
 outline         Bool    Whether the glyphs are outlines
-scalable        Bool    Whether glyphs can be scaled
+scalable        Bool    Whether the glyphs are outlines or have color
 dpi             Double  Target dots per inch
 rgba            Int     unknown, rgb, bgr, vrgb, vbgr,
                         none - subpixel geometry

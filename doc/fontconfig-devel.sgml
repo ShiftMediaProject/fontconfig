@@ -175,7 +175,7 @@ convenience for the application's rendering mechanism.
                                                   face object
     rasterizer     FC_RASTERIZER          String  Which rasterizer is in use (deprecated)
     outline        FC_OUTLINE             Bool    Whether the glyphs are outlines
-    scalable       FC_SCALABLE            Bool    Whether glyphs can be scaled
+    scalable       FC_SCALABLE            Bool    Whether the glyphs are outlines or have color
     dpi            FC_DPI                 Double  Target dots per inch
     rgba           FC_RGBA                Int     unknown, rgb, bgr, vrgb,
                                                   vbgr, none - subpixel geometry
