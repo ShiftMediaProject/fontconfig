@@ -10,7 +10,7 @@
 # and run ci-fairy generate-template. For details, see
 # https://freedesktop.pages.freedesktop.org/ci-templates/ci-fairy.html#templating-gitlab-ci-yml
 
-.templates_sha: &template_sha dd90ac0d7a03b574eb4f18d7358083f0c97825f3
+.templates_sha: &template_sha 81a36b5c5349fd3222036bb3caa0166083a3fd44
 
 include:
   # Fedora container builder template
@@ -35,7 +35,7 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:  '2023-03-31.0-e8249e0940af'
+  FEDORA_TAG:  '2023-07-15.0-029bccad11f1'
 
   FEDORA_EXEC: 'bash .gitlab-ci/fedora-install.sh'
 
