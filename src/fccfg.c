@@ -2275,8 +2275,8 @@ FcConfigSubstituteWithPat (FcConfig    *config,
 	printf ("FcConfigSubstitute done");
 	FcPatternPrint (p);
     }
-bail1:
     FamilyTableClear (&data);
+bail1:
     if (elt)
 	free (elt);
     if (value)
