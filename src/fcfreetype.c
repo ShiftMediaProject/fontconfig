@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_ADVANCES_H
@@ -2177,6 +2178,30 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 #endif
     if (!FcPatternObjectAddBool (pat, FC_NAMED_INSTANCE_OBJECT, !!(id > 0xffff)))
 	    goto bail2;
+
+    if (face->face_flags & FT_FACE_FLAG_SFNT)
+    {
+	/* If this is an SFNT wrapper, try to sniff the SFNT tag which is the
+	 * first 4 bytes, to see if it is a WOFF or WOFF2 wrapper. */
+	FcChar8* wrapper = (FcChar8*) "SFNT";
+
+	char buf[4];
+	int fd = FcOpen ((char *) file, O_RDONLY);
+	if (fd != -1 && read (fd, buf, 4))
+	{
+	    if (buf[0] == 'w' && buf[1] == 'O' && buf[2] == 'F')
+	    {
+		if (buf[3] == 'F')
+		    wrapper = (FcChar8*) "WOFF";
+		else if (buf[3] == '2')
+		    wrapper = (FcChar8*) "WOFF2";
+	    }
+	}
+	close (fd);
+
+	if (!FcPatternObjectAddString (pat, FC_FONT_WRAPPER_OBJECT, wrapper))
+	    goto bail2;
+    }
 
     /*
      * Drop our reference to the charset

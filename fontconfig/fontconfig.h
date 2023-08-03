@@ -130,6 +130,7 @@ typedef int		FcBool;
 #define FC_ORDER	    "order"		/* Integer */
 #define FC_DESKTOP_NAME     "desktop"		/* String */
 #define FC_NAMED_INSTANCE   "namedinstance"	/* Bool - true if font is named instance */
+#define FC_FONT_WRAPPER     "fontwrapper" 	/* String */
 
 #define FC_CACHE_SUFFIX		    ".cache-" FC_CACHE_VERSION
 #define FC_DIR_CACHE_FILE	    "fonts.cache-" FC_CACHE_VERSION
