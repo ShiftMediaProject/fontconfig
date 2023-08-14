@@ -699,6 +699,7 @@ FcSfntNameTranscode (FT_SfntName *sname)
     iconv_t cd;
 #endif
     FcChar8 *utf8;
+    FcBool redecoded = FcFalse;
 
     for (i = 0; i < NUM_FC_FT_ENCODING; i++)
 	if (fcFtEncoding[i].platform_id == sname->platform_id &&
@@ -709,6 +710,7 @@ FcSfntNameTranscode (FT_SfntName *sname)
 	return 0;
     fromcode = fcFtEncoding[i].fromcode;
 
+retry:
     /*
      * Many names encoded for TT_PLATFORM_MACINTOSH are broken
      * in various ways. Kludge around them.
@@ -858,12 +860,27 @@ FcSfntNameTranscode (FT_SfntName *sname)
 	    {
 		iconv_close (cd);
 		free (utf8);
+		if (!redecoded)
+		{
+		    /* Regard the encoding as UTF-16BE and try again. */
+		    redecoded = FcTrue;
+		    fromcode = "UTF-16BE";
+		    goto retry;
+		}
 		return 0;
 	    }
 	}
     	iconv_close (cd);
 	*outbuf = '\0';
 	goto done;
+    }
+#else
+    if (!redecoded)
+    {
+	/* Regard the encoding as UTF-16BE and try again. */
+	redecoded = FcTrue;
+	fromcode = "UTF-16BE";
+	goto retry;
     }
 #endif
     return 0;
