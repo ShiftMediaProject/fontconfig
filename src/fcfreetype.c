@@ -722,6 +722,10 @@ retry:
 	{
 	    fromcode = "SJIS";
 	}
+	else if (sname->language_id == TT_MAC_LANGID_JAPANESE)
+	{
+	    fromcode = "SJIS";
+	}
 	else if (sname->language_id >= 0x100)
 	{
 	    /*
