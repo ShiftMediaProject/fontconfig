@@ -2164,6 +2164,9 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	if (!FcPatternObjectAddBool (pat, FC_ANTIALIAS_OBJECT, FcFalse))
 	    goto bail2;
     }
+
+    FcChar8* wrapper = NULL;
+
 #if HAVE_FT_GET_X11_FONT_FORMAT
     /*
      * Use the (not well documented or supported) X-specific function
@@ -2172,18 +2175,25 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
     {
 	const char *font_format = FT_Get_X11_Font_Format (face);
 	if (font_format)
+	{
 	    if (!FcPatternObjectAddString (pat, FC_FONTFORMAT_OBJECT, (FcChar8 *) font_format))
 		goto bail2;
+
+	    /* If this is not a SFNT font and format is CFF, then it is a standlone CFF font */
+	    if (!FT_IS_SFNT (face) && !strcmp (font_format, "CFF"))
+		wrapper = (FcChar8*) "CFF";
+	}
     }
 #endif
+
     if (!FcPatternObjectAddBool (pat, FC_NAMED_INSTANCE_OBJECT, !!(id > 0xffff)))
 	    goto bail2;
 
-    if (face->face_flags & FT_FACE_FLAG_SFNT)
+    if (FT_IS_SFNT (face))
     {
 	/* If this is an SFNT wrapper, try to sniff the SFNT tag which is the
 	 * first 4 bytes, to see if it is a WOFF or WOFF2 wrapper. */
-	FcChar8* wrapper = (FcChar8*) "SFNT";
+	wrapper = (FcChar8*) "SFNT";
 
 	char buf[4];
 	int fd = FcOpen ((char *) file, O_RDONLY);
@@ -2198,10 +2208,11 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	    }
 	}
 	close (fd);
+    }
 
+    if (wrapper)
 	if (!FcPatternObjectAddString (pat, FC_FONT_WRAPPER_OBJECT, wrapper))
 	    goto bail2;
-    }
 
     /*
      * Drop our reference to the charset
