@@ -1,4 +1,4 @@
-.default_tag: &default_tag "2023-07-15.0"
+.default_tag: &default_tag "2023-12-05.0"
 
 distributions:
   - name: fedora
@@ -6,8 +6,8 @@ distributions:
     base_type: fedora
     versions:
       - "rawhide"
+      - "39"
       - "38"
-      - "37"
     builds:
       - name: "autotools shared expat"
         variables:
