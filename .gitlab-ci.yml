@@ -41,8 +41,8 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:    '2023-12-05.1-7b7a4d882550'
-  FREEBSD_TAG:   '2023-12-05.1-9e4cd5a85377'
+  FEDORA_TAG:    '2023-12-05.1-7c59f403cca5'
+  FREEBSD_TAG:   '2023-12-05.1-b3f6fd9ee634'
 
   FEDORA_EXEC:   'bash .gitlab-ci/fedora-install.sh'
   FREEBSD_EXEC:  'bash .gitlab-ci/freebsd-install.sh'
@@ -372,6 +372,22 @@ t_fedora:rawhide:autotools shared libxml2:
     - 'fedora:rawhide@container-prep'
 
 
+t_fedora:rawhide:meson shared expat:
+  extends:
+    - .build@template
+    - .fdo.distribution-image@fedora
+    - .fc_artifacts
+  variables:
+    FC_DISTRO_NAME: fedora
+    FDO_DISTRIBUTION_VERSION: 'rawhide'
+    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
+    FC_BUILDSYS: meson
+    FC_BUILD_TYPE: shared
+    FC_XML_BACKEND: expat
+  needs:
+    - 'fedora:rawhide@container-prep'
+
+
 t_fedora:rawhide:autotools static expat:
   extends:
     - .build@template
@@ -404,6 +420,22 @@ t_fedora:rawhide:autotools static libxml2:
     - 'fedora:rawhide@container-prep'
 
 
+t_fedora:rawhide:meson static expat:
+  extends:
+    - .build@template
+    - .fdo.distribution-image@fedora
+    - .fc_artifacts
+  variables:
+    FC_DISTRO_NAME: fedora
+    FDO_DISTRIBUTION_VERSION: 'rawhide'
+    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
+    FC_BUILDSYS: meson
+    FC_BUILD_TYPE: static
+    FC_XML_BACKEND: expat
+  needs:
+    - 'fedora:rawhide@container-prep'
+
+
 t_fedora:rawhide:mingw autotools static libxml2:
   extends:
     - .build@template
@@ -418,38 +450,6 @@ t_fedora:rawhide:mingw autotools static libxml2:
     FC_XML_BACKEND: libxml2
     FC_BUILD_PLATFORM: mingw
     FC_BUILD_ARCH: x86_64-mingw32
-  needs:
-    - 'fedora:rawhide@container-prep'
-
-
-t_fedora:rawhide:meson shared expat:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: 'rawhide'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: meson
-    FC_BUILD_TYPE: shared
-    FC_XML_BACKEND: expat
-  needs:
-    - 'fedora:rawhide@container-prep'
-
-
-t_fedora:rawhide:meson static expat:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: 'rawhide'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: meson
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: expat
   needs:
     - 'fedora:rawhide@container-prep'
 
@@ -506,56 +506,6 @@ t_fedora:39:autotools shared libxml2:
     - 'fedora:39@container-prep'
 
 
-t_fedora:39:autotools static expat:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: '39'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: autotools
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: expat
-  needs:
-    - 'fedora:39@container-prep'
-
-
-t_fedora:39:autotools static libxml2:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: '39'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: autotools
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: libxml2
-  needs:
-    - 'fedora:39@container-prep'
-
-
-t_fedora:39:mingw autotools static libxml2:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: '39'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: autotools
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: libxml2
-    FC_BUILD_PLATFORM: mingw
-    FC_BUILD_ARCH: x86_64-mingw32
-  needs:
-    - 'fedora:39@container-prep'
-
-
 t_fedora:39:meson shared expat:
   extends:
     - .build@template
@@ -572,39 +522,14 @@ t_fedora:39:meson shared expat:
     - 'fedora:39@container-prep'
 
 
-t_fedora:39:meson static expat:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: '39'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: meson
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: expat
-  needs:
-    - 'fedora:39@container-prep'
 
 
-t_fedora:39:mingw meson static expat:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: '39'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: meson
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: expat
-    FC_BUILD_PLATFORM: mingw
-    FC_BUILD_ARCH: linux-mingw-w64-64bit
-    FC_BUILD_NO_INSTALL: 1
-  needs:
-    - 'fedora:39@container-prep'
+
+
+
+
+
+
 
 
 t_fedora:38:autotools shared expat:
@@ -640,56 +565,6 @@ t_fedora:38:autotools shared libxml2:
     - 'fedora:38@container-prep'
 
 
-t_fedora:38:autotools static expat:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: '38'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: autotools
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: expat
-  needs:
-    - 'fedora:38@container-prep'
-
-
-t_fedora:38:autotools static libxml2:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: '38'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: autotools
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: libxml2
-  needs:
-    - 'fedora:38@container-prep'
-
-
-t_fedora:38:mingw autotools static libxml2:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: '38'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: autotools
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: libxml2
-    FC_BUILD_PLATFORM: mingw
-    FC_BUILD_ARCH: x86_64-mingw32
-  needs:
-    - 'fedora:38@container-prep'
-
-
 t_fedora:38:meson shared expat:
   extends:
     - .build@template
@@ -706,39 +581,14 @@ t_fedora:38:meson shared expat:
     - 'fedora:38@container-prep'
 
 
-t_fedora:38:meson static expat:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: '38'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: meson
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: expat
-  needs:
-    - 'fedora:38@container-prep'
 
 
-t_fedora:38:mingw meson static expat:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: '38'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: meson
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: expat
-    FC_BUILD_PLATFORM: mingw
-    FC_BUILD_ARCH: linux-mingw-w64-64bit
-    FC_BUILD_NO_INSTALL: 1
-  needs:
-    - 'fedora:38@container-prep'
+
+
+
+
+
+
 
 
 t_freebsd:14.0:autotools shared expat:

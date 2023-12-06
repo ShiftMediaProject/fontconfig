@@ -283,6 +283,7 @@ check-ci-script:
 {% for version in distro.versions %}
 {% for build in distro.builds %}
 
+{% if not 'build_only' in build or build.build_only == version %}
 t_{{distro.name}}:{{version}}:{{build.name}}:
   extends:
 {% if distro.qemu_based %}
@@ -304,6 +305,7 @@ t_{{distro.name}}:{{version}}:{{build.name}}:
     {% endif %}
   needs:
     - '{{distro.name}}:{{version}}@container-prep'
+{% endif %}
 
 {% endfor %}
 {% endfor %}

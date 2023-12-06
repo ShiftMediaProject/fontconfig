@@ -21,34 +21,39 @@ distributions:
           FC_BUILD_TYPE: shared
           FC_XML_BACKEND: libxml2
           FC_BUILD_DISTCHECK: 1
+      - name: "meson shared expat"
+        variables:
+          FC_BUILDSYS: meson
+          FC_BUILD_TYPE: shared
+          FC_XML_BACKEND: expat
       - name: "autotools static expat"
+        build_only: "rawhide"
         variables:
           FC_BUILDSYS: autotools
           FC_BUILD_TYPE: static
           FC_XML_BACKEND: expat
       - name: "autotools static libxml2"
+        build_only: "rawhide"
         variables:
           FC_BUILDSYS: autotools
           FC_BUILD_TYPE: static
           FC_XML_BACKEND: libxml2
+      - name: "meson static expat"
+        build_only: "rawhide"
+        variables:
+          FC_BUILDSYS: meson
+          FC_BUILD_TYPE: static
+          FC_XML_BACKEND: expat
       - name: "mingw autotools static libxml2"
+        build_only: "rawhide"
         variables:
           FC_BUILDSYS: autotools
           FC_BUILD_TYPE: static
           FC_XML_BACKEND: libxml2
           FC_BUILD_PLATFORM: mingw
           FC_BUILD_ARCH: x86_64-mingw32
-      - name: "meson shared expat"
-        variables:
-          FC_BUILDSYS: meson
-          FC_BUILD_TYPE: shared
-          FC_XML_BACKEND: expat
-      - name: "meson static expat"
-        variables:
-          FC_BUILDSYS: meson
-          FC_BUILD_TYPE: static
-          FC_XML_BACKEND: expat
       - name: "mingw meson static expat"
+        build_only: "rawhide"
         variables:
           FC_BUILDSYS: meson
           FC_BUILD_TYPE: static
