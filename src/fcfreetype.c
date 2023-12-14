@@ -1741,7 +1741,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 	    goto bail1;
 	len = strlen ((const char *) style);
 	for (i = 0; style[i] != 0 && isspace (style[i]); i++);
-	memcpy (style, &style[i], len - i);
+	memmove (style, &style[i], len - i);
 	FcStrBufInit (&sbuf, NULL, 0);
 	FcStrBufString (&sbuf, family);
 	FcStrBufChar (&sbuf, ' ');
