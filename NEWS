@@ -1,11 +1,98 @@
                               Fontconfig
              Font configuration and customization library
-                            Version 2.14.2
-                              2023-01-27
+                             Version 2.15
+                              2023-12-22
 
 
 Check INSTALL for compilation and installation instructions.
 Report bugs to https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/new.
+
+2.15
+
+Akira TAGOH (39):
+      Do not change the order of orth files
+      Convert tabs to spaces
+      Convert more tabs to spaces in docs
+      src/meson.build: Store correct paths to fontconfig.pc.
+      Fix a typo in description for HAVE_STDATOMIC_PRIMITIVES
+      Report more detailed logs instead of assertion.
+      Add some missing constant names for weight.
+      Adujst indentation between programlisting in fontconfig-user.sgml
+      Bump version to 2.14.2
+      Clean up unused code
+      Add another test case for flatpak
+      Update 65-nonlatin.conf for macOS
+      Change the order of the properties to the order of fontconfig cache format
+      Add missing property descriptions
+      Add namedinstance property
+      Remove the problematic language from code and doc
+      Fix a typo
+      Fix a typo for FcCharSetDelChar doc
+      Fix a typo in scalable property
+      Use 'outline' instead of 'scalable' for bitmaps
+      Add more docs about selectfont
+      Rework CI implementation
+      Fix a typo
+      Rework CI implementation v2
+      Apply a fix of ci-templates
+      Fix uninitialized memory access when failing memory allocation.
+      Create a symlink with relative path
+      Fix an error of "initializer element is not constant"
+      Update CaseFolding.txt to Unicode 15.1
+      Update the encoding table for Simplified Chinese
+      Retry to decode strings in the name table as UTF-16BE in some cases.
+      Work around decoding strings in Macintosh encoding for the name table.
+      Add iconv detection for meson build
+      .gitlab-ci: Update
+      CI: Update
+      CI: static build only for rawhide
+      Use memmove instead of memcpy
+      Rename README to NEWS and add README.md
+      Update so version
+
+Ben Wagner (1):
+      Fix leak of `reason` in _FcConfigParse when not complaining
+
+Jean Abou Samra (2):
+      Ignore LC_CTYPE if set to "UTF-8"
+      Some doc clarifications
+
+Khaled Hosny (2):
+      Add FC_FONT_WRAPPER
+      Detect standalone CFF fonts for FC_FONT_WRAPPER
+
+Mike FABIAN (3):
+      Add anp.orth, bhb.orth, hif.orth, mag.orth, raj.orth, and the.orth
+      Add {agr,ayc,bem,ckb,cmn,dsb,hak,lij,lzh,mfe,mhr,miq,mjw,mnw,nan,nhn,niu,rif,sgs,shn,szl,tcy,tpi,unm,wae,yue,yuw}.orth
+      Change index type to 16 bit and bump cache version to 9
+
+Ondrej Balaz (1):
+      Expand ~ in glob
+
+Sefa Eyeoglu (1):
+      Add optional 11-lcdfilter-none configuration
+
+Tom Anderson (2):
+      Fix filepaths added when scanning with sysroot
+      Fix false-positive CFI failure
+
+Vitaly Lysenkov (1):
+      In fcfreetype.c, `GetScriptTags`: fix `use_of_uninitialized_value` and return the correct number of parsed tags in case the font file contains less tags than indicated.
+
+Xavier Claessens (1):
+      meson: Support any compiler with gcc or msvc argument syntax
+
+lilinjie (1):
+      fix typo
+
+msizanoen1 (1):
+      Reload MM/VF metadata for each font face in font collection
+
+pell (1):
+      fixed typos in fc-conflist.sgml
+
+xiota (1):
+      Add aliases for Helvetica LT Std
 
 2.14.2
 
