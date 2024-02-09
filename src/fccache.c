@@ -106,8 +106,8 @@ FcDirCacheDeleteUUID (const FcChar8  *dir,
     FcStrFree (target);
 bail:
     FcStrFree (d);
-#endif
     FcConfigDestroy (config);
+#endif
 
     return ret;
 }
