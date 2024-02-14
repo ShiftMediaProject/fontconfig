@@ -23,7 +23,7 @@ freetype_req = '>= 21.0.15'
 freetype_req_cmake = '>= 2.8.1'
 
 cc = meson.get_compiler('c')
-
+math_dep = cc.find_library('m', required: false)
 
 freetype_dep = dependency('freetype2', method: 'pkg-config', version: freetype_req, required: false)
 
