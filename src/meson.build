@@ -57,8 +57,9 @@ fcobjshash_h = custom_target('fcobjshash.h',
 # Define FcPublic appropriately for exports on windows
 fc_extra_c_args = []
 
-if cc.get_argument_syntax() == 'msvc'
+if host_machine.system() == 'windows' and get_option('default_library') == 'shared'
   fc_extra_c_args += '-DFcPublic=__declspec(dllexport)'
+  fc_extra_c_args += '-DDLL_EXPORT'
 endif
 
 libfontconfig = library('fontconfig',
