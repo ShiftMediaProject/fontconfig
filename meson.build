@@ -43,6 +43,8 @@ if not expat_dep.found()
 endif
 
 i18n = import('i18n')
+gettext_args = [ '--msgid-bugs-address=https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/new' ]
+
 pkgmod = import('pkgconfig')
 python3 = import('python').find_installation()
 
