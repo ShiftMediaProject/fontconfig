@@ -42,6 +42,8 @@ fi
 for i in \
 	45-generic.conf \
 	60-generic.conf \
+	70-no-bitmaps-and-emoji.conf \
+	70-no-bitmaps-except-emoji.conf \
 	90-synthetic.conf \
     ; do
     test_json=$(echo test-$i|sed s'/\.conf/.json/')
