@@ -1,4 +1,4 @@
-.default_tag: &default_tag "2024-04-06.1"
+.default_tag: &default_tag "2024-04-06.2"
 
 distributions:
   - name: fedora
@@ -112,6 +112,8 @@ packages:
         "ninja-build",
         "wget",
         "python3-pip",
+        "mingw64-expat",
+        "mingw64-gcc",
         "mingw64-gettext",
         "mingw64-freetype",
         "mingw64-libxml2",
