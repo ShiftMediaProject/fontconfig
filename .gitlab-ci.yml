@@ -41,8 +41,8 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:    '2024-01-11.1-21391676125f'
-  FREEBSD_TAG:   '2024-01-11.1-6ddd7d2cf9ad'
+  FEDORA_TAG:    '2024-04-05.1-a4a62e2d0d2f'
+  FREEBSD_TAG:   '2024-04-05.1-cb54b6adc6bf'
 
   FEDORA_EXEC:   'bash .gitlab-ci/fedora-install.sh'
   FREEBSD_EXEC:  'bash .gitlab-ci/freebsd-install.sh'
@@ -128,7 +128,7 @@ freebsd:14.0@container-prep:
   variables:
     GIT_STRATEGY: none
     FDO_DISTRIBUTION_VERSION: '14.0'
-    FDO_DISTRIBUTION_PACKAGES: 'gcc autoconf automake libtool gettext gperf expat libxml2 freetype2 json-c git ninja wget python3 py39-pip pkgconf gmake'
+    FDO_DISTRIBUTION_PACKAGES: 'gcc autoconf automake libtool gettext gperf expat libxml2 freetype2 json-c git ninja wget python3 py39-pip pkgconf gmake gettext-runtime'
     FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
     FDO_DISTRIBUTION_EXEC: $FREEBSD_EXEC
 
@@ -140,7 +140,7 @@ freebsd:13.2@container-prep:
   variables:
     GIT_STRATEGY: none
     FDO_DISTRIBUTION_VERSION: '13.2'
-    FDO_DISTRIBUTION_PACKAGES: 'gcc autoconf automake libtool gettext gperf expat libxml2 freetype2 json-c git ninja wget python3 py39-pip pkgconf gmake'
+    FDO_DISTRIBUTION_PACKAGES: 'gcc autoconf automake libtool gettext gperf expat libxml2 freetype2 json-c git ninja wget python3 py39-pip pkgconf gmake gettext-runtime'
     FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
     FDO_DISTRIBUTION_EXEC: $FREEBSD_EXEC
 
