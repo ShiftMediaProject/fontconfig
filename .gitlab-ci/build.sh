@@ -128,7 +128,7 @@ elif [ x"$buildsys" == "xmeson" ]; then
         . .gitlab-ci/cross-$FC_DISTRO_NAME.sh
     fi
     buildopt+=(--default-library=$type)
-    meson setup --prefix="$PREFIX" ${buildopt[*]} "$BUILDDIR" 2>&1 | tee /tmp/fc-build.log || r=$?
+    meson setup --prefix="$PREFIX" -Dnls=enabled ${buildopt[*]} "$BUILDDIR" 2>&1 | tee /tmp/fc-build.log || r=$?
     meson compile -v -C "$BUILDDIR" 2>&1 | tee -a /tmp/fc-build.log || r=$?
     if [ $disable_check -eq 0 ]; then
         meson test -v -C "$BUILDDIR" 2>&1 | tee -a /tmp/fc-build.log || r=$?

@@ -144,10 +144,19 @@ conf.set_quoted('PACKAGE_VERSION', meson.project_version())
 conf.set_quoted('PACKAGE_STRING', '@0@ @1@'.format(meson.project_name(), meson.project_version()))
 conf.set_quoted('PACKAGE_BUGREPORT', 'https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/new')
 conf.set_quoted('PACKAGE_URL', '')
-conf.set('ENABLE_NLS', get_option('nls').allowed().to_int())
 
 i18n = import('i18n')
 gettext_args = [ '--msgid-bugs-address=@0@'.format(conf.get('PACKAGE_BUGREPORT')) ]
+
+# Check for libintl.h
+opt_nls = get_option('nls')
+libintl_dep = dependency('intl', required: false, fallback: ['libintl', 'libintl_dep'])
+if libintl_dep.found()
+  conf.set('ENABLE_NLS', opt_nls.allowed().to_int())
+  deps += [libintl_dep]
+else
+  opt_nls = opt_nls.require(false)
+endif
 
 # We cannot try compiling against an internal dependency
 if freetype_dep.type_name() == 'internal'
@@ -456,7 +465,7 @@ subdir('conf.d')
 subdir('its')
 
 # xgettext is optional (on Windows for instance)
-if find_program('xgettext', required : get_option('nls')).found()
+if find_program('xgettext', required : opt_nls).found()
   subdir('po')
   subdir('po-conf')
 endif
@@ -490,7 +499,7 @@ doc_targets = get_variable('doc_targets', [])
 
 summary({
   'Documentation': (doc_targets.length() > 0 ? doc_targets : false),
-  'NLS': not get_option('nls').disabled(),
+  'NLS': not opt_nls.disabled(),
   'Tests': not get_option('tests').disabled(),
   'Tools': not get_option('tools').disabled(),
   'iconv': found_iconv == 1,
