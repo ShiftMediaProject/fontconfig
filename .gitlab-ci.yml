@@ -41,8 +41,8 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:    '2024-04-05.1-a4a62e2d0d2f'
-  FREEBSD_TAG:   '2024-04-05.1-cb54b6adc6bf'
+  FEDORA_TAG:    '2024-04-06.1-e0cfd2105c81'
+  FREEBSD_TAG:   '2024-04-06.1-bfe06adea2ce'
 
   FEDORA_EXEC:   'bash .gitlab-ci/fedora-install.sh'
   FREEBSD_EXEC:  'bash .gitlab-ci/freebsd-install.sh'
@@ -329,6 +329,7 @@ freebsd:13.2@container-clean:
       - build*/doc/fontconfig-user.html
       - build*/doc/fontconfig-devel/*
       - build*/fc-build.log
+      - build*/config.log
       - build*/fontconfig-*.tar.*
       - build*/test/*log
       - build*/fontconfig*/_build

@@ -270,6 +270,7 @@ check-ci-script:
       - build*/doc/fontconfig-user.html
       - build*/doc/fontconfig-devel/*
       - build*/fc-build.log
+      - build*/config.log
       - build*/fontconfig-*.tar.*
       - build*/test/*log
       - build*/fontconfig*/_build
