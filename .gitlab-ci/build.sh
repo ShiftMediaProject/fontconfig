@@ -82,9 +82,9 @@ if [ x"$buildsys" == "xautotools" ]; then
             buildopt+=(--enable-static)
             ;;
     esac
-    if [ $cross -eq 1 -a -z "$arch" ]; then
+    if [ $cross -eq 1 -a -n "$arch" ]; then
         buildopt+=(--host=$arch)
-        if [ -f .gitlab-ci/${FC_DISTRO_NAME}-cross.sh ]; then
+        if [ ! -f .gitlab-ci/${FC_DISTRO_NAME}-cross.sh ]; then
             echo "No ${FC_DISTRO_NAME}-cross.sh available"
             exit 1
         fi
@@ -118,14 +118,14 @@ elif [ x"$buildsys" == "xmeson" ]; then
         'xlibxml2')
         ;;
     esac
-    if [ $cross -eq 1 -a -z "$arch" ]; then
+    if [ $cross -eq 1 -a -n "$arch" ]; then
         buildopt+=(--cross-file)
         buildopt+=(.gitlab-ci/$arch.txt)
-        if [ -f .gitlab-ci/cross-$FC_DISTRO_NAME.sh ]; then
-            echo "No cross-$FC_DISTRO_NAME.sh available"
+        if [ ! -f .gitlab-ci/$FC_DISTRO_NAME-cross.sh ]; then
+            echo "No $FC_DISTRO_NAME-cross.sh available"
             exit 1
         fi
-        . .gitlab-ci/cross-$FC_DISTRO_NAME.sh
+        . .gitlab-ci/$FC_DISTRO_NAME-cross.sh
     fi
     buildopt+=(--default-library=$type)
     meson setup --prefix="$PREFIX" -Dnls=enabled ${buildopt[*]} "$BUILDDIR" 2>&1 | tee /tmp/fc-build.log || r=$?
