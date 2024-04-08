@@ -25,6 +25,8 @@ freetype_req_cmake = '>= 2.8.1'
 cc = meson.get_compiler('c')
 math_dep = cc.find_library('m', required: false)
 
+conf = configuration_data()
+
 freetype_dep = dependency('freetype2', method: 'pkg-config', version: freetype_req, required: false)
 
 # Give another shot using CMake
@@ -33,13 +35,21 @@ if not freetype_dep.found()
     fallback: ['freetype2', 'freetype_dep'], default_options: 'werror=false')
 endif
 
-# Linking expat should not be so difficult... see: https://github.com/mesonbuild/meson/issues/10516
-expat_dep = dependency('expat', required: false)
-if not expat_dep.found()
-  expat_dep = cc.find_library('expat', required : false)
-  if not expat_dep.found()
-    expat_dep = dependency('expat', method: 'system', fallback: ['expat', 'expat_dep'])
+xml_dep = dependency('', required: false)
+xmlbackend = get_option('xml-backend')
+if xmlbackend == 'auto' or xmlbackend == 'expat'
+  # Linking expat should not be so difficult... see: https://github.com/mesonbuild/meson/issues/10516
+  xml_dep = dependency('expat', required: false)
+  if not xml_dep.found()
+    xml_dep = cc.find_library('expat', required : false)
+    if not xml_dep.found() and xmlbackend == 'expat'
+      xml_dep = dependency('expat', method: 'system', required: true, fallback: ['expat', 'expat_dep'])
+    endif
   endif
+endif
+if (xmlbackend == 'auto' and not xml_dep.found()) or xmlbackend == 'libxml2'
+  xml_dep = dependency('libxml-2.0', required: true)
+  conf.set('ENABLE_LIBXML2', 1)
 endif
 
 pkgmod = import('pkgconfig')
@@ -133,8 +143,7 @@ add_project_arguments('-DHAVE_CONFIG_H', language: 'c')
 
 c_args = []
 
-conf = configuration_data()
-deps = [freetype_dep, expat_dep]
+deps = [freetype_dep, xml_dep]
 incbase = include_directories('.')
 
 # For compatibility to autoconf (regardless of the usage in fontconfig)
@@ -503,6 +512,7 @@ summary({
   'Tests': not get_option('tests').disabled(),
   'Tools': not get_option('tools').disabled(),
   'iconv': found_iconv == 1,
+  'XML backend': xml_dep.name(),
 }, section: 'General', bool_yn: true, list_sep: ', ')
 summary({
   'Hinting': preferred_hinting,
