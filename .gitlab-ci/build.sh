@@ -114,9 +114,11 @@ elif [ x"$buildsys" == "xmeson" ]; then
     done
     case x"$backend" in
         'xexpat')
-        ;;
+            buildopt+=(-Dxml-backend=expat)
+            ;;
         'xlibxml2')
-        ;;
+            buildopt+=(-Dxml-backend=libxml2)
+            ;;
     esac
     if [ $cross -eq 1 -a -n "$arch" ]; then
         buildopt+=(--cross-file)

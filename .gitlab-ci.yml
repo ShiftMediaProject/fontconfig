@@ -41,8 +41,8 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:    '2024-04-06.2-5d3fdc50a3d1'
-  FREEBSD_TAG:   '2024-04-06.2-cc62efaaea62'
+  FEDORA_TAG:    '2024-04-08.1-ec786b3b9ef2'
+  FREEBSD_TAG:   '2024-04-08.1-b5edf8602f60'
 
   FEDORA_EXEC:   'bash .gitlab-ci/fedora-install.sh'
   FREEBSD_EXEC:  'bash .gitlab-ci/freebsd-install.sh'
@@ -391,6 +391,22 @@ t_fedora:rawhide:meson shared expat:
     - 'fedora:rawhide@container-prep'
 
 
+t_fedora:rawhide:meson shared libxml2:
+  extends:
+    - .build@template
+    - .fdo.distribution-image@fedora
+    - .fc_artifacts
+  variables:
+    FC_DISTRO_NAME: fedora
+    FDO_DISTRIBUTION_VERSION: 'rawhide'
+    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
+    FC_BUILDSYS: meson
+    FC_BUILD_TYPE: shared
+    FC_XML_BACKEND: libxml2
+  needs:
+    - 'fedora:rawhide@container-prep'
+
+
 t_fedora:rawhide:autotools static expat:
   extends:
     - .build@template
@@ -435,6 +451,22 @@ t_fedora:rawhide:meson static expat:
     FC_BUILDSYS: meson
     FC_BUILD_TYPE: static
     FC_XML_BACKEND: expat
+  needs:
+    - 'fedora:rawhide@container-prep'
+
+
+t_fedora:rawhide:meson static libxml2:
+  extends:
+    - .build@template
+    - .fdo.distribution-image@fedora
+    - .fc_artifacts
+  variables:
+    FC_DISTRO_NAME: fedora
+    FDO_DISTRIBUTION_VERSION: 'rawhide'
+    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
+    FC_BUILDSYS: meson
+    FC_BUILD_TYPE: static
+    FC_XML_BACKEND: libxml2
   needs:
     - 'fedora:rawhide@container-prep'
 
@@ -525,6 +557,24 @@ t_fedora:39:meson shared expat:
     - 'fedora:39@container-prep'
 
 
+t_fedora:39:meson shared libxml2:
+  extends:
+    - .build@template
+    - .fdo.distribution-image@fedora
+    - .fc_artifacts
+  variables:
+    FC_DISTRO_NAME: fedora
+    FDO_DISTRIBUTION_VERSION: '39'
+    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
+    FC_BUILDSYS: meson
+    FC_BUILD_TYPE: shared
+    FC_XML_BACKEND: libxml2
+  needs:
+    - 'fedora:39@container-prep'
+
+
+
+
 
 
 
@@ -582,6 +632,24 @@ t_fedora:38:meson shared expat:
     FC_XML_BACKEND: expat
   needs:
     - 'fedora:38@container-prep'
+
+
+t_fedora:38:meson shared libxml2:
+  extends:
+    - .build@template
+    - .fdo.distribution-image@fedora
+    - .fc_artifacts
+  variables:
+    FC_DISTRO_NAME: fedora
+    FDO_DISTRIBUTION_VERSION: '38'
+    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
+    FC_BUILDSYS: meson
+    FC_BUILD_TYPE: shared
+    FC_XML_BACKEND: libxml2
+  needs:
+    - 'fedora:38@container-prep'
+
+
 
 
 
@@ -647,6 +715,23 @@ t_freebsd:14.0:meson shared expat:
     - 'freebsd:14.0@container-prep'
 
 
+t_freebsd:14.0:meson shared libxml2:
+  extends:
+    - .build-in-qemu@template
+    - .fdo.distribution-image@freebsd
+    - .fc_artifacts
+  variables:
+    FC_DISTRO_NAME: freebsd
+    FDO_DISTRIBUTION_VERSION: '14.0'
+    FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
+    FC_BUILDSYS: meson
+    FC_BUILD_TYPE: shared
+    FC_XML_BACKEND: libxml2
+    FC_BUILD_NO_CHECK: 1
+  needs:
+    - 'freebsd:14.0@container-prep'
+
+
 t_freebsd:13.2:autotools shared expat:
   extends:
     - .build-in-qemu@template
@@ -695,6 +780,23 @@ t_freebsd:13.2:meson shared expat:
     FC_BUILDSYS: meson
     FC_BUILD_TYPE: shared
     FC_XML_BACKEND: expat
+    FC_BUILD_NO_CHECK: 1
+  needs:
+    - 'freebsd:13.2@container-prep'
+
+
+t_freebsd:13.2:meson shared libxml2:
+  extends:
+    - .build-in-qemu@template
+    - .fdo.distribution-image@freebsd
+    - .fc_artifacts
+  variables:
+    FC_DISTRO_NAME: freebsd
+    FDO_DISTRIBUTION_VERSION: '13.2'
+    FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
+    FC_BUILDSYS: meson
+    FC_BUILD_TYPE: shared
+    FC_XML_BACKEND: libxml2
     FC_BUILD_NO_CHECK: 1
   needs:
     - 'freebsd:13.2@container-prep'
