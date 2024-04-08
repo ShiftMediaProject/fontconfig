@@ -138,5 +138,5 @@ meson android arm64 fedora:
       ar          = toolchain + '-ar'
       strip       = toolchain + '-strip'
       EOF
-    - meson setup --werror --cross-file android-cross-file.txt build
+    - meson setup --werror -Dxml-backend=expat --cross-file android-cross-file.txt build
     - meson compile --verbose -C build
