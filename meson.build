@@ -37,6 +37,7 @@ endif
 
 xml_dep = dependency('', required: false)
 xmlbackend = get_option('xml-backend')
+xmltype = ''
 if xmlbackend == 'auto' or xmlbackend == 'expat'
   # Linking expat should not be so difficult... see: https://github.com/mesonbuild/meson/issues/10516
   xml_dep = dependency('expat', required: false)
@@ -44,12 +45,17 @@ if xmlbackend == 'auto' or xmlbackend == 'expat'
     xml_dep = cc.find_library('expat', required : false)
     if not xml_dep.found() and xmlbackend == 'expat'
       xml_dep = dependency('expat', method: 'system', required: true, fallback: ['expat', 'expat_dep'])
+    else
+      xmltype = 'expat'
     endif
   endif
 endif
 if (xmlbackend == 'auto' and not xml_dep.found()) or xmlbackend == 'libxml2'
   xml_dep = dependency('libxml-2.0', required: true)
   conf.set('ENABLE_LIBXML2', 1)
+endif
+if xmltype == ''
+  xmltype = xml_dep.name()
 endif
 
 pkgmod = import('pkgconfig')
@@ -512,7 +518,7 @@ summary({
   'Tests': not get_option('tests').disabled(),
   'Tools': not get_option('tools').disabled(),
   'iconv': found_iconv == 1,
-  'XML backend': xml_dep.name(),
+  'XML backend': xmltype,
 }, section: 'General', bool_yn: true, list_sep: ', ')
 summary({
   'Hinting': preferred_hinting,
