@@ -173,6 +173,24 @@ else
   opt_nls = opt_nls.require(false)
 endif
 
+# Check iconv support
+iconv = get_option('iconv')
+iconv_dep = dependency('', required: false)
+found_iconv = 0
+if iconv.allowed()
+  iconv_dep = cc.find_library('iconv', required: false)
+  if cc.has_header_symbol('iconv.h', 'libiconv_open', dependencies: libintl_dep)
+    conf.set('LIBICONV_PLUG', 1)
+    found_iconv = 1
+  elif cc.has_header('iconv.h') and cc.has_function('iconv_open', dependencies: iconv_dep)
+    found_iconv = 1
+  else
+    iconv.require(false)
+  endif
+endif
+conf.set('USE_ICONV', found_iconv)
+deps += [iconv_dep]
+
 # We cannot try compiling against an internal dependency
 if freetype_dep.type_name() == 'internal'
   foreach func: check_freetype_funcs
@@ -266,20 +284,6 @@ if cc.links(files('meson-cc-tests/solaris-atomic-operations.c'), name: 'Solaris 
   conf.set('HAVE_SOLARIS_ATOMIC_OPS', 1)
 endif
 
-
-# Check iconv support
-iconv_dep = []
-found_iconv = 0
-if host_machine.system() != 'windows'
-  iconv_dep = dependency('iconv', required: get_option('iconv'))
-  found_iconv = iconv_dep.found().to_int()
-else
-  if get_option('iconv').enabled()
-    warning('-Diconv was set but this is not functional on Windows.')
-  endif
-endif
-conf.set('USE_ICONV', found_iconv)
-deps += [iconv_dep]
 
 prefix = get_option('prefix')
 
