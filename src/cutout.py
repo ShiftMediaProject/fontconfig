@@ -37,8 +37,8 @@ if __name__== '__main__':
                 write = False
 
             if write and l:
-                stripped = re.sub('^\s+', '', l)
-                stripped = re.sub('\s*,\s*', ',', stripped)
+                stripped = re.sub(r'^\s+', '', l)
+                stripped = re.sub(r'\s*,\s*', ',', stripped)
                 if not stripped.isspace() and stripped:
                     out.write('%s\n' % stripped)
 
