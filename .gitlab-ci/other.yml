@@ -33,7 +33,7 @@
       SET REQUESTS_CA_BUNDLE=$(python -m certifi) &&
       meson setup -Diconv=enabled $env:MESON_ARGS build &&
       meson compile --verbose -C build &&
-      meson test -C build
+      meson test -C build"
   artifacts:
     name: fontconfig-$CI_COMMIT_SHA-$CI_JOB_ID
     when: always
