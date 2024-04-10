@@ -31,7 +31,7 @@
       SET CERT_PATH=$(python -m certifi) &&
       SET SSL_CERT_FILE=$(python -m certifi) &&
       SET REQUESTS_CA_BUNDLE=$(python -m certifi) &&
-      meson setup -Diconv=enabled $env:MESON_ARGS build &&
+      meson setup $env:MESON_ARGS build &&
       meson compile --verbose -C build &&
       meson test -C build"
   artifacts:
