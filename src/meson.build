@@ -55,16 +55,16 @@ fcobjshash_h = custom_target('fcobjshash.h',
 )
 
 # Define FcPublic appropriately for exports on windows
-fc_extra_c_args = []
+fc_c_shared_args = []
 
-if host_machine.system() == 'windows' and get_option('default_library') == 'shared'
-  fc_extra_c_args += '-DFcPublic=__declspec(dllexport)'
-  fc_extra_c_args += '-DDLL_EXPORT'
+if host_machine.system() == 'windows' and get_option('default_library') in ['both', 'shared']
+  fc_c_shared_args += '-DFcPublic=__declspec(dllexport)'
+  fc_c_shared_args += '-DDLL_EXPORT'
 endif
 
 libfontconfig = library('fontconfig',
   fc_sources, alias_headers, ft_alias_headers, fclang_h, fccase_h, fcobjshash_h,
-  c_args: c_args + fc_extra_c_args,
+  c_shared_args: fc_c_shared_args,
   include_directories: incbase,
   dependencies: [deps, math_dep],
   install: true,
