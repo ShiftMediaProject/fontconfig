@@ -4,6 +4,8 @@ project('fontconfig', 'c',
   default_options: [ 'buildtype=debugoptimized'],
 )
 
+fs = import('fs')
+
 fc_version = meson.project_version()
 version_arr = fc_version.split('.')
 fc_version_major = version_arr[0].to_int()
@@ -438,10 +440,7 @@ foreach t : ['uint64_t', 'int32_t', 'uintptr_t', 'intptr_t']
   endif
 endforeach
 
-fcstdint_h = configure_file(
-  input: 'src/fcstdint.h.in',
-  output: 'fcstdint.h',
-  copy: true)
+fcstdint_h = fs.copyfile('src/fcstdint.h.in', 'fcstdint.h')
 
 makealias = files('src/makealias.py')[0]
 

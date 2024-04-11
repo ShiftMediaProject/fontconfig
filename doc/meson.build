@@ -52,13 +52,8 @@ endforeach
 edit_sgml = find_program('edit-sgml.py')
 
 # copy into build directory, it includes generated files from build directory
-fontconfig_devel_sgml = configure_file(output: 'fontconfig-devel.sgml',
-  input: 'fontconfig-devel.sgml',
-  copy: true)
-
-fontconfig_user_sgml = configure_file(output: 'fontconfig-user.sgml',
-  input: 'fontconfig-user.sgml',
-  copy: true)
+fontconfig_devel_sgml = fs.copyfile('fontconfig-devel.sgml')
+fontconfig_user_sgml = fs.copyfile('fontconfig-user.sgml')
 
 version_conf = configuration_data()
 version_conf.set('VERSION', meson.project_version())

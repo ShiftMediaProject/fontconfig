@@ -29,22 +29,11 @@ fc_sources = [
   'ftglue.c',
 ]
 
-# FIXME: obviously fragile, cc.preprocess would be sweet
-cpp = cc.cmd_array()
-if cc.get_argument_syntax() == 'gcc'
-  cpp += ['-E', '-P']
-elif cc.get_argument_syntax() == 'msvc'
-  cpp += ['/EP']
-else
-  error('FIXME: implement cc.preprocess')
-endif
-
-cpp += ['-I', join_paths(meson.current_source_dir(), '..')]
-
-fcobjshash_gperf = custom_target('fcobjshash.gperf',
-  input: 'fcobjshash.gperf.h',
+fcobjshash_h = cc.preprocess('fcobjshash.gperf.h', include_directories: incbase)
+fcobjshash_gperf = custom_target(
+  input: fcobjshash_h,
   output: 'fcobjshash.gperf',
-  command: [python3, files('cutout.py')[0], '@INPUT@', '@OUTPUT@', '@BUILD_ROOT@', cpp],
+  command: ['cutout.py', '@INPUT@', '@OUTPUT@'],
   build_by_default: true,
 )
 
