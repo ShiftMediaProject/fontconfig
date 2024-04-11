@@ -1,4 +1,12 @@
 doc_targets = []
+tests = []
+
+if host_machine.system() != 'windows'
+  tests += [
+    'check-missing-doc',
+    'check-whitespace-in-args'
+  ]
+endif
 
 docbook2man = find_program('docbook2man', required: get_option('doc-man'))
 docbook2txt = find_program('docbook2txt', required: get_option('doc-txt'))
@@ -170,3 +178,8 @@ if docbook2html.found()
     install_dir: get_option('datadir') / 'doc' / 'fontconfig',
     install: true)
 endif
+
+foreach script : tests
+  py = find_program(script)
+  test(script, py)
+endforeach
