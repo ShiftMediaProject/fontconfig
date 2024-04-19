@@ -44,6 +44,15 @@ if [ -x "$(command -v bwrap)" ]; then
     BWRAP="$(command -v bwrap)"
 fi
 
+if [ -x "$(command -v md5sum)" ]; then
+    MD5SUM="$(command -v md5sum)"
+elif [ -x "$(command -v md5)" ]; then
+    MD5SUM="$(command -v md5)"
+else
+    echo "E: No md5sum or equivalent command"
+    exit 1
+fi
+
 FONT1=$TESTDIR/4x6.pcf
 FONT2=$TESTDIR/8x16.pcf
 TEST=""
@@ -401,7 +410,7 @@ cp "$BUILDTESTDIR"/fonts.conf "$BUILDTESTDIR"/sysroot/"$BUILDTESTDIR"/fonts.conf
 $FCCACHE -y "$BUILDTESTDIR"/sysroot
 
 dotest "creating cache file on sysroot"
-md5=$(printf "%s" "$FONTDIR" | md5sum | sed 's/ .*$//')
+md5=$(printf "%s" "$FONTDIR" | $MD5SUM | sed 's/ .*$//')
 echo "checking for cache file $md5"
 if ! ls "$BUILDTESTDIR/sysroot/$CACHEDIR/$md5"*; then
   echo "*** Test failed: $TEST"
