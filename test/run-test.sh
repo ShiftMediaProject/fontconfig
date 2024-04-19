@@ -47,6 +47,43 @@ fi
 FONT1=$TESTDIR/4x6.pcf
 FONT2=$TESTDIR/8x16.pcf
 TEST=""
+export TZ=UTC
+
+fdate() {
+    sdate=$1
+    ret=0
+    date -d @0 > /dev/null 2>&1 || ret=$?
+    if [ $ret -eq 0 ]; then
+        ret=$(date -u -d @${sdate} +%y%m%d%H%M.%S)
+    else
+        ret=$(date -u -j -f "%s" +%y%m%d%H%M.%S $sdate)
+    fi
+    echo $ret
+}
+
+fstat() {
+    fmt=$1
+    fn=$2
+    ret=0
+    stat -c %Y "$fn" > /dev/null 2>&1 || ret=$?
+    if [ $ret -eq 0 ]; then
+        # GNU
+        ret=$(stat -c "$fmt" "$fn")
+    else
+        # BSD
+        if [ "x$fmt" == "x%Y" ]; then
+            ret=$(stat -f "%m" "$fn")
+        elif [ "x$fmt" == "x%y" ]; then
+            ret=$(stat -f "%Sm" -t "%F %T %z" "$fn")
+        elif [ "x$fmt" == "x%n %s %y %z" ]; then
+            ret=$(stat -f "%SN %z %Sm %Sc" -t "%F %T %z" "$fn")
+        else
+            echo "E: Unknown format"
+            exit 1
+        fi
+    fi
+    echo $ret
+}
 
 clean_exit() {
     rc=$?
@@ -97,7 +134,7 @@ dotest "Basic check"
 prep
 cp "$FONT1" "$FONT2" "$FONTDIR"
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"
 fi
 check
 
@@ -105,7 +142,7 @@ dotest "With a subdir"
 prep
 cp "$FONT1" "$FONT2" "$FONTDIR"
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"
 fi
 $FCCACHE "$FONTDIR"
 check
@@ -115,7 +152,7 @@ prep
 mkdir "$FONTDIR"/a
 cp "$FONT1" "$FONT2" "$FONTDIR"/a
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"/a
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"/a
 fi
 $FCCACHE "$FONTDIR"/a
 check
@@ -128,11 +165,11 @@ mkdir "$FONTDIR"/b
 mkdir "$FONTDIR"/b/a
 cp "$FONT1" "$FONTDIR"/a
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"/a
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"/a
 fi
 cp "$FONT2" "$FONTDIR"/b/a
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"/b/a
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"/b/a
 fi
 check
 
@@ -156,10 +193,10 @@ check
 dotest "Keep mtime of the font directory"
 prep
 cp "$FONT1" "$FONTDIR"
-touch -d @0 "$FONTDIR"
-stat -c '%y' "$FONTDIR" > "$BUILDTESTDIR"/out1
-$FCCACHE "$FONTDIR"
-stat -c '%y' "$FONTDIR" > "$BUILDTESTDIR"/out2
+touch -t $(fdate 0) "$FONTDIR"
+fstat "%y" "$FONTDIR" > "$BUILDTESTDIR"/out1
+$FCCACHE -v "$FONTDIR"
+fstat "%y" "$FONTDIR" > "$BUILDTESTDIR"/out2
 if cmp "$BUILDTESTDIR"/out1 "$BUILDTESTDIR"/out2 > /dev/null ; then : ; else
     echo "*** Test failed: $TEST"
     echo "mtime was modified"
@@ -171,7 +208,7 @@ dotest "Basic functionality with the bind-mounted cache dir"
 prep
 cp "$FONT1" "$FONT2" "$FONTDIR"
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"
 fi
 $FCCACHE "$FONTDIR"
 sleep 1
@@ -224,17 +261,17 @@ dotest "Different directory content between host and sandbox"
 prep
 cp "$FONT1" "$FONTDIR"
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"
 fi
 $FCCACHE "$FONTDIR"
 sleep 1
 ls -1 --color=no "$CACHEDIR"/*cache*> "$BUILDTESTDIR"/out1
-stat -c '%n %s %y %z' "$(cat $BUILDTESTDIR/out1)" > "$BUILDTESTDIR"/stat1
+fstat "%n %s %y %z" "$(cat $BUILDTESTDIR/out1)" > "$BUILDTESTDIR"/stat1
 TESTTMPDIR=$(mktemp -d "$TMPDIR"/fontconfig.XXXXXXXX)
 TESTTMP2DIR=$(mktemp -d "$TMPDIR"/fontconfig.XXXXXXXX)
 cp "$FONT2" "$TESTTMP2DIR"
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$TESTTMP2DIR"
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$TESTTMP2DIR"
 fi
 sed "s!@FONTDIR@!$TESTTMPDIR/fonts</dir><dir salt="'"'"salt-to-make-different"'"'">$FONTDIR!
 s!@REMAPDIR@!<remap-dir as-path="'"'"$FONTDIR"'"'">$TESTTMPDIR/fonts</remap-dir>!
@@ -251,7 +288,7 @@ fi
 $BWRAP --bind / / --bind "$CACHEDIR" "$TESTTMPDIR"/cache.dir --bind "$FONTDIR" "$TESTTMPDIR"/fonts --bind "$TESTTMP2DIR" "$FONTDIR" --bind "$BUILDTESTDIR"/.. "$TESTTMPDIR"/build --dev-bind /dev /dev --setenv FONTCONFIG_FILE "$TESTTMPDIR"/build/test/bind-fonts.conf "$TESTTMPDIR"/build/test/"$TESTEXE" | sort > "$BUILDTESTDIR"/flist1
 $BWRAP --bind / / --bind "$CACHEDIR" "$TESTTMPDIR"/cache.dir --bind "$FONTDIR" "$TESTTMPDIR"/fonts --bind "$TESTTMP2DIR" "$FONTDIR" --bind "$BUILDTESTDIR"/.. "$TESTTMPDIR"/build --dev-bind /dev /dev find "$TESTTMPDIR"/fonts/ -type f -name '*.pcf' | sort > "$BUILDTESTDIR"/flist2
 ls -1 --color=no "$CACHEDIR"/*cache* > "$BUILDTESTDIR"/out2
-stat -c '%n %s %y %z' "$(cat $BUILDTESTDIR/out1)" > "$BUILDTESTDIR"/stat2
+fstat "%n %s %y %z" "$(cat $BUILDTESTDIR/out1)" > "$BUILDTESTDIR"/stat2
 if cmp "$BUILDTESTDIR"/stat1 "$BUILDTESTDIR"/stat2 > /dev/null ; then : ; else
   echo "*** Test failed: $TEST"
   echo "cache was created/updated."
@@ -285,7 +322,7 @@ prep
 mkdir -p "$FONTDIR"/sub
 cp "$FONT1" "$FONTDIR"/sub
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"/sub
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"/sub
 fi
 $FCCACHE "$FONTDIR"
 sleep 1
@@ -315,18 +352,18 @@ dotest "Fallback to uuid"
 prep
 cp "$FONT1" "$FONTDIR"
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"
 fi
-touch -d @"$(stat -c %Y "$FONTDIR")" "$FONTDIR"
+touch -t "$(fdate $(fstat "%Y" "$FONTDIR"))" "$FONTDIR"
 $FCCACHE "$FONTDIR"
 sleep 1
 _cache=$(ls -1 --color=no "$CACHEDIR"/*cache*)
-_mtime=$(stat -c %Y "$FONTDIR")
+_mtime=$(fstat "%Y" "$FONTDIR")
 _uuid=$(uuidgen)
 _newcache=$(echo "$_cache" | sed "s/\([0-9a-f]*\)\(\-.*\)/$_uuid\2/")
 mv "$_cache" "$_newcache"
 echo "$_uuid" > "$FONTDIR"/.uuid
-touch -d @"$_mtime" "$FONTDIR"
+touch -t "$(fdate "$_mtime")" "$FONTDIR"
 (cd "$CACHEDIR"; ls -1 --color=no ./*cache*) > "$BUILDTESTDIR"/out1
 TESTTMPDIR=$(mktemp -d "$TMPDIR"/fontconfig.XXXXXXXX)
 mkdir -p "$TESTTMPDIR"/cache.dir
@@ -358,7 +395,7 @@ mkdir -p "$BUILDTESTDIR"/sysroot/"$CACHEDIR"
 mkdir -p "$BUILDTESTDIR"/sysroot/"$BUILDTESTDIR"
 cp "$FONT1" "$BUILDTESTDIR"/sysroot/"$FONTDIR"
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$BUILDTESTDIR"/sysroot/"$FONTDIR"
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$BUILDTESTDIR"/sysroot/"$FONTDIR"
 fi
 cp "$BUILDTESTDIR"/fonts.conf "$BUILDTESTDIR"/sysroot/"$BUILDTESTDIR"/fonts.conf
 $FCCACHE -y "$BUILDTESTDIR"/sysroot
@@ -378,8 +415,13 @@ rm -rf "$BUILDTESTDIR"/sysroot
 dotest "read newer caches when multiple places are allowed to store"
 prep
 cp "$FONT1" "$FONT2" "$FONTDIR"
+if [ -n "${SOURCE_DATE_EPOCH:-}" ]; then
+    # epoch 0 has special meaning. increase to avoid epoch 0
+    old_epoch=${SOURCE_DATE_EPOCH}
+    SOURCE_DATE_EPOCH=$(("$SOURCE_DATE_EPOCH" + 1))
+fi
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"
 fi
 MYCACHEBASEDIR=$(mktemp -d "$TMPDIR"/fontconfig.XXXXXXXX)
 MYCACHEDIR="$MYCACHEBASEDIR"/cache.dir
@@ -409,7 +451,6 @@ s!@REMAPDIR@!<include ignore_missing=\"yes\">$MYCONFIG</include>!
 s!@CACHEDIR@!$MYOWNCACHEDIR!" < "$TESTDIR"/fonts.conf.in > "$BUILDTESTDIR"/my-fonts.conf
 
 if [ -n "${SOURCE_DATE_EPOCH:-}" ]; then
-  old_epoch=${SOURCE_DATE_EPOCH}
   SOURCE_DATE_EPOCH=$(("$SOURCE_DATE_EPOCH" + 1))
 fi
 FONTCONFIG_FILE="$BUILDTESTDIR"/my-fonts.conf $FCCACHE -f "$FONTDIR"
@@ -451,7 +492,7 @@ if [ -x "$BUILDTESTDIR"/test-crbug1004254 ]; then
     curl -s -o "$FONTDIR"/noto.zip https://noto-website-2.storage.googleapis.com/pkgs/NotoSans-hinted.zip
     (cd "$FONTDIR"; unzip noto.zip)
     if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-	touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"
+        touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"
     fi
     "$BUILDTESTDIR"/test-crbug1004254
 else
@@ -468,7 +509,7 @@ export temp_HOME=$(mktemp -d "$TMPDIR"/fontconfig.XXXXXXXX)
 export HOME="$temp_HOME"
 cp "$FONT1" "$FONT2" "$FONTDIR"
 if [ -n "${SOURCE_DATE_EPOCH:-}" ] && [ ${#SOURCE_DATE_EPOCH} -gt 0 ]; then
-    touch -m -t "$(date -d @"${SOURCE_DATE_EPOCH}" +%y%m%d%H%M.%S)" "$FONTDIR"
+    touch -m -t "$(fdate ${SOURCE_DATE_EPOCH})" "$FONTDIR"
 fi
 echo "<fontconfig><dir>$FONTDIR</dir><cachedir prefix=\"xdg\">fontconfig</cachedir></fontconfig>" > "$BUILDTESTDIR"/my-fonts.conf
 FONTCONFIG_FILE="$BUILDTESTDIR"/my-fonts.conf $FCCACHE "$FONTDIR" || :
