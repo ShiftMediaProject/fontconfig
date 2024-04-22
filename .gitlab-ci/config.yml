@@ -1,4 +1,4 @@
-.default_tag: &default_tag "2024-04-08.1"
+.default_tag: &default_tag "2024-04-22.1"
 
 distributions:
   - name: fedora
@@ -7,8 +7,8 @@ distributions:
     qemu_based: false
     versions:
       - "rawhide"
+      - "40"
       - "39"
-      - "38"
     builds:
       - name: "autotools shared expat"
         variables:
