@@ -29,12 +29,16 @@ case "$OSTYPE" in
     *    ) MyPWD=$(pwd)    ;;  # On any other platforms, returns a Unix style path.
 esac
 
+normpath() {
+    printf "%s" "$1" | sed -E 's,/+,/,g'
+}
+
 TESTDIR=${srcdir-"$MyPWD"}
 BUILDTESTDIR=${builddir-"$MyPWD"}
 
 BASEDIR=$(mktemp -d "$TMPDIR"/fontconfig.XXXXXXXX)
-FONTDIR="$BASEDIR"/fonts
-CACHEDIR="$BASEDIR"/cache.dir
+FONTDIR=$(normpath "$BASEDIR"/fonts)
+CACHEDIR=$(normpath "$BASEDIR"/cache.dir)
 EXPECTED=${EXPECTED-"out.expected"}
 
 FCLIST="$LOG_COMPILER $BUILDTESTDIR/../fc-list/fc-list$EXEEXT"
@@ -53,8 +57,8 @@ else
     exit 1
 fi
 
-FONT1=$TESTDIR/4x6.pcf
-FONT2=$TESTDIR/8x16.pcf
+FONT1=$(normpath $TESTDIR/4x6.pcf)
+FONT2=$(normpath $TESTDIR/8x16.pcf)
 TEST=""
 export TZ=UTC
 
