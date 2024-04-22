@@ -401,7 +401,7 @@ run_test (FcConfig *config, json_object *root)
 	}
 	if (method != NULL && strcmp (method, "match") == 0)
 	{
-	    FcPattern *match;
+	    FcPattern *match = NULL;
 	    FcResult res;
 
 	    if (!query)
@@ -456,12 +456,13 @@ run_test (FcConfig *config, json_object *root)
 		    }
 		} while (FcPatternIterNext (result, &iter));
 	    bail:
-		FcPatternDestroy (match);
+		if (match)
+			FcPatternDestroy (match);
 	    }
 	    else
 	    {
 		FcPatternIter iter;
-		int x, vc;
+		int vc;
 
 		FcPatternIterStart (result, &iter);
 		vc = FcPatternIterValueCount (result, &iter);
@@ -474,7 +475,7 @@ run_test (FcConfig *config, json_object *root)
 	}
 	else if (method != NULL && strcmp (method, "list") == 0)
 	{
-	    FcFontSet *fs;
+	    FcFontSet *fs = NULL;
 
 	    if (!query)
 	    {
@@ -544,7 +545,8 @@ run_test (FcConfig *config, json_object *root)
 		    } while (FcPatternIterNext (result_fs->fonts[i], &iter));
 		}
 	    bail2:
-		FcFontSetDestroy (fs);
+		if (fs)
+			FcFontSetDestroy (fs);
 	    }
 	}
 	else
@@ -577,7 +579,7 @@ static FcBool
 run_scenario (FcConfig *config, char *file)
 {
     FcBool ret = FcTrue;
-    json_object *root, *scenario;
+    json_object *root;
 
     root = json_object_from_file (file);
     if (!root)

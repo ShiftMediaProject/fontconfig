@@ -31,7 +31,7 @@ esac
 TESTDIR=${srcdir-"$MyPWD"}
 BUILDTESTDIR=${builddir-"$MyPWD"}
 
-RUNNER=../test/test-conf$EXEEXT
+RUNNER=$BUILDTESTDIR/test-conf$EXEEXT
 
 if [ ! -f ${RUNNER} ]; then
     echo "${RUNNER} not found!\n"
