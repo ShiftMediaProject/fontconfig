@@ -337,6 +337,9 @@ typedef struct _FcStrSet    FcStrSet;
 
 typedef struct _FcCache	    FcCache;
 
+typedef void (* FcDestroyFunc) (void *data);
+typedef FcBool (* FcFilterFontSetFunc) (const FcPattern *font, void *user_data);
+
 _FCFUNCPROTOBEGIN
 
 /* fcblanks.c */
@@ -458,6 +461,10 @@ FcConfigAcceptFont (FcConfig	    *config,
 		    const FcPattern *font);
 
 FcPublic FcBool
+FcConfigAcceptFilter (FcConfig        *config,
+		      const FcPattern *font);
+
+FcPublic FcBool
 FcConfigAppFontAddFile (FcConfig    *config,
 			const FcChar8  *file);
 
@@ -485,6 +492,12 @@ FcConfigGetSysRoot (const FcConfig *config);
 FcPublic void
 FcConfigSetSysRoot (FcConfig      *config,
 		    const FcChar8 *sysroot);
+
+FcPublic FcConfig *
+FcConfigSetFontSetFilter (FcConfig            *config,
+			  FcFilterFontSetFunc filter_func,
+			  FcDestroyFunc       destroy_data_func,
+			  void                *user_data);
 
 FcPublic void
 FcConfigFileInfoIterInit (FcConfig		*config,
