@@ -34,7 +34,7 @@ dnl version.  This same version number must appear in fontconfig/fontconfig.h
 dnl Yes, it is a pain to synchronize version numbers.  Unfortunately, it's
 dnl not possible to extract the version number here from fontconfig.h
 AC_INIT([fontconfig],[2.15.0],[https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/new])
-AM_INIT_AUTOMAKE([1.11 parallel-tests dist-xz])
+AM_INIT_AUTOMAKE([1.11 parallel-tests dist-xz foreign])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 dnl ==========================================================================
