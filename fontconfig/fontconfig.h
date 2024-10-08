@@ -32,8 +32,10 @@
 
 #if defined(__GNUC__) && (__GNUC__ >= 4)
 #define FC_ATTRIBUTE_SENTINEL(x) __attribute__((__sentinel__(0)))
+#define FC_ATTRIBUTE_MAY_ALIAS __attribute__((may_alias))
 #else
 #define FC_ATTRIBUTE_SENTINEL(x)
+#define FC_ATTRIBUTE_MAY_ALIAS
 #endif
 
 #ifndef FcPublic
@@ -253,7 +255,7 @@ typedef enum _FcValueBinding {
 
 typedef struct _FcPattern   FcPattern;
 
-typedef struct _FcPatternIter {
+typedef struct FC_ATTRIBUTE_MAY_ALIAS _FcPatternIter {
     void *dummy1;
     void *dummy2;
 } FcPatternIter;
@@ -1160,6 +1162,7 @@ FcConfigParseAndLoadFromMemory (FcConfig       *config,
 _FCFUNCPROTOEND
 
 #undef FC_ATTRIBUTE_SENTINEL
+#undef FC_ATTRIBUTE_MAY_ALIAS
 
 
 #ifndef _FCINT_H_
