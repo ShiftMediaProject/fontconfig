@@ -534,6 +534,10 @@ fc_headers = [
 
 install_headers(fc_headers, subdir: meson.project_name())
 
+if not meson.is_subproject()
+  meson.add_dist_script('build-aux/meson-dist-docs.py')
+endif
+
 # Summary
 doc_targets = get_variable('doc_targets', [])
 
