@@ -519,11 +519,12 @@ configure_file(output: 'fonts.conf',
                input: 'fonts.conf.in',
                configuration: fonts_conf,
                install_dir: fc_baseconfigdir,
-               install: true)
+               install: true,
+               install_tag: 'runtime')
 
 install_data('fonts.dtd',
-             install_dir: join_paths(get_option('prefix'), get_option('datadir'), 'xml/fontconfig')
-            )
+             install_dir: join_paths(get_option('prefix'), get_option('datadir'), 'xml/fontconfig'),
+             install_tag: 'runtime')
 
 fc_headers = [
   'fontconfig/fontconfig.h',
