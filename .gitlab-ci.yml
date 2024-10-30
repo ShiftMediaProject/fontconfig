@@ -41,8 +41,8 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:    '2024-10-29.1-41214b06dc2e'
-  FREEBSD_TAG:   '2024-10-29.1-07eda677a3b7'
+  FEDORA_TAG:    '2024-10-31.1-f8217c171a86'
+  FREEBSD_TAG:   '2024-10-31.1-68faa3935c22'
 
   FEDORA_EXEC:   'bash .gitlab-ci/fedora-install.sh'
   FREEBSD_EXEC:  'bash .gitlab-ci/freebsd-install.sh'
@@ -120,27 +120,15 @@ fedora:40@container-prep:
     FDO_DISTRIBUTION_TAG: $FEDORA_TAG
     FDO_DISTRIBUTION_EXEC: $FEDORA_EXEC
 
-freebsd:14.0@container-prep:
+freebsd:14.1@container-prep:
   extends: .fdo.qemu-build@freebsd
   tags:
     - kvm
   stage: prep
   variables:
     GIT_STRATEGY: none
-    FDO_DISTRIBUTION_VERSION: '14.0'
-    FDO_DISTRIBUTION_PACKAGES: 'gcc autoconf automake libtool gettext gperf expat libxml2 freetype2 json-c git ninja wget python3 py39-pip pkgconf gmake gettext-runtime'
-    FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
-    FDO_DISTRIBUTION_EXEC: $FREEBSD_EXEC
-
-freebsd:13.2@container-prep:
-  extends: .fdo.qemu-build@freebsd
-  tags:
-    - kvm
-  stage: prep
-  variables:
-    GIT_STRATEGY: none
-    FDO_DISTRIBUTION_VERSION: '13.2'
-    FDO_DISTRIBUTION_PACKAGES: 'gcc autoconf automake libtool gettext gperf expat libxml2 freetype2 json-c git ninja wget python3 py39-pip pkgconf gmake gettext-runtime'
+    FDO_DISTRIBUTION_VERSION: '14.1'
+    FDO_DISTRIBUTION_PACKAGES: 'gcc autoconf automake libtool gettext gperf expat libxml2 freetype2 json-c git ninja wget python3 py311-pip pkgconf gmake gettext-runtime'
     FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
     FDO_DISTRIBUTION_EXEC: $FREEBSD_EXEC
 
@@ -204,22 +192,13 @@ fedora:40@container-clean:
     FDO_DISTRIBUTION_VERSION: '40'
     FDO_DISTRIBUTION_TAG: $FEDORA_TAG
 
-freebsd:14.0@container-clean:
+freebsd:14.1@container-clean:
   extends:
     - .container-clean
   variables:
     GIT_STRATEGY: none
     CURRENT_CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/freebsd/$FDO_DISTRIBUTION_VERSION:$FDO_DISTRIBUTION_TAG
-    FDO_DISTRIBUTION_VERSION: '14.0'
-    FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
-
-freebsd:13.2@container-clean:
-  extends:
-    - .container-clean
-  variables:
-    GIT_STRATEGY: none
-    CURRENT_CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/freebsd/$FDO_DISTRIBUTION_VERSION:$FDO_DISTRIBUTION_TAG
-    FDO_DISTRIBUTION_VERSION: '13.2'
+    FDO_DISTRIBUTION_VERSION: '14.1'
     FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
 
 
@@ -662,14 +641,14 @@ t_fedora:40:meson shared libxml2:
 
 
 
-t_freebsd:14.0:autotools shared expat:
+t_freebsd:14.1:autotools shared expat:
   extends:
     - .build-in-qemu@template
     - .fdo.distribution-image@freebsd
     - .fc_artifacts
   variables:
     FC_DISTRO_NAME: freebsd
-    FDO_DISTRIBUTION_VERSION: '14.0'
+    FDO_DISTRIBUTION_VERSION: '14.1'
     FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
     FC_BUILDSYS: autotools
     FC_BUILD_TYPE: shared
@@ -677,17 +656,17 @@ t_freebsd:14.0:autotools shared expat:
     MAKE: gmake
     FC_BUILD_NO_CHECK: 1
   needs:
-    - 'freebsd:14.0@container-prep'
+    - 'freebsd:14.1@container-prep'
 
 
-t_freebsd:14.0:autotools shared libxml2:
+t_freebsd:14.1:autotools shared libxml2:
   extends:
     - .build-in-qemu@template
     - .fdo.distribution-image@freebsd
     - .fc_artifacts
   variables:
     FC_DISTRO_NAME: freebsd
-    FDO_DISTRIBUTION_VERSION: '14.0'
+    FDO_DISTRIBUTION_VERSION: '14.1'
     FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
     FC_BUILDSYS: autotools
     FC_BUILD_TYPE: shared
@@ -695,111 +674,41 @@ t_freebsd:14.0:autotools shared libxml2:
     MAKE: gmake
     FC_BUILD_NO_CHECK: 1
   needs:
-    - 'freebsd:14.0@container-prep'
+    - 'freebsd:14.1@container-prep'
 
 
-t_freebsd:14.0:meson shared expat:
+t_freebsd:14.1:meson shared expat:
   extends:
     - .build-in-qemu@template
     - .fdo.distribution-image@freebsd
     - .fc_artifacts
   variables:
     FC_DISTRO_NAME: freebsd
-    FDO_DISTRIBUTION_VERSION: '14.0'
+    FDO_DISTRIBUTION_VERSION: '14.1'
     FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
     FC_BUILDSYS: meson
     FC_BUILD_TYPE: shared
     FC_XML_BACKEND: expat
     FC_BUILD_NO_CHECK: 1
   needs:
-    - 'freebsd:14.0@container-prep'
+    - 'freebsd:14.1@container-prep'
 
 
-t_freebsd:14.0:meson shared libxml2:
+t_freebsd:14.1:meson shared libxml2:
   extends:
     - .build-in-qemu@template
     - .fdo.distribution-image@freebsd
     - .fc_artifacts
   variables:
     FC_DISTRO_NAME: freebsd
-    FDO_DISTRIBUTION_VERSION: '14.0'
+    FDO_DISTRIBUTION_VERSION: '14.1'
     FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
     FC_BUILDSYS: meson
     FC_BUILD_TYPE: shared
     FC_XML_BACKEND: libxml2
     FC_BUILD_NO_CHECK: 1
   needs:
-    - 'freebsd:14.0@container-prep'
-
-
-t_freebsd:13.2:autotools shared expat:
-  extends:
-    - .build-in-qemu@template
-    - .fdo.distribution-image@freebsd
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: freebsd
-    FDO_DISTRIBUTION_VERSION: '13.2'
-    FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
-    FC_BUILDSYS: autotools
-    FC_BUILD_TYPE: shared
-    FC_XML_BACKEND: expat
-    MAKE: gmake
-    FC_BUILD_NO_CHECK: 1
-  needs:
-    - 'freebsd:13.2@container-prep'
-
-
-t_freebsd:13.2:autotools shared libxml2:
-  extends:
-    - .build-in-qemu@template
-    - .fdo.distribution-image@freebsd
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: freebsd
-    FDO_DISTRIBUTION_VERSION: '13.2'
-    FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
-    FC_BUILDSYS: autotools
-    FC_BUILD_TYPE: shared
-    FC_XML_BACKEND: libxml2
-    MAKE: gmake
-    FC_BUILD_NO_CHECK: 1
-  needs:
-    - 'freebsd:13.2@container-prep'
-
-
-t_freebsd:13.2:meson shared expat:
-  extends:
-    - .build-in-qemu@template
-    - .fdo.distribution-image@freebsd
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: freebsd
-    FDO_DISTRIBUTION_VERSION: '13.2'
-    FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
-    FC_BUILDSYS: meson
-    FC_BUILD_TYPE: shared
-    FC_XML_BACKEND: expat
-    FC_BUILD_NO_CHECK: 1
-  needs:
-    - 'freebsd:13.2@container-prep'
-
-
-t_freebsd:13.2:meson shared libxml2:
-  extends:
-    - .build-in-qemu@template
-    - .fdo.distribution-image@freebsd
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: freebsd
-    FDO_DISTRIBUTION_VERSION: '13.2'
-    FDO_DISTRIBUTION_TAG: $FREEBSD_TAG
-    FC_BUILDSYS: meson
-    FC_BUILD_TYPE: shared
-    FC_XML_BACKEND: libxml2
-    FC_BUILD_NO_CHECK: 1
-  needs:
-    - 'freebsd:13.2@container-prep'
+    - 'freebsd:14.1@container-prep'
 
 
 #######################################

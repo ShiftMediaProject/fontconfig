@@ -1,4 +1,4 @@
-.default_tag: &default_tag "2024-10-29.1"
+.default_tag: &default_tag "2024-10-31.1"
 
 distributions:
   - name: fedora
@@ -77,8 +77,7 @@ distributions:
     base_type: freebsd
     qemu_based: true
     versions:
-      - "14.0"
-      - "13.2"
+      - "14.1"
     builds:
       - name: "autotools shared expat"
         variables:
@@ -153,7 +152,7 @@ packages:
         "ninja",
         "wget",
         "python3",
-        "py39-pip",
+        "py311-pip",
         "pkgconf",
         "gmake",
         "gettext-runtime",
