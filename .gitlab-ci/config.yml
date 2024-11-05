@@ -1,4 +1,4 @@
-.default_tag: &default_tag "2024-10-31.1"
+.default_tag: &default_tag "2024-11-05.1"
 
 distributions:
   - name: fedora
@@ -56,7 +56,7 @@ distributions:
           FC_BUILD_TYPE: static
           FC_XML_BACKEND: libxml2
       - name: "mingw autotools static libxml2"
-        build_only: "rawhide"
+        build_only: "40"
         variables:
           FC_BUILDSYS: autotools
           FC_BUILD_TYPE: static

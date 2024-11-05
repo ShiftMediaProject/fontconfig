@@ -41,8 +41,8 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:    '2024-10-31.1-f8217c171a86'
-  FREEBSD_TAG:   '2024-10-31.1-68faa3935c22'
+  FEDORA_TAG:    '2024-11-05.1-142cd4455e97'
+  FREEBSD_TAG:   '2024-11-05.1-4a2d6eca68b8'
 
   FEDORA_EXEC:   'bash .gitlab-ci/fedora-install.sh'
   FREEBSD_EXEC:  'bash .gitlab-ci/freebsd-install.sh'
@@ -450,22 +450,6 @@ t_fedora:rawhide:meson static libxml2:
     - 'fedora:rawhide@container-prep'
 
 
-t_fedora:rawhide:mingw autotools static libxml2:
-  extends:
-    - .build@template
-    - .fdo.distribution-image@fedora
-    - .fc_artifacts
-  variables:
-    FC_DISTRO_NAME: fedora
-    FDO_DISTRIBUTION_VERSION: 'rawhide'
-    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
-    FC_BUILDSYS: autotools
-    FC_BUILD_TYPE: static
-    FC_XML_BACKEND: libxml2
-    FC_BUILD_PLATFORM: mingw
-    FC_BUILD_ARCH: x86_64-mingw32
-  needs:
-    - 'fedora:rawhide@container-prep'
 
 
 t_fedora:rawhide:mingw meson static expat:
@@ -637,6 +621,22 @@ t_fedora:40:meson shared libxml2:
 
 
 
+t_fedora:40:mingw autotools static libxml2:
+  extends:
+    - .build@template
+    - .fdo.distribution-image@fedora
+    - .fc_artifacts
+  variables:
+    FC_DISTRO_NAME: fedora
+    FDO_DISTRIBUTION_VERSION: '40'
+    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
+    FC_BUILDSYS: autotools
+    FC_BUILD_TYPE: static
+    FC_XML_BACKEND: libxml2
+    FC_BUILD_PLATFORM: mingw
+    FC_BUILD_ARCH: x86_64-mingw32
+  needs:
+    - 'fedora:40@container-prep'
 
 
 
