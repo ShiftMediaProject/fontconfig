@@ -519,11 +519,12 @@ configure_file(output: 'fonts.conf',
                input: 'fonts.conf.in',
                configuration: fonts_conf,
                install_dir: fc_baseconfigdir,
-               install: true)
+               install: true,
+               install_tag: 'runtime')
 
 install_data('fonts.dtd',
-             install_dir: join_paths(get_option('prefix'), get_option('datadir'), 'xml/fontconfig')
-            )
+             install_dir: join_paths(get_option('prefix'), get_option('datadir'), 'xml/fontconfig'),
+             install_tag: 'runtime')
 
 fc_headers = [
   'fontconfig/fontconfig.h',
@@ -532,6 +533,11 @@ fc_headers = [
 ]
 
 install_headers(fc_headers, subdir: meson.project_name())
+
+if not meson.is_subproject()
+  meson.add_dist_script('build-aux/meson-dist-docs.py')
+  meson.add_dist_script('build-aux/meson-dist-autotools.py')
+endif
 
 # Summary
 doc_targets = get_variable('doc_targets', [])
