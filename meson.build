@@ -536,6 +536,7 @@ install_headers(fc_headers, subdir: meson.project_name())
 
 if not meson.is_subproject()
   meson.add_dist_script('build-aux/meson-dist-docs.py')
+  meson.add_dist_script('build-aux/meson-dist-autotools.py')
 endif
 
 # Summary
