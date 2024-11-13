@@ -2619,15 +2619,12 @@ FcFreeTypeCharSet (FT_Face face, FcBlanks *blanks FC_UNUSED)
 #endif
     for (o = 0; o < NUM_DECODE; o++)
     {
-	FcChar32        page, off, ucs4;
-	FcCharLeaf      *leaf;
+	FcChar32        ucs4;
 	FT_UInt	 	glyph;
 
 	if (FT_Select_Charmap (face, fcFontEncodings[o]) != 0)
 	    continue;
 
-	page = ~0;
-	leaf = NULL;
 	ucs4 = FT_Get_First_Char (face, &glyph);
 	while (glyph != 0)
 	{
@@ -2643,19 +2640,8 @@ FcFreeTypeCharSet (FT_Face face, FcBlanks *blanks FC_UNUSED)
 		    good = FcFalse;
 	    }
 
-	    if (good)
-	    {
-		FcCharSetAddChar (fcs, ucs4);
-		if ((ucs4 >> 8) != page)
-		{
-		    page = (ucs4 >> 8);
-		    leaf = FcCharSetFindLeafCreate (fcs, ucs4);
-		    if (!leaf)
-			goto bail;
-		}
-		off = ucs4 & 0xff;
-		leaf->map[off >> 5] |= (1U << (off & 0x1f));
-	    }
+        if (good)
+            FcCharSetAddChar (fcs, ucs4);
 
 	    ucs4 = FT_Get_Next_Char (face, ucs4, &glyph);
 	}
