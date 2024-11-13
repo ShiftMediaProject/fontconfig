@@ -336,9 +336,9 @@ FcConfigReference (FcConfig *config)
 	    unlock_config ();
 
 	    config = FcInitLoadConfigAndFonts ();
+	    lock_config ();
 	    if (!config)
 		goto retry;
-	    lock_config ();
 	    if (!fc_atomic_ptr_cmpexch (&_fcConfig, NULL, config))
 	    {
 		FcConfigDestroy (config);
