@@ -41,8 +41,8 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:    '2024-11-05.1-142cd4455e97'
-  FREEBSD_TAG:   '2024-11-05.1-4a2d6eca68b8'
+  FEDORA_TAG:    '2024-11-13.1-08f953db8aa7'
+  FREEBSD_TAG:   '2024-11-13.1-ed8d8ffae892'
 
   FEDORA_EXEC:   'bash .gitlab-ci/fedora-install.sh'
   FREEBSD_EXEC:  'bash .gitlab-ci/freebsd-install.sh'
@@ -736,7 +736,7 @@ pages:
   script:
     - |
       mkdir public || :
-      cp -a build*/doc/fontconfig-user.html build*/doc/fontconfig-devel public/
+      cp -a build*/doc/fontconfig-user.html build*/doc/fontconfig-devel.html public/
   artifacts:
     paths:
       - public

@@ -339,7 +339,7 @@ pages:
   script:
     - |
       mkdir public || :
-      cp -a build*/doc/fontconfig-user.html build*/doc/fontconfig-devel public/
+      cp -a build*/doc/fontconfig-user.html build*/doc/fontconfig-devel.html public/
   artifacts:
     paths:
       - public
