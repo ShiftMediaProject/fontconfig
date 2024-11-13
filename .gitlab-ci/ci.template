@@ -268,7 +268,7 @@ check-ci-script:
     expire_in: 5 days
     paths:
       - build*/doc/fontconfig-user.html
-      - build*/doc/fontconfig-devel/*
+      - build*/doc/fontconfig-devel.html
       - build*/fc-build.log
       - build*/config.log
       - build*/fontconfig-*.tar.*
