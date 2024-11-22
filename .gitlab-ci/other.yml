@@ -19,7 +19,11 @@
     #   -Dbar=disabled
   before_script:
     # Make sure meson is up to date, so we don't need to rebuild the image with each release
-    - pip3 install -U meson certifi
+    - pip3 install -U meson certifi tomli requests
+    # Test Rust availability. As of 11/25/2024, according to
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/main/ci/docker/windows/Dockerfile
+    # Rust 1.82 is already installed.
+    - rustc --version
   script:
     # For some reason, options are separated by newline instead of space, so we
     # have to replace them first.
@@ -68,10 +72,18 @@ meson macos:
     - pip3 install --upgrade pip
     # Make sure meson is up to date
     - pip3 install -U meson
+    # For Python < 3.11 we need tomli for Rust build support
+    - pip3 install -U tomli
     # Need to install certificates for python
     - pip3 install --upgrade certifi
     # Get ninja
     - pip3 install --upgrade ninja
+    # Install rust
+    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - . "$HOME/.cargo/env"
+    # Test Rust availability.
+    - rustup update
+    - rustc --version
   script:
     - CERT_PATH=$(python3 -m certifi) && export SSL_CERT_FILE=${CERT_PATH} && export REQUESTS_CA_BUNDLE=${CERT_PATH} && meson setup -Diconv=enabled build
     - meson compile --verbose -C build
