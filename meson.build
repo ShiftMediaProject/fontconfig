@@ -1,7 +1,7 @@
 project('fontconfig', 'c',
   version: '2.15.0',
-  meson_version : '>= 1.3.0',
-  default_options: [ 'buildtype=debugoptimized'],
+  meson_version : '>= 1.6.0',
+  default_options: [ 'buildtype=debugoptimized', ]
 )
 
 fs = import('fs')
@@ -71,6 +71,12 @@ if (xmlbackend == 'auto' and not xml_dep.found()) or xmlbackend == 'libxml2'
 endif
 if xmltype == ''
   xmltype = xml_dep.name()
+endif
+
+fontations = get_option('fontations')
+if (fontations.enabled())
+  conf.set('ENABLE_FONTATIONS', 1)
+  add_languages(['rust'], native: false, required : true)
 endif
 
 pkgmod = import('pkgconfig')
@@ -484,6 +490,10 @@ subdir('fc-case')
 subdir('fc-lang')
 subdir('src')
 
+if get_option('fontations').enabled()
+  subdir('fc-fontations')
+endif
+
 if not get_option('tools').disabled()
   subdir('fc-cache')
   subdir('fc-cat')
@@ -549,6 +559,7 @@ summary({
   'Tools': not get_option('tools').disabled(),
   'iconv': found_iconv == 1,
   'XML backend': xmltype,
+  'Fontations support' : fontations
 }, section: 'General', bool_yn: true, list_sep: ', ')
 summary({
   'Hinting': preferred_hinting,

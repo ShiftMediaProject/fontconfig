@@ -72,6 +72,13 @@ distributions:
           FC_BUILD_PLATFORM: mingw
           FC_BUILD_ARCH: linux-mingw-w64-64bit
           FC_BUILD_NO_INSTALL: 1
+      - name: "meson static libxml2 fontations"
+        build_only: "rawhide"
+        variables:
+          FC_BUILDSYS: meson
+          FC_BUILD_TYPE: static
+          FC_XML_BACKEND: libxml2
+          FC_BUILD_ENABLED: "fontations"
   - name: freebsd
     tag: *default_tag
     base_type: freebsd
@@ -113,6 +120,7 @@ packages:
         "@buildsys-build",
         "autoconf",
         "automake",
+        "clang-devel",
         "libtool",
         "gettext",
         "gettext-devel",
@@ -136,6 +144,7 @@ packages:
         "wine",
         "rust",
         "cargo",
+        "bindgen-cli"
       ]
   freebsd:
     needed:

@@ -26,6 +26,7 @@ if host_machine.system() != 'windows'
   endif
 endif
 
+
 foreach test_data : tests
   fname = test_data[0]
   opts = test_data.length() > 1 ? test_data[1] : {}
@@ -42,6 +43,11 @@ foreach test_data : tests
 
   test(test_name, exe, timeout: 600)
 endforeach
+
+if get_option('fontations').enabled()
+  rust = import('rust')
+  rust.test('fc_fontations_tests', fc_fontations)
+endif
 
 fs = import('fs')
 

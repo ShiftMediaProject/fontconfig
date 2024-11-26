@@ -45,17 +45,18 @@
       - build-*/meson-logs/*txt
       - prefix-*
 
-meson vs2019 amd64:
-  extends: ".build meson windows"
-  variables:
-    ARCH: "amd64"
 
 meson vs2019 x86:
   extends: ".build meson windows"
   variables:
     ARCH: "x86"
+    MESON_ARGS: "-Dfontations=disabled"
 
-meson macos:
+# A Windows Fontations build would currently require
+# libclang and llvm installation which is a several hundred megabyte download.
+# Skip that configuration for now.
+
+.meson macos test:
   stage: "test"
   # See https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/main/.gitlab-ci.yml
   # As of 2024-11-21, this is a Mac OS 15 Sequia image on Apple silicon.
@@ -83,11 +84,23 @@ meson macos:
     - . "$HOME/.cargo/env"
     # Test Rust availability.
     - rustup update
+    - cargo install bindgen-cli
     - rustc --version
+    - bindgen --version
   script:
-    - CERT_PATH=$(python3 -m certifi) && export SSL_CERT_FILE=${CERT_PATH} && export REQUESTS_CA_BUNDLE=${CERT_PATH} && meson setup -Diconv=enabled build
+    - CERT_PATH=$(python3 -m certifi) && export SSL_CERT_FILE=${CERT_PATH} && export REQUESTS_CA_BUNDLE=${CERT_PATH} && meson setup -Diconv=enabled $MESON_FONTATIONS_ARG build
     - meson compile --verbose -C build
     - meson test -C build
+
+meson macos test:
+  extends: ".meson macos test"
+  variables:
+    MESON_FONTATIONS_ARG: "-Dfontations=disabled"
+
+meson macos test fontations:
+  extends: ".meson macos test"
+  variables:
+    MESON_FONTATIONS_ARG: "-Dfontations=enabled"
 
 # msys infrastructure is a bit broken, disable for now
 meson msys2:
