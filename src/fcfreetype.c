@@ -1772,6 +1772,9 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
     {
 	char	    psname[256];
 	const char	    *tmp;
+
+	if (instance)
+            FT_Set_Named_Instance (face, id >> 16);
 	tmp = FT_Get_Postscript_Name (face);
 	if (!tmp)
 	{
