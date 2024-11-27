@@ -134,6 +134,8 @@ packages:
         "mingw64-freetype",
         "mingw64-libxml2",
         "wine",
+        "rust",
+        "cargo",
       ]
   freebsd:
     needed:
