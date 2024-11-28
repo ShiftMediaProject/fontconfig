@@ -81,6 +81,7 @@ endif
 
 pkgmod = import('pkgconfig')
 python3 = import('python').find_installation()
+pytest = find_program('pytest', required: false)
 
 check_headers = [
   ['dirent.h'],

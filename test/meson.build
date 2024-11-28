@@ -61,6 +61,13 @@ if host_machine.system() != 'windows'
   endif
 
   test('run_test_sh', find_program('run-test.sh'), timeout: 600, env: ['srcdir=@0@'.format(meson.current_source_dir()), 'builddir=@0@'.format(meson.current_build_dir()), 'EXEEXT=@0@'.format(conf.get('EXEEXT')), 'VERBOSE=1'])
+
+  if pytest.found()
+    test('pytest', pytest, args: ['--tap'],
+         workdir: meson.current_source_dir(),
+         env: ['builddir=@0@'.format(meson.current_build_dir())],
+         protocol: 'tap')
+  endif
 endif
 
 if jsonc_dep.found()
