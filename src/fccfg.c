@@ -2990,7 +2990,7 @@ FcConfigGlobAdd (FcConfig	*config,
 {
     FcStrSet	*set = accept ? config->acceptGlobs : config->rejectGlobs;
     FcChar8     *realglob = FcStrCopyFilename(glob);
-    FcChar8     *cwd = FcStrCopyFilename((const FcChar8 *) "");
+    FcChar8     *cwd = FcStrCopyFilename((const FcChar8 *) ".");
     const FcChar8 *s;
     FcBool       ret;
     size_t       len = 0;
@@ -3006,8 +3006,11 @@ FcConfigGlobAdd (FcConfig	*config,
     else
     {
 	    len = strlen((const char *) cwd);
+	    /* No need to use FC_DIR_SEPARATOR because '\\' will be
+	     * replaced with / by FcConvertDosPath in FcStrCanonFilename
+	     */
 	    if (strncmp((const char *) cwd, (const char *) realglob, len) == 0 &&
-		realglob[len] == FC_DIR_SEPARATOR)
+		realglob[len] == '/')
 		    s = &realglob[len + 1];
 	    else
 		    s = realglob;
