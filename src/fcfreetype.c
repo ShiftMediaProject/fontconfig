@@ -2584,8 +2584,8 @@ FcFreeTypeCharSet (FT_Face face, FcBlanks *blanks FC_UNUSED)
 		    good = FcFalse;
 	    }
 
-        if (good)
-            FcCharSetAddChar (fcs, ucs4);
+	    if (good)
+		FcCharSetAddChar (fcs, ucs4);
 
 	    ucs4 = FT_Get_Next_Char (face, ucs4, &glyph);
 	}
