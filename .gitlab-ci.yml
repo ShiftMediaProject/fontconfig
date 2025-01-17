@@ -41,8 +41,8 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:    '2024-11-13.2-3bd7920ce40a'
-  FREEBSD_TAG:   '2024-11-13.2-f272a7918d7b'
+  FEDORA_TAG:    '2025-01-17.1-ad5c9d5d2ff5'
+  FREEBSD_TAG:   '2025-01-17.1-285a32ac747a'
 
   FEDORA_EXEC:   'bash .gitlab-ci/fedora-install.sh'
   FREEBSD_EXEC:  'bash .gitlab-ci/freebsd-install.sh'
@@ -382,6 +382,7 @@ t_fedora:rawhide:meson shared libxml2:
     FC_BUILDSYS: meson
     FC_BUILD_TYPE: shared
     FC_XML_BACKEND: libxml2
+    FC_BUILD_DISTCHECK: 1
   needs:
     - 'fedora:rawhide@container-prep'
 
@@ -549,6 +550,7 @@ t_fedora:41:meson shared libxml2:
     FC_BUILDSYS: meson
     FC_BUILD_TYPE: shared
     FC_XML_BACKEND: libxml2
+    FC_BUILD_DISTCHECK: 1
   needs:
     - 'fedora:41@container-prep'
 
@@ -628,6 +630,7 @@ t_fedora:40:meson shared libxml2:
     FC_BUILDSYS: meson
     FC_BUILD_TYPE: shared
     FC_XML_BACKEND: libxml2
+    FC_BUILD_DISTCHECK: 1
   needs:
     - 'fedora:40@container-prep'
 
