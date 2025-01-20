@@ -550,6 +550,11 @@ if not meson.is_subproject()
   meson.add_dist_script('build-aux/meson-dist-autotools.py')
 endif
 
+if host_machine.system() != 'windows'
+  install_emptydir(fc_cachedir,
+                   install_tag: 'runtime')
+endif
+
 # Summary
 doc_targets = get_variable('doc_targets', [])
 
