@@ -181,6 +181,7 @@ conf.set_quoted('PACKAGE_VERSION', meson.project_version())
 conf.set_quoted('PACKAGE_STRING', '@0@ @1@'.format(meson.project_name(), meson.project_version()))
 conf.set_quoted('PACKAGE_BUGREPORT', 'https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/new')
 conf.set_quoted('PACKAGE_URL', '')
+conf.set('WORDS_BIGENDIAN', (host_machine.endian() == 'big').to_int())
 
 if host_machine.system() == 'windows'
   conf.set('EXEEXT', '.exe')
