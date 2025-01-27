@@ -383,8 +383,10 @@ endif
 
 if host_machine.system() != 'windows'
   thread_dep = dependency('threads')
-  conf.set('HAVE_PTHREAD', 1)
-  deps += [thread_dep]
+  if thread_dep.found() and cc.has_header('pthread.h')
+    conf.set('HAVE_PTHREAD', 1)
+    deps += [thread_dep]
+  endif
 endif
 
 fc_templatedir = get_option('template-dir')
