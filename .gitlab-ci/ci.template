@@ -175,11 +175,15 @@ clang-format:
   stage: style check
   extends:
     - .fdo.distribution-image@fedora
+  variables:
+    FDO_DISTRIBUTION_VERSION: 'rawhide'
+    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
   needs:
     - 'fedora:rawhide@container-prep'
   script:
     - |
-      commit=${CI_MERGE_REQUEST_TARGET_BRANCH_SHA:-${CI_MERGE_REQUEST_DIFF_BASE_SHA:?}} || exit
+      commit="${CI_MERGE_REQUEST_TARGET_BRANCH_SHA:-${CI_MERGE_REQUEST_DIFF_BASE_SHA:?}}" || exit
+      echo sh .gitlab-ci/check-style.sh "$commit"
       sh .gitlab-ci/check-style.sh "$commit"
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
