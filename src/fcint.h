@@ -119,7 +119,7 @@ extern pfnSHGetFolderPathA          pSHGetFolderPathA;
 #define FC_MAX(a, b)                     ((a) > (b) ? (a) : (b))
 
 /* slim_internal.h */
-#if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3)) && defined(__ELF__) && !defined(__sun)
+#if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3)) && defined(__ELF__) && !defined(__sun) && !defined(BINDGEN_IGNORE_VISIBILITY)
 #  define FcPrivate           __attribute__ ((__visibility__ ("hidden")))
 #  define HAVE_GNUC_ATTRIBUTE 1
 #  include "fcalias.h"

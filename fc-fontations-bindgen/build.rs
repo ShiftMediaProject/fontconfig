@@ -10,6 +10,7 @@ fn main() {
     meson.current_dir("../");
     meson.arg("setup")
          .arg(build_dir.to_str().unwrap())
+         .arg("--reconfigure")
          .arg("-Dfontations=enabled");
 
     let status = meson.status().expect("Failed to execute meson");
@@ -26,8 +27,12 @@ fn main() {
     }
 
     // Tell cargo to look for fontconfig in the build directory
-    println!("cargo:rustc-link-search=native={}", build_dir.join("lib").display());
-    println!("cargo:rustc-link-lib=dylib=fontconfig");
+    println!("cargo:rustc-link-search=native={}", build_dir.join("src").display());
+    println!("cargo:rustc-link-lib=static=fontconfig");
+
+    // FreeType and Expat from the system.
+    println!("cargo:rustc-link-lib=dylib=freetype");
+    println!("cargo:rustc-link-lib=dylib=expat");
 
     // Rerun this build script if the fontconfig source code changes
     println!("cargo:rerun-if-changed=src");
