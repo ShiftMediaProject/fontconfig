@@ -42,8 +42,8 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:    '2025-02-17.3-c09ad6f8f869'
-  FREEBSD_TAG:   '2025-02-17.3-40e170f4e005'
+  FEDORA_TAG:    '2025-03-10.1-788fd421ac5d'
+  FREEBSD_TAG:   '2025-03-10.1-8c6b4797d3ca'
 
   FEDORA_EXEC:   'bash .gitlab-ci/fedora-install.sh'
   FREEBSD_EXEC:  'bash .gitlab-ci/freebsd-install.sh'
@@ -97,7 +97,7 @@ fedora:rawhide@container-prep:
   variables:
     GIT_STRATEGY: none
     FDO_DISTRIBUTION_VERSION: 'rawhide'
-    FDO_DISTRIBUTION_PACKAGES: '@buildsys-build autoconf automake clang-devel clang-tools-extra libtool gettext gettext-devel gperf expat-devel libxml2-devel freetype-devel json-c-devel git git-clang-format docbook-utils docbook-utils-pdf bubblewrap ninja-build wget python3-pip mingw64-expat mingw64-gcc mingw64-gettext mingw64-freetype mingw64-libxml2 rust cargo bindgen-cli'
+    FDO_DISTRIBUTION_PACKAGES: '@buildsys-build autoconf automake clang-devel clang-tools-extra curl libtool gettext gettext-devel gperf expat-devel libxml2-devel freetype-devel json-c-devel git git-clang-format docbook-utils docbook-utils-pdf bubblewrap ninja-build wget python3-pip mingw64-expat mingw64-gcc mingw64-gettext mingw64-freetype mingw64-libxml2 rust cargo bindgen-cli'
     FDO_DISTRIBUTION_TAG: $FEDORA_TAG
     FDO_DISTRIBUTION_EXEC: $FEDORA_EXEC
 
@@ -107,7 +107,7 @@ fedora:41@container-prep:
   variables:
     GIT_STRATEGY: none
     FDO_DISTRIBUTION_VERSION: '41'
-    FDO_DISTRIBUTION_PACKAGES: '@buildsys-build autoconf automake clang-devel clang-tools-extra libtool gettext gettext-devel gperf expat-devel libxml2-devel freetype-devel json-c-devel git git-clang-format docbook-utils docbook-utils-pdf bubblewrap ninja-build wget python3-pip mingw64-expat mingw64-gcc mingw64-gettext mingw64-freetype mingw64-libxml2 rust cargo bindgen-cli'
+    FDO_DISTRIBUTION_PACKAGES: '@buildsys-build autoconf automake clang-devel clang-tools-extra curl libtool gettext gettext-devel gperf expat-devel libxml2-devel freetype-devel json-c-devel git git-clang-format docbook-utils docbook-utils-pdf bubblewrap ninja-build wget python3-pip mingw64-expat mingw64-gcc mingw64-gettext mingw64-freetype mingw64-libxml2 rust cargo bindgen-cli'
     FDO_DISTRIBUTION_TAG: $FEDORA_TAG
     FDO_DISTRIBUTION_EXEC: $FEDORA_EXEC
 
@@ -117,7 +117,7 @@ fedora:40@container-prep:
   variables:
     GIT_STRATEGY: none
     FDO_DISTRIBUTION_VERSION: '40'
-    FDO_DISTRIBUTION_PACKAGES: '@buildsys-build autoconf automake clang-devel clang-tools-extra libtool gettext gettext-devel gperf expat-devel libxml2-devel freetype-devel json-c-devel git git-clang-format docbook-utils docbook-utils-pdf bubblewrap ninja-build wget python3-pip mingw64-expat mingw64-gcc mingw64-gettext mingw64-freetype mingw64-libxml2 rust cargo bindgen-cli'
+    FDO_DISTRIBUTION_PACKAGES: '@buildsys-build autoconf automake clang-devel clang-tools-extra curl libtool gettext gettext-devel gperf expat-devel libxml2-devel freetype-devel json-c-devel git git-clang-format docbook-utils docbook-utils-pdf bubblewrap ninja-build wget python3-pip mingw64-expat mingw64-gcc mingw64-gettext mingw64-freetype mingw64-libxml2 rust cargo bindgen-cli'
     FDO_DISTRIBUTION_TAG: $FEDORA_TAG
     FDO_DISTRIBUTION_EXEC: $FEDORA_EXEC
 
@@ -337,6 +337,18 @@ clang-format:
       - build*/test/*log
       - build*/fontconfig*/_build
       - build*/meson-logs/*
+      - build*/meson-dist/*
+
+.upload:
+  rules:
+    - if: $CI_COMMIT_TAG
+  variables:
+    PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/fontconfig/${CI_COMMIT_TAG}"
+  script:
+    - |
+      for f in $(pwd)/build-fontconfig-$CI_JOB_NAME_$CI_COMMIT_SHA-*/meson-dist/*; do
+        curl --location --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file $f ${PACKAGE_REGISTRY_URL}/$(basename $f)
+      done
 
 #######################################
 #                                     #
@@ -361,6 +373,7 @@ t_fedora:rawhide:autotools shared expat:
     - 'fedora:rawhide@container-prep'
 
 
+
 t_fedora:rawhide:autotools shared libxml2:
   extends:
     - .build@template
@@ -376,6 +389,7 @@ t_fedora:rawhide:autotools shared libxml2:
     FC_BUILD_DISTCHECK: 1
   needs:
     - 'fedora:rawhide@container-prep'
+
 
 
 t_fedora:rawhide:meson shared expat:
@@ -394,6 +408,7 @@ t_fedora:rawhide:meson shared expat:
     - 'fedora:rawhide@container-prep'
 
 
+
 t_fedora:rawhide:meson shared libxml2:
   extends:
     - .build@template
@@ -409,6 +424,16 @@ t_fedora:rawhide:meson shared libxml2:
     FC_BUILD_DISTCHECK: 1
   needs:
     - 'fedora:rawhide@container-prep'
+
+t_fedora:rawhide:meson shared libxml2:upload:
+  needs:
+    - t_fedora:rawhide:meson shared libxml2
+  extends:
+    - .fdo.distribution-image@fedora
+    - .upload
+  variables:
+    FDO_DISTRIBUTION_VERSION: 'rawhide'
+    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
 
 
 t_fedora:rawhide:autotools static expat:
@@ -427,6 +452,7 @@ t_fedora:rawhide:autotools static expat:
     - 'fedora:rawhide@container-prep'
 
 
+
 t_fedora:rawhide:autotools static libxml2:
   extends:
     - .build@template
@@ -441,6 +467,7 @@ t_fedora:rawhide:autotools static libxml2:
     FC_XML_BACKEND: libxml2
   needs:
     - 'fedora:rawhide@container-prep'
+
 
 
 t_fedora:rawhide:meson static expat:
@@ -459,6 +486,7 @@ t_fedora:rawhide:meson static expat:
     - 'fedora:rawhide@container-prep'
 
 
+
 t_fedora:rawhide:meson static libxml2:
   extends:
     - .build@template
@@ -473,6 +501,7 @@ t_fedora:rawhide:meson static libxml2:
     FC_XML_BACKEND: libxml2
   needs:
     - 'fedora:rawhide@container-prep'
+
 
 
 t_fedora:rawhide:mingw autotools static libxml2:
@@ -491,6 +520,7 @@ t_fedora:rawhide:mingw autotools static libxml2:
     FC_BUILD_ARCH: x86_64-mingw32
   needs:
     - 'fedora:rawhide@container-prep'
+
 
 
 t_fedora:rawhide:mingw meson static expat:
@@ -512,6 +542,7 @@ t_fedora:rawhide:mingw meson static expat:
     - 'fedora:rawhide@container-prep'
 
 
+
 t_fedora:rawhide:meson static libxml2 fontations:
   extends:
     - .build@template
@@ -529,6 +560,7 @@ t_fedora:rawhide:meson static libxml2 fontations:
     - 'fedora:rawhide@container-prep'
 
 
+
 t_fedora:41:autotools shared expat:
   extends:
     - .build@template
@@ -543,6 +575,7 @@ t_fedora:41:autotools shared expat:
     FC_XML_BACKEND: expat
   needs:
     - 'fedora:41@container-prep'
+
 
 
 t_fedora:41:autotools shared libxml2:
@@ -562,6 +595,7 @@ t_fedora:41:autotools shared libxml2:
     - 'fedora:41@container-prep'
 
 
+
 t_fedora:41:meson shared expat:
   extends:
     - .build@template
@@ -576,6 +610,7 @@ t_fedora:41:meson shared expat:
     FC_XML_BACKEND: expat
   needs:
     - 'fedora:41@container-prep'
+
 
 
 t_fedora:41:meson shared libxml2:
@@ -609,6 +644,14 @@ t_fedora:41:meson shared libxml2:
 
 
 
+
+
+
+
+
+
+
+
 t_fedora:40:autotools shared expat:
   extends:
     - .build@template
@@ -623,6 +666,7 @@ t_fedora:40:autotools shared expat:
     FC_XML_BACKEND: expat
   needs:
     - 'fedora:40@container-prep'
+
 
 
 t_fedora:40:autotools shared libxml2:
@@ -642,6 +686,7 @@ t_fedora:40:autotools shared libxml2:
     - 'fedora:40@container-prep'
 
 
+
 t_fedora:40:meson shared expat:
   extends:
     - .build@template
@@ -656,6 +701,7 @@ t_fedora:40:meson shared expat:
     FC_XML_BACKEND: expat
   needs:
     - 'fedora:40@container-prep'
+
 
 
 t_fedora:40:meson shared libxml2:
@@ -673,6 +719,14 @@ t_fedora:40:meson shared libxml2:
     FC_BUILD_DISTCHECK: 1
   needs:
     - 'fedora:40@container-prep'
+
+
+
+
+
+
+
+
 
 
 
@@ -707,6 +761,7 @@ t_freebsd:14.1:autotools shared expat:
     - 'freebsd:14.1@container-prep'
 
 
+
 t_freebsd:14.1:autotools shared libxml2:
   extends:
     - .build-in-qemu@template
@@ -723,6 +778,7 @@ t_freebsd:14.1:autotools shared libxml2:
     FC_BUILD_NO_CHECK: 1
   needs:
     - 'freebsd:14.1@container-prep'
+
 
 
 t_freebsd:14.1:meson shared expat:
@@ -742,6 +798,7 @@ t_freebsd:14.1:meson shared expat:
     - 'freebsd:14.1@container-prep'
 
 
+
 t_freebsd:14.1:meson shared libxml2:
   extends:
     - .build-in-qemu@template
@@ -757,6 +814,7 @@ t_freebsd:14.1:meson shared libxml2:
     FC_BUILD_NO_CHECK: 1
   needs:
     - 'freebsd:14.1@container-prep'
+
 
 
 #######################################
@@ -795,8 +853,21 @@ pages:
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE != "merge_request_event"
 
+make-release:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+  variables:
+    PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/fontconfig/${CI_COMMIT_TAG}"
+  script:
+    - glab auth login -h ${CI_SERVER_HOST} -j ${CI_JOB_TOKEN}
+    - |
+      glab release create ${CI_COMMIT_TAG} --name "Release ${CI_COMMIT_TAG}" -a "[{\"name\": \"fontconfig-${CI_COMMIT_TAG}.tar.xz\", \"url\": \"${PACKAGE_REGISTRY_URL}/fontconfig-${CI_COMMIT_TAG}.tar.xz\"}, {\"name\": \"fontconfig-${CI_COMMIT_TAG}.tar.xz (sha256sum)\", \"url\": \"${PACKAGE_REGISTRY_URL}/fontconfig-${CI_COMMIT_TAG}.tar.xz.sha256sum\"}]"
+
 workflow:
   rules:
+    - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
       when: never

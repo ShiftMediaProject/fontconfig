@@ -1,4 +1,4 @@
-.default_tag: &default_tag "2025-02-17.3"
+.default_tag: &default_tag "2025-03-10.1"
 
 distributions:
   - name: fedora
@@ -27,6 +27,7 @@ distributions:
           FC_BUILD_TYPE: shared
           FC_XML_BACKEND: expat
       - name: "meson shared libxml2"
+        upload: 'rawhide'
         variables:
           FC_BUILDSYS: meson
           FC_BUILD_TYPE: shared
@@ -123,6 +124,7 @@ packages:
         "automake",
         "clang-devel",
         "clang-tools-extra",
+        "curl",
         "libtool",
         "gettext",
         "gettext-devel",
