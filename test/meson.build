@@ -37,16 +37,17 @@ foreach test_data : tests
   exe = executable(test_name, fname,
     c_args: c_args + extra_c_args,
     include_directories: incbase,
-    link_with: [libfontconfig],
+    link_with: [libfontconfig.get_static_lib()],
     dependencies: extra_deps,
   )
 
   test(test_name, exe, timeout: 600)
 endforeach
 
+
 if get_option('fontations').enabled()
   rust = import('rust')
-  rust.test('fc_fontations_tests', fc_fontations)
+  rust.test('fc_fontations_rust_tests', fc_fontations, link_with: [fc_fontations, libfontconfig.get_static_lib()])
 endif
 
 fs = import('fs')

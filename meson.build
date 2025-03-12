@@ -77,6 +77,7 @@ fontations = get_option('fontations')
 if (fontations.enabled())
   conf.set('ENABLE_FONTATIONS', 1)
   add_languages(['rust'], native: false, required : true)
+
 endif
 
 pkgmod = import('pkgconfig')
