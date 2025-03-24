@@ -111,6 +111,18 @@ elif [ x"$buildsys" == "xmeson" ]; then
     pip install tomli
     for i in "${enable[@]}"; do
         buildopt+=(-D$i=enabled)
+
+        # Update bindgen on Fontations builds to improve support for constants in fcint.h
+        if [[ "$i" == "fontations" ]]; then
+            cargo install bindgen-cli
+            # Prepend the cargo bin directory to PATH
+            if [[ -d "$HOME/.cargo/bin" ]]; then
+                export PATH="$HOME/.cargo/bin:$PATH"
+                echo "Cargo bin directory added to PATH."
+            else
+                echo "Cargo bin directory not found."
+            fi
+        fi
     done
     for i in "${disable[@]}"; do
         buildopt+=(-D$i=disabled)
