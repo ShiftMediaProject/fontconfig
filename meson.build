@@ -195,7 +195,7 @@ gettext_args = [ '--msgid-bugs-address=@0@'.format(conf.get('PACKAGE_BUGREPORT')
 
 # Check for libintl.h
 opt_nls = get_option('nls')
-libintl_dep = dependency('intl', required: false, fallback: ['libintl', 'libintl_dep'])
+libintl_dep = dependency('intl', required: opt_nls, fallback: ['libintl', 'libintl_dep'])
 if libintl_dep.found()
   conf.set('ENABLE_NLS', opt_nls.allowed().to_int())
   deps += [libintl_dep]
