@@ -17,3 +17,13 @@ fi
 # workaround to avoid conflict between systemd and systemd-standalone-sysusers
 dnf -y swap systemd-standalone-sysusers systemd
 dnf -y install wine
+
+# Install Android NDK
+dnf -y install unzip
+mkdir /android
+pushd /android
+curl -O https://dl.google.com/android/repository/android-ndk-r28-linux.zip
+unzip android-ndk-r28-linux.zip
+ln -sf android-ndk-r28 ndk
+rm android-ndk-r28-linux.zip
+popd

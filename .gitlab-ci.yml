@@ -42,8 +42,8 @@ variables:
 # changing these will force rebuilding the associated image
 # Note: these tags have no meaning and are not tied to a particular
 # fontconfig version
-  FEDORA_TAG:    '2025-03-10.1-788fd421ac5d'
-  FREEBSD_TAG:   '2025-03-10.1-8c6b4797d3ca'
+  FEDORA_TAG:    '2025-03-26.1-061a0cd0d4b5'
+  FREEBSD_TAG:   '2025-03-26.1-1f1b3be21da5'
 
   FEDORA_EXEC:   'bash .gitlab-ci/fedora-install.sh'
   FREEBSD_EXEC:  'bash .gitlab-ci/freebsd-install.sh'
@@ -561,6 +561,28 @@ t_fedora:rawhide:meson static libxml2 fontations:
 
 
 
+t_fedora:rawhide:android aarch64:
+  extends:
+    - .build@template
+    - .fdo.distribution-image@fedora
+    - .fc_artifacts
+  variables:
+    FC_DISTRO_NAME: fedora
+    FDO_DISTRIBUTION_VERSION: 'rawhide'
+    FDO_DISTRIBUTION_TAG: $FEDORA_TAG
+    FC_BUILDSYS: meson
+    FC_BUILD_TYPE: shared
+    FC_XML_BACKEND: expat
+    FC_BUILD_PLATFORM: android
+    FC_BUILD_ARCH: aarch64-linux-android
+    FC_BUILD_NO_INSTALL: 1
+    FC_BUILD_DISABLED: nls
+    FC_BUILD_NO_CHECK: 1
+  needs:
+    - 'fedora:rawhide@container-prep'
+
+
+
 t_fedora:41:autotools shared expat:
   extends:
     - .build@template
@@ -652,6 +674,9 @@ t_fedora:41:meson shared libxml2:
 
 
 
+
+
+
 t_fedora:40:autotools shared expat:
   extends:
     - .build@template
@@ -719,6 +744,9 @@ t_fedora:40:meson shared libxml2:
     FC_BUILD_DISTCHECK: 1
   needs:
     - 'fedora:40@container-prep'
+
+
+
 
 
 
