@@ -1,4 +1,4 @@
-.default_tag: &default_tag "2025-03-10.1"
+.default_tag: &default_tag "2025-03-26.1"
 
 distributions:
   - name: fedora
@@ -27,7 +27,7 @@ distributions:
           FC_BUILD_TYPE: shared
           FC_XML_BACKEND: expat
       - name: "meson shared libxml2"
-        upload: 'rawhide'
+        upload: "rawhide"
         variables:
           FC_BUILDSYS: meson
           FC_BUILD_TYPE: shared
@@ -81,6 +81,17 @@ distributions:
           FC_BUILD_TYPE: static
           FC_XML_BACKEND: libxml2
           FC_BUILD_ENABLED: "fontations"
+      - name: "android aarch64"
+        build_only: "rawhide"
+        variables:
+          FC_BUILDSYS: meson
+          FC_BUILD_TYPE: shared
+          FC_XML_BACKEND: expat
+          FC_BUILD_PLATFORM: android
+          FC_BUILD_ARCH: aarch64-linux-android
+          FC_BUILD_NO_INSTALL: 1
+          FC_BUILD_DISABLED: nls
+          FC_BUILD_NO_CHECK: 1
   - name: freebsd
     tag: *default_tag
     base_type: freebsd

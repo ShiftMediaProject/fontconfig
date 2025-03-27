@@ -47,6 +47,7 @@ do
 done
 case x"$FC_BUILD_PLATFORM" in
     'xmingw') cross=1 ;;
+    'xandroid') cross=1 ;;
     *) cross=0 ;;
 esac
 
