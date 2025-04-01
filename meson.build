@@ -1,7 +1,10 @@
 project('fontconfig', 'c',
   version: '2.16.1',
   meson_version : '>= 1.6.0',
-  default_options: [ 'buildtype=debugoptimized', ]
+  default_options: [
+    'c_std=c11,c99',
+    'buildtype=debugoptimized',
+  ]
 )
 
 fs = import('fs')
