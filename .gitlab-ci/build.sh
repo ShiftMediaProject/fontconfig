@@ -28,6 +28,17 @@ export BUILD_ID=${BUILD_ID:-fontconfig-$$}
 export PREFIX=${PREFIX:-$MyPWD/prefix}
 export BUILDDIR=${BUILDDIR:-$MyPWD/build}
 
+if [ "x$FC_DISTRO_NAME" = "x" ]; then
+    . /etc/os-release || :
+    FC_DISTRO_NAME=$ID
+fi
+if [ "x$FC_DISTRO_NAME" = "x" ]; then
+    echo "***"
+    echo "*** Unable to detect OS. cross-compiling may not work. Please consider setting FC_DISTRO_NAME"
+    echo "***"
+    sleep 3
+fi
+
 while getopts a:cCe:d:hINs:t:X: OPT
 do
     case $OPT in
@@ -42,7 +53,7 @@ do
         't') type=$OPTARG ;;
         'X') backend=$OPTARG ;;
         'h')
-            echo "Usage: $0 [-a ARCH] [-c] [-e OPT] [-d OPT] [-I] [-s BUILDSYS] [-t BUILDTYPE] [-X XMLBACKEND]"
+            echo "Usage: $0 [-a ARCH] [-c] [-C] [-e OPT] [-d OPT] [-h] [-I] [-N] [-s BUILDSYS] [-t BUILDTYPE] [-X XMLBACKEND]"
             exit 1
             ;;
     esac
