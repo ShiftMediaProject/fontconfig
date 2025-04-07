@@ -16,6 +16,7 @@ disable=()
 distcheck=0
 enable_install=1
 disable_check=0
+clean_build=1
 cross=0
 buildsys="meson"
 type="shared"
@@ -27,7 +28,7 @@ export BUILD_ID=${BUILD_ID:-fontconfig-$$}
 export PREFIX=${PREFIX:-$MyPWD/prefix}
 export BUILDDIR=${BUILDDIR:-$MyPWD/build}
 
-while getopts a:cCe:d:hIs:t:X: OPT
+while getopts a:cCe:d:hINs:t:X: OPT
 do
     case $OPT in
         'a') arch=$OPTARG ;;
@@ -36,6 +37,7 @@ do
         'e') enable+=($OPTARG) ;;
         'd') disable+=($OPTARG) ;;
         'I') enable_install=0 ;;
+        'N') clean_build=0 ;;
         's') buildsys=$OPTARG ;;
         't') type=$OPTARG ;;
         'X') backend=$OPTARG ;;
@@ -103,8 +105,10 @@ if [ x"$buildsys" == "xautotools" ]; then
         fi
         . .gitlab-ci/${FC_DISTRO_NAME}-cross.sh
     fi
-    rm -rf "$BUILDDIR" "$PREFIX" || :
-    mkdir "$BUILDDIR" "$PREFIX"
+    if [ $clean_build -eq 1 ]; then
+        rm -rf "$BUILDDIR" "$PREFIX" || :
+        mkdir "$BUILDDIR" "$PREFIX"
+    fi
     cd "$BUILDDIR"
     TASK="autogen.sh"
     ../autogen.sh --prefix="$PREFIX" --disable-cache-build ${buildopt[*]} 2>&1 | tee /tmp/fc-build.log
@@ -165,6 +169,9 @@ elif [ x"$buildsys" == "xmeson" ]; then
         . .gitlab-ci/$FC_DISTRO_NAME-cross.sh
     fi
     buildopt+=(--default-library=$type)
+    if [ $clean_build -eq 1 ]; then
+        rm -rf $BUILDDIR || :
+    fi
     TASK="meson setup"
     meson setup --prefix="$PREFIX" -Dnls=enabled -Dcache-build=disabled -Diconv=enabled ${buildopt[*]} "$BUILDDIR" 2>&1 | tee /tmp/fc-build.log
     TASK="meson compile"
@@ -183,5 +190,4 @@ elif [ x"$buildsys" == "xmeson" ]; then
     fi
 fi
 TASK=
-mv /tmp/fc-build.log . || :
 exit $r
