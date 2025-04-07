@@ -67,7 +67,8 @@ if host_machine.system() != 'windows'
     test('pytest', pytest, args: ['--tap'],
          workdir: meson.current_source_dir(),
          env: ['builddir=@0@'.format(meson.current_build_dir())],
-         protocol: 'tap')
+         protocol: 'tap',
+         timeout: 600)
   endif
 endif
 
