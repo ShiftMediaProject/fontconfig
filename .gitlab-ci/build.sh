@@ -142,7 +142,7 @@ elif [ x"$buildsys" == "xmeson" ]; then
     pip install meson
 #   tomli not required for Python >= 3.11
     pip install tomli
-    pip install pytest pytest-tap
+    pip install pytest pytest-tap requests
     for i in "${enable[@]}"; do
         buildopt+=(-D$i=enabled)
 
