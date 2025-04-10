@@ -80,7 +80,7 @@ pkgmod.generate(libfontconfig,
   description: 'Font configuration and customization library',
   filebase: 'fontconfig',
   name: 'Fontconfig',
-  requires: ['freetype2 ' + freetype_req],
+  requires_private: ['freetype2 ' + freetype_req],
   version: fc_version,
   variables: [
     'sysconfdir=@0@'.format(join_paths(prefix, get_option('sysconfdir'))),
