@@ -1,11 +1,37 @@
                               Fontconfig
              Font configuration and customization library
-                            Version 2.16.1
-                              2025-03-13
+                            Version 2.16.2
+                              2025-04-11
 
 
 Check INSTALL for compilation and installation instructions.
 Report bugs to https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/new.
+
+2.16.2
+
+Akira TAGOH (12):
+      meson: do not require libintl if nls feature is disabled
+      ci: Add back Android build in a common way
+      ci: drop Language to make sure they are applied as default style
+      ci: Change the default build system to meson
+      ci: Stop on fail anyway
+      ci: default to clean-build
+      ci: detect OS from os-release if no FC_DISTRO_NAME is set
+      ci: add missing dependency of pytest
+      ci: Set more timeout for pytest
+      ci: fix too many open files on test
+      ci: add missing dependency of requests
+      meson: Use Requires.private instead of Requires
+
+Dominik Röttsches (2):
+      Upgrade bindgen in Fontations enabled Rust builds
+      [Fontations] Add internal PatternBuilder abstraction
+
+Kacper Michajłow (1):
+      meson: don't force build of a shared library
+
+Thomas Devoogdt (1):
+      meson.build: define a 'c' standard for the project (C99 and C11)
 
 2.16.1
 
