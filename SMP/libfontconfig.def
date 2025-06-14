@@ -36,6 +36,8 @@ EXPORTS
 	FcCharSetSubtract
 	FcCharSetSubtractCount
 	FcCharSetUnion
+	FcConfigAcceptFilter
+	FcConfigAcceptFont
 	FcConfigAppFontAddDir
 	FcConfigAppFontAddFile
 	FcConfigAppFontClear
@@ -64,6 +66,7 @@ EXPORTS
 	FcConfigParseAndLoadFromMemory
 	FcConfigReference
 	FcConfigSetCurrent
+	FcConfigSetFontSetFilter
 	FcConfigSetRescanInterval
 	FcConfigSetRescanInverval
 	FcConfigSetSysRoot
