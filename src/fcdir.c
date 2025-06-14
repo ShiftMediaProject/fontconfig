@@ -234,7 +234,7 @@ FcDirScanConfig (FcFontSet	*set,
 
     if (FcDebug () & FC_DBG_SCAN)
 	printf ("\tScanning dir %s\n", s_dir);
-	
+
     d = opendir ((char *) s_dir);
     if (!d)
     {
@@ -265,7 +265,8 @@ FcDirScanConfig (FcFontSet	*set,
     /*
      * Sort files to make things prettier
      */
-    qsort(files->strs, files->num, sizeof(FcChar8 *), cmpstringp);
+    if (files->num)
+        qsort(files->strs, files->num, sizeof(FcChar8 *), cmpstringp);
 
     /*
      * Scan file files to build font patterns
@@ -459,7 +460,10 @@ FcDirCacheRead (const FcChar8 *dir, FcBool force, FcConfig *config)
 
     /* Not using existing cache file, construct new cache */
     if (!cache)
+    {
+	FcDirCacheDeleteUUID (dir, config);
 	cache = FcDirCacheScan (dir, config);
+    }
     FcConfigDestroy (config);
 
     return cache;

@@ -32,6 +32,7 @@
 #include FT_FREETYPE_H
 #include FT_ADVANCES_H
 #include FT_TRUETYPE_TABLES_H
+#include FT_TRUETYPE_TAGS_H
 #include FT_SFNT_NAMES_H
 #include FT_TRUETYPE_IDS_H
 #include FT_TYPE1_TABLES_H
@@ -46,36 +47,6 @@
 
 #include "fcfoundry.h"
 #include "ftglue.h"
-
-/*
- * Keep Han languages separated by eliminating languages
- * that the codePageRange bits says aren't supported
- */
-
-static const struct {
-    char    	    bit;
-    const FcChar8   lang[6];
-} FcCodePageRange[] = {
-    { 17,	"ja" },
-    { 18,	"zh-cn" },
-    { 19,	"ko" },
-    { 20,	"zh-tw" },
-};
-
-#define NUM_CODE_PAGE_RANGE (int) (sizeof FcCodePageRange / sizeof FcCodePageRange[0])
-
-FcBool
-FcFreeTypeIsExclusiveLang (const FcChar8  *lang)
-{
-    int	    i;
-
-    for (i = 0; i < NUM_CODE_PAGE_RANGE; i++)
-    {
-	if (FcLangCompare (lang, FcCodePageRange[i].lang) == FcLangEqual)
-	    return FcTrue;
-    }
-    return FcFalse;
-}
 
 typedef struct {
     const FT_UShort	platform_id;
@@ -666,6 +637,16 @@ static const FcChar16 fcMacRomanNonASCIIToUnicode[128] = {
 
 #if USE_ICONV
 #include <iconv.h>
+
+#ifdef _WIN32
+#  ifdef WINICONV_CONST
+#    define FC_ICONV_CONST WINICONV_CONST
+#  endif
+#endif
+#ifndef FC_ICONV_CONST
+#  define FC_ICONV_CONST
+#endif
+
 #endif
 
 /*
@@ -858,8 +839,8 @@ retry:
 	while (in_bytes_left)
 	{
 	    size_t	did = iconv (cd,
-				 &inbuf, &in_bytes_left,
-				 &outbuf, &out_bytes_left);
+				     (FC_ICONV_CONST char **)&inbuf, &in_bytes_left,
+				     &outbuf, &out_bytes_left);
 	    if (did == (size_t) (-1))
 	    {
 		iconv_close (cd);
@@ -1761,6 +1742,9 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
     {
 	char	    psname[256];
 	const char	    *tmp;
+
+	if (instance)
+            FT_Set_Named_Instance (face, id >> 16);
 	tmp = FT_Get_Postscript_Name (face);
 	if (!tmp)
 	{
@@ -1845,36 +1829,7 @@ FcFreeTypeQueryFaceInternal (const FT_Face  face,
 
     if (os2 && os2->version >= 0x0001 && os2->version != 0xffff)
     {
-	unsigned int i;
-	for (i = 0; i < NUM_CODE_PAGE_RANGE; i++)
-	{
-	    FT_ULong	bits;
-	    int		bit;
-	    if (FcCodePageRange[i].bit < 32)
-	    {
-		bits = os2->ulCodePageRange1;
-		bit = FcCodePageRange[i].bit;
-	    }
-	    else
-	    {
-		bits = os2->ulCodePageRange2;
-		bit = FcCodePageRange[i].bit - 32;
-	    }
-	    if (bits & (1U << bit))
-	    {
-		/*
-		 * If the font advertises support for multiple
-		 * "exclusive" languages, then include support
-		 * for any language found to have coverage
-		 */
-		if (exclusiveLang)
-		{
-		    exclusiveLang = 0;
-		    break;
-		}
-		exclusiveLang = FcCodePageRange[i].lang;
-	    }
-	}
+        exclusiveLang = FcLangIsExclusiveFromOs2(os2->ulCodePageRange1, os2->ulCodePageRange2);
     }
 
     if (os2 && os2->version != 0xffff)
@@ -2608,15 +2563,12 @@ FcFreeTypeCharSet (FT_Face face, FcBlanks *blanks FC_UNUSED)
 #endif
     for (o = 0; o < NUM_DECODE; o++)
     {
-	FcChar32        page, off, ucs4;
-	FcCharLeaf      *leaf;
+	FcChar32        ucs4;
 	FT_UInt	 	glyph;
 
 	if (FT_Select_Charmap (face, fcFontEncodings[o]) != 0)
 	    continue;
 
-	page = ~0;
-	leaf = NULL;
 	ucs4 = FT_Get_First_Char (face, &glyph);
 	while (glyph != 0)
 	{
@@ -2633,18 +2585,7 @@ FcFreeTypeCharSet (FT_Face face, FcBlanks *blanks FC_UNUSED)
 	    }
 
 	    if (good)
-	    {
 		FcCharSetAddChar (fcs, ucs4);
-		if ((ucs4 >> 8) != page)
-		{
-		    page = (ucs4 >> 8);
-		    leaf = FcCharSetFindLeafCreate (fcs, ucs4);
-		    if (!leaf)
-			goto bail;
-		}
-		off = ucs4 & 0xff;
-		leaf->map[off >> 5] |= (1U << (off & 0x1f));
-	    }
 
 	    ucs4 = FT_Get_Next_Char (face, ucs4, &glyph);
 	}
@@ -2698,10 +2639,8 @@ FcFreeTypeCharSetAndSpacing (FT_Face face, FcBlanks *blanks FC_UNUSED, int *spac
 }
 
 
-#define TTAG_GPOS  FT_MAKE_TAG( 'G', 'P', 'O', 'S' )
-#define TTAG_GSUB  FT_MAKE_TAG( 'G', 'S', 'U', 'B' )
+/* Graphite Rules Table */
 #define TTAG_SILF  FT_MAKE_TAG( 'S', 'i', 'l', 'f')
-#define TTAG_prep  FT_MAKE_TAG( 'p', 'r', 'e', 'p' )
 
 #define OTLAYOUT_HEAD	    "otlayout:"
 #define OTLAYOUT_HEAD_LEN   9
@@ -2752,7 +2691,7 @@ compareulong (const void *a, const void *b)
 }
 
 static FcBool
-FindTable (FT_Face face, FT_ULong tabletag)
+FindTable (FT_Face face, FT_ULong tabletag, FT_ULong *tablesize)
 {
     FT_Stream  stream = face->stream;
     FT_Error   error;
@@ -2760,7 +2699,7 @@ FindTable (FT_Face face, FT_ULong tabletag)
     if (!stream)
         return FcFalse;
 
-    if (( error = ftglue_face_goto_table( face, tabletag, stream ) ))
+    if (( error = ftglue_face_goto_table( face, tabletag, stream, tablesize ) ))
 	return FcFalse;
 
     return FcTrue;
@@ -2778,7 +2717,7 @@ GetScriptTags(FT_Face face, FT_ULong tabletag, FT_ULong **stags)
     if (!stream)
         return 0;
 
-    if (( error = ftglue_face_goto_table( face, tabletag, stream ) ))
+    if (( error = ftglue_face_goto_table( face, tabletag, stream, NULL ) ))
 	return 0;
 
     base_offset = ftglue_stream_pos ( stream );
@@ -2901,9 +2840,29 @@ bail:
 }
 
 static FcBool
-FcFontHasHint (FT_Face face)
+FcFontHasHint(FT_Face face)
 {
-    return FindTable (face, TTAG_prep);
+    FT_ULong size;
+
+    /* For a workaround of gttools fix-nonhinting.
+     * See https://gitlab.freedesktop.org/fontconfig/fontconfig/-/issues/426
+     */
+    if (FcDebug() & FC_DBG_SCANV)
+    {
+	FT_ULong ret;
+
+	fprintf(stderr, "*** Has hint:\n");
+	fprintf(stderr, "    fpgm table: %s\n",
+		FindTable(face, TTAG_fpgm, NULL) ? "True" : "False");
+	fprintf(stderr, "    cvt table: %s\n",
+		FindTable(face, TTAG_cvt, NULL) ? "True" : "False");
+	fprintf(stderr, "    prep table: %s\n",
+		FindTable(face, TTAG_prep, &ret) ? "True" : "False");
+        fprintf(stderr, "    prep size: %lu\n", ret);
+    }
+    return FindTable(face, TTAG_fpgm, NULL) ||
+	FindTable(face, TTAG_cvt, NULL) ||
+	(FindTable (face, TTAG_prep, &size) && size > 7);
 }
 
 

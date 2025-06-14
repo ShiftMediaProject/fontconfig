@@ -106,8 +106,8 @@ FcDirCacheDeleteUUID (const FcChar8  *dir,
     FcStrFree (target);
 bail:
     FcStrFree (d);
-#endif
     FcConfigDestroy (config);
+#endif
 
     return ret;
 }
@@ -194,8 +194,7 @@ FcDirCacheBasenameMD5 (FcConfig *config, const FcChar8 *dir, FcChar8 cache_base[
     if (key)
 	FcStrFree (key);
 
-    cache_base[0] = '/';
-    hex_hash = cache_base + 1;
+    hex_hash = cache_base;
     for (cnt = 0; cnt < 16; ++cnt)
     {
 	hex_hash[2*cnt  ] = bin2hex[hash[cnt] >> 4];
@@ -587,7 +586,10 @@ FcCacheInsert (FcCache *cache, struct stat *cache_stat)
 
     s = malloc (sizeof (FcCacheSkip) + (level - 1) * sizeof (FcCacheSkip *));
     if (!s)
+    {
+	unlock_cache ();
 	return FcFalse;
+    }
 
     s->cache = cache;
     s->size = cache->size;
@@ -1358,14 +1360,21 @@ FcDirCacheWrite (FcCache *cache, FcConfig *config)
     unsigned int    magic;
     int		    written;
     const FcChar8   *sysroot = FcConfigGetSysRoot (config);
+    FcStrSet	    *cpath;
 
     /*
      * Write it to the first directory in the list which is writable
      */
 
+    cpath = FcStrSetCreateEx (FCSS_GROW_BY_64);
+    if (!cpath)
+	return FcFalse;
     list = FcStrListCreate (config->cacheDirs);
     if (!list)
+    {
+	FcStrSetDestroy (cpath);
 	return FcFalse;
+    }
     while ((test_dir = FcStrListNext (list)))
     {
 	if (d)
@@ -1404,12 +1413,26 @@ FcDirCacheWrite (FcCache *cache, FcConfig *config)
 		FcDirCacheCreateTagFile (d);
 		break;
 	    }
+	    /* Record a path that was supposed to be a cache directory */
+	    FcStrSetAdd (cpath, d);
 	}
     }
     if (!test_dir)
-	fprintf (stderr, "Fontconfig error: No writable cache directories\n");
+    {
+	FcStrList *l;
+	FcChar8 *s;
+
+	l = FcStrListCreate (cpath);
+	fprintf (stderr, "\nFontconfig error: No writable cache directories\n");
+	while ((s = FcStrListNext (l)))
+	{
+	    fprintf (stderr, "\t%s\n", s);
+	}
+	FcStrListDone (l);
+    }
     if (d)
 	FcStrFree (d);
+    FcStrSetDestroy (cpath);
     FcStrListDone (list);
     if (!cache_dir)
 	return FcFalse;

@@ -12,7 +12,7 @@
 # and run ci-fairy generate-template. For details, see
 # https://freedesktop.pages.freedesktop.org/ci-templates/ci-fairy.html#templating-gitlab-ci-yml
 
-.templates_sha: &template_sha d11c0dd4c1c9a69c14b4af9b50cdd12b89d24672
+.templates_sha: &template_sha e195d80f35b45cc73668be3767b923fd76c70ed5
 
 include:
   {% for distro in distributions|sort(attribute="name") %}
@@ -267,7 +267,10 @@ check-ci-script:
     when: always
     expire_in: 5 days
     paths:
+      - build*/doc/fontconfig-user.html
+      - build*/doc/fontconfig-devel.html
       - build*/fc-build.log
+      - build*/config.log
       - build*/fontconfig-*.tar.*
       - build*/test/*log
       - build*/fontconfig*/_build
@@ -328,4 +331,28 @@ check-merge-request:
     reports:
       junit: results.xml
   allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
+pages:
+  stage: deploy
+  script:
+    - |
+      mkdir public || :
+      cp -a build*/doc/fontconfig-user.html build*/doc/fontconfig-devel.html public/
+  artifacts:
+    paths:
+      - public
+  dependencies:
+    - t_fedora:rawhide:autotools shared libxml2
+  needs:
+    - t_fedora:rawhide:autotools shared libxml2
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE != "merge_request_event"
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
