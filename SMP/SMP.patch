@@ -1,98 +1,88 @@
 diff --git a/src/fccfg.c b/src/fccfg.c
-index f62e228..3649b38 100644
+index 8b82b427..6291911d 100644
 --- a/src/fccfg.c
 +++ b/src/fccfg.c
-@@ -2320,12 +2320,14 @@ DllMain (HINSTANCE hinstDLL,
- 	 DWORD     fdwReason,
- 	 LPVOID    lpvReserved)
+@@ -2231,11 +2231,13 @@ DllMain (HINSTANCE hinstDLL,
+          LPVOID    lpvReserved)
  {
-+  WCHAR wide_fontconfig_path[1000];
-   FcChar8 *p;
-+  WCHAR *wp;
+     FcChar8 *p;
++    WCHAR    wide_fontconfig_path[1000];
++    WCHAR   *wp;
  
-   switch (fdwReason) {
-   case DLL_PROCESS_ATTACH:
--      if (!GetModuleFileName ((HMODULE) hinstDLL, (LPCH) fontconfig_path,
--			      sizeof (fontconfig_path)))
-+      if (!GetModuleFileNameW ((HMODULE) hinstDLL, wide_fontconfig_path,
-+			      sizeof (wide_fontconfig_path) / sizeof(WCHAR)))
- 	  break;
+     switch (fdwReason) {
+     case DLL_PROCESS_ATTACH:
+-	if (!GetModuleFileName ((HMODULE)hinstDLL, (LPCH)fontconfig_path,
+-	                        sizeof (fontconfig_path)))
++	if (!GetModuleFileNameW ((HMODULE)hinstDLL, wide_fontconfig_path,
++	                         sizeof (wide_fontconfig_path) / sizeof (WCHAR)))
+ 	    break;
  
-       /* If the fontconfig DLL is in a "bin" or "lib" subfolder,
-@@ -2333,14 +2335,16 @@ DllMain (HINSTANCE hinstDLL,
-        * "etc/fonts" in there as FONTCONFIG_PATH. Otherwise use the
-        * folder where the DLL is as FONTCONFIG_PATH.
-        */
--      p = (FcChar8 *) strrchr ((const char *) fontconfig_path, '\\');
--      if (p)
-+      wp = wcsrchr (wide_fontconfig_path, L'\\');
-+      if (wp)
-       {
--	  *p = '\0';
--	  p = (FcChar8 *) strrchr ((const char *) fontconfig_path, '\\');
--	  if (p && (FcStrCmpIgnoreCase (p + 1, (const FcChar8 *) "bin") == 0 ||
--		    FcStrCmpIgnoreCase (p + 1, (const FcChar8 *) "lib") == 0))
--	      *p = '\0';
-+	  *wp = L'\0';
-+      wp = wcsrchr (wide_fontconfig_path, L'\\');
-+	  if (wp && (_wcsicmp (wp + 1, L"bin") == 0 ||
-+          _wcsicmp (wp + 1, L"lib") == 0))
-+	      *wp = L'\0';
-+      if (WideCharToMultiByte (CP_UTF8, 0, wide_fontconfig_path, -1, (LPSTR) fontconfig_path, 1000, NULL, NULL) == 0)
-+      break;
- 	  strcat ((char *) fontconfig_instprefix, (char *) fontconfig_path);
- 	  strcat ((char *) fontconfig_path, "\\etc\\fonts");
-       }
-@@ -2401,7 +2405,7 @@ FcConfigFileExists (const FcChar8 *dir, const FcChar8 *file)
- #endif
-     strcat ((char *) path, (char *) file);
+ 	/* If the fontconfig DLL is in a "bin" or "lib" subfolder,
+@@ -2243,13 +2245,15 @@ DllMain (HINSTANCE hinstDLL,
+ 	 * "etc/fonts" in there as FONTCONFIG_PATH. Otherwise use the
+ 	 * folder where the DLL is as FONTCONFIG_PATH.
+ 	 */
+-	p = (FcChar8 *)strrchr ((const char *)fontconfig_path, '\\');
+-	if (p) {
+-	    *p = '\0';
+-	    p = (FcChar8 *)strrchr ((const char *)fontconfig_path, '\\');
+-	    if (p && (FcStrCmpIgnoreCase (p + 1, (const FcChar8 *)"bin") == 0 ||
+-	              FcStrCmpIgnoreCase (p + 1, (const FcChar8 *)"lib") == 0))
+-		*p = '\0';
++	wp = wcsrchr (wide_fontconfig_path, L'\\');
++	if (wp) {
++	    *wp = L'\0';
++	    wp = wcsrchr (wide_fontconfig_path, L'\\');
++	    if (wp && (_wcsicmp (wp + 1, L"bin") == 0 ||
++	               _wcsicmp (wp + 1, L"lib") == 0))
++		*wp = L'\0';
++	    if (WideCharToMultiByte (CP_UTF8, 0, wide_fontconfig_path, -1, (LPSTR)fontconfig_path, 1000, NULL, NULL) == 0)
++		break;
+ 	    strcat ((char *)fontconfig_instprefix, (char *)fontconfig_path);
+ 	    strcat ((char *)fontconfig_path, "\\etc\\fonts");
+ 	} else
+@@ -2361,12 +2365,15 @@ FcConfigGetPath (void)
  
--    if (access ((char *) path, R_OK) == 0)
-+    if (access (path, R_OK) == 0)
- 	return path;
- 
-     FcStrFree (path);
-@@ -2457,11 +2461,14 @@ FcConfigGetPath (void)
  #ifdef _WIN32
- 	if (fontconfig_path[0] == '\0')
- 	{
--		char *p;
--		if(!GetModuleFileName(NULL, (LPCH) fontconfig_path, sizeof(fontconfig_path)))
-+        WCHAR wide_fontconfig_path[1000];
-+        WCHAR *p;
-+		if(!GetModuleFileNameW (NULL, wide_fontconfig_path, sizeof(wide_fontconfig_path) / sizeof(wide_fontconfig_path[0])))
- 			goto bail1;
--		p = strrchr ((const char *) fontconfig_path, '\\');
--		if (p) *p = '\0';
-+		p = wcsrchr(wide_fontconfig_path, L'\\');
-+		if (p) *p = L'\0';
-+        if (WideCharToMultiByte (CP_UTF8, 0, wide_fontconfig_path, -1, (LPSTR) fontconfig_path, 1000, NULL, NULL) == 0)
-+            goto bail1;
- 		strcat ((char *) fontconfig_path, "\\fonts");
- 	}
+     if (fontconfig_path[0] == '\0') {
+-	char *p;
+-	if (!GetModuleFileName (NULL, (LPCH)fontconfig_path, sizeof (fontconfig_path)))
++	WCHAR   wide_fontconfig_path[1000];
++	WCHAR *p;
++	if (!GetModuleFileNameW (NULL, wide_fontconfig_path, sizeof (wide_fontconfig_path) / sizeof (wide_fontconfig_path[0])))
+ 	    goto bail1;
+-	p = strrchr ((const char *)fontconfig_path, '\\');
++	p = wcsrchr (wide_fontconfig_path, L'\\');
+ 	if (p)
+-	    *p = '\0';
++	    *p = L'\0';
++	if (WideCharToMultiByte (CP_UTF8, 0, wide_fontconfig_path, -1, (LPSTR)fontconfig_path, 1000, NULL, NULL) == 0)
++	    goto bail1;
+ 	strcat ((char *)fontconfig_path, "\\fonts");
+     }
  #endif
 diff --git a/src/fccompat.c b/src/fccompat.c
-index 65ac84c..18b33f2 100644
+index 9ec84103..624bcb60 100644
 --- a/src/fccompat.c
 +++ b/src/fccompat.c
-@@ -296,7 +296,7 @@ FcReadLink (const FcChar8 *pathname,
+@@ -284,7 +284,7 @@ FcReadLink (const FcChar8 *pathname,
  struct DIR {
-     struct dirent d_ent;
-     HANDLE handle;
+     struct dirent   d_ent;
+     HANDLE          handle;
 -    WIN32_FIND_DATA fdata;
 +    WIN32_FIND_DATAW fdata;
-     FcBool valid;
+     FcBool          valid;
  };
  
-@@ -306,6 +306,7 @@ FcCompatOpendirWin32 (const char *dirname)
+@@ -294,6 +294,7 @@ FcCompatOpendirWin32 (const char *dirname)
      size_t len;
-     char *name;
-     DIR *dir;
-+    WCHAR wide_buffer[FC_MAX_FILE_LEN];
+     char  *name;
+     DIR   *dir;
++    WCHAR  wide_buffer[FC_MAX_FILE_LEN];
  
      dir = calloc (1, sizeof (struct DIR));
      if (dir == NULL)
-@@ -323,7 +324,9 @@ FcCompatOpendirWin32 (const char *dirname)
+@@ -310,7 +311,9 @@ FcCompatOpendirWin32 (const char *dirname)
      name[len++] = '*';
      name[len] = '\0';
  
@@ -103,56 +93,56 @@ index 65ac84c..18b33f2 100644
  
      free (name);
  
-@@ -345,10 +348,16 @@ FcCompatOpendirWin32 (const char *dirname)
+@@ -331,10 +334,16 @@ FcCompatOpendirWin32 (const char *dirname)
  FcPrivate struct dirent *
  FcCompatReaddirWin32 (DIR *dir)
  {
 +    size_t len;
 +
      if (dir->valid != FcTrue)
-         return NULL;
+ 	return NULL;
  
 -    dir->d_ent.d_name = dir->fdata.cFileName;
-+    len = WideCharToMultiByte(CP_UTF8, 0, dir->fdata.cFileName, -1, NULL, 0, NULL, NULL);
-+    dir->d_ent.d_name = malloc(len + 3);
++    len = WideCharToMultiByte (CP_UTF8, 0, dir->fdata.cFileName, -1, NULL, 0, NULL, NULL);
++    dir->d_ent.d_name = malloc (len + 3);
 +
-+    if(WideCharToMultiByte(CP_UTF8, 0, dir->fdata.cFileName, -1, (LPSTR)dir->d_ent.d_name, len+3, NULL, NULL) == 0)
-+        return NULL;
++    if (WideCharToMultiByte (CP_UTF8, 0, dir->fdata.cFileName, -1, (LPSTR)dir->d_ent.d_name, len + 3, NULL, NULL) == 0)
++    return NULL;
  
      if ((dir->fdata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
-         dir->d_ent.d_type = DT_DIR;
-@@ -357,7 +366,7 @@ FcCompatReaddirWin32 (DIR *dir)
+ 	dir->d_ent.d_type = DT_DIR;
+@@ -343,7 +352,7 @@ FcCompatReaddirWin32 (DIR *dir)
      else
-         dir->d_ent.d_type = DT_UNKNOWN;
+ 	dir->d_ent.d_type = DT_UNKNOWN;
  
 -    if (!FindNextFile (dir->handle, &dir->fdata))
 +    if (!FindNextFileW (dir->handle, &dir->fdata))
-         dir->valid = FcFalse;
+ 	dir->valid = FcFalse;
  
      return &dir->d_ent;
 diff --git a/src/fcdefault.c b/src/fcdefault.c
-index d00c494..3d7d24e 100644
+index b3aed4d5..a2f257cd 100644
 --- a/src/fcdefault.c
 +++ b/src/fcdefault.c
-@@ -127,29 +127,35 @@ retry:
-     if (!prgname)
-     {
+@@ -121,27 +121,33 @@ retry:
+     prgname = fc_atomic_ptr_get (&default_prgname);
+     if (!prgname) {
  #ifdef _WIN32
--	char buf[MAX_PATH+1];
-+	WCHAR buf[MAX_PATH];
- 
+-	char buf[MAX_PATH + 1];
+-
 -	/* TODO This is ASCII-only; fix it. */
--	if (GetModuleFileNameA (GetModuleHandle (NULL), buf, sizeof (buf) / sizeof (buf[0])) > 0)
+-	if (GetModuleFileNameA (GetModuleHandle (NULL), buf, sizeof (buf) / sizeof (buf[0])) > 0) {
+-	    char        *p;
++	WCHAR buf[MAX_PATH];
++
 +# if !defined(WINAPI_FAMILY) || !(WINAPI_FAMILY == WINAPI_FAMILY_PC_APP || WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
-+	if (GetModuleFileNameW (GetModuleHandle (NULL), buf, sizeof (buf) / sizeof (buf[0])) > 0)
++	if (GetModuleFileNameW (GetModuleHandle (NULL), buf, sizeof (buf) / sizeof (buf[0])) > 0) {
 +# else
-+	if (GetModuleFileNameW (GetCurrentProcess (), buf, sizeof(buf) / sizeof(buf[0])) > 0)
++	if (GetModuleFileNameW (GetCurrentProcess(), buf, sizeof (buf) / sizeof (buf[0])) > 0) {
 +# endif
- 	{
--	    char *p;
-+	    WCHAR *p;
++	    WCHAR       *p;
  	    unsigned int len;
-+        char buf2[MAX_PATH];
++	    char         buf2[MAX_PATH];
  
 -	    p = strrchr (buf, '\\');
 +	    p = wcsrchr (buf, L'\\');
@@ -164,37 +154,35 @@ index d00c494..3d7d24e 100644
 -	    len = strlen (p);
 +	    len = wcslen (p);
  
--	    if (len > 4 && 0 == strcmp (p + len - 4, ".exe"))
-+	    if (len > 4 && 0 == wcscmp (p + len - 4, L".exe"))
- 	    {
+-	    if (len > 4 && 0 == strcmp (p + len - 4, ".exe")) {
++	    if (len > 4 && 0 == wcscmp (p + len - 4, L".exe")) {
  		len -= 4;
 -		buf[len] = '\0';
 +		buf[len] = L'\0';
  	    }
--
+ 
 -	    prgname = FcStrdup (p);
-+        if (WideCharToMultiByte (CP_UTF8, 0, p, len, buf2, MAX_PATH, NULL, NULL) != 0)
-+        {
-+        prgname = FcStrdup(buf2);
-+        }
++	    if (WideCharToMultiByte (CP_UTF8, 0, p, len, buf2, MAX_PATH, NULL, NULL) != 0) {
++		prgname = FcStrdup (buf2);
++	    }
  	}
- #elif defined (HAVE_GETPROGNAME)
- 	const char *q = getprogname ();
+ #elif defined(HAVE_GETPROGNAME)
+ 	const char *q = getprogname();
 diff --git a/src/fcformat.c b/src/fcformat.c
-index ae8c59c..b6d9834 100644
+index d99b0c15..5d050d21 100644
 --- a/src/fcformat.c
 +++ b/src/fcformat.c
-@@ -271,7 +271,7 @@ interpret_builtin (FcFormatContext *c,
- 		   FcPattern       *pat,
- 		   FcStrBuf        *buf)
+@@ -256,7 +256,7 @@ interpret_builtin (FcFormatContext *c,
+                    FcPattern       *pat,
+                    FcStrBuf        *buf)
  {
--    FcChar8       *new_str;
-+    FcChar8       *new_str = NULL;
-     FcBool         ret;
+-    FcChar8 *new_str;
++    FcChar8 *new_str = NULL;
+     FcBool   ret;
  
      if (!expect_char (c, '=') ||
-@@ -971,7 +971,7 @@ interpret_convert (FcFormatContext *c,
- 		   int              start)
+@@ -890,7 +890,7 @@ interpret_convert (FcFormatContext *c,
+                    int              start)
  {
      const FcChar8 *str;
 -    FcChar8       *new_str;
@@ -203,138 +191,133 @@ index ae8c59c..b6d9834 100644
      FcChar8        buf_static[8192];
      FcBool         ret;
 diff --git a/src/fcint.h b/src/fcint.h
-index 78cee54..40adae6 100644
+index 334cde0b..b3c34e32 100644
 --- a/src/fcint.h
 +++ b/src/fcint.h
-@@ -67,10 +67,6 @@
+@@ -69,10 +69,6 @@
  
  #ifdef _WIN32
  #  include "fcwindows.h"
--typedef UINT (WINAPI *pfnGetSystemWindowsDirectory)(LPSTR, UINT);
--typedef HRESULT (WINAPI *pfnSHGetFolderPathA)(HWND, int, HANDLE, DWORD, LPSTR);
+-typedef UINT (WINAPI *pfnGetSystemWindowsDirectory) (LPSTR, UINT);
+-typedef HRESULT (WINAPI *pfnSHGetFolderPathA) (HWND, int, HANDLE, DWORD, LPSTR);
 -extern pfnGetSystemWindowsDirectory pGetSystemWindowsDirectory;
--extern pfnSHGetFolderPathA pSHGetFolderPathA;
+-extern pfnSHGetFolderPathA          pSHGetFolderPathA;
  #  define FC_SEARCH_PATH_SEPARATOR ';'
  #  define FC_DIR_SEPARATOR         '\\'
  #  define FC_DIR_SEPARATOR_S       "\\"
 diff --git a/src/fcstat.c b/src/fcstat.c
-index 4f69eae..231b15d 100644
+index 9b54e2b4..531982de 100644
 --- a/src/fcstat.c
 +++ b/src/fcstat.c
-@@ -78,11 +78,15 @@ int
+@@ -79,11 +79,14 @@ int
  FcStat (const FcChar8 *file, struct stat *statb)
  {
      WIN32_FILE_ATTRIBUTE_DATA wfad;
-+    WCHAR wide_full_path_name[MAX_PATH];
-     char full_path_name[MAX_PATH];
--    char *basename;
-+    WCHAR *basename;
-     DWORD rc;
-+    WCHAR wide_file[MAX_PATH];
++    WCHAR                     wide_full_path_name[MAX_PATH];
+     char                      full_path_name[MAX_PATH];
+-    char                     *basename;
+-    DWORD                     rc;
++    WCHAR                    *basename;
++    DWORD                     rc;WCHAR wide_file[MAX_PATH];
 +    if (MultiByteToWideChar (CP_UTF8, 0, file, -1, wide_file, MAX_PATH) == 0)
 +    return -1;
  
--    if (!GetFileAttributesEx ((LPCSTR) file, GetFileExInfoStandard, &wfad))
+-    if (!GetFileAttributesEx ((LPCSTR)file, GetFileExInfoStandard, &wfad))
 +    if (!GetFileAttributesExW (wide_file, GetFileExInfoStandard, &wfad))
  	return -1;
  
      statb->st_dev = 0;
-@@ -91,11 +95,15 @@ FcStat (const FcChar8 *file, struct stat *statb)
+@@ -92,11 +95,15 @@ FcStat (const FcChar8 *file, struct stat *statb)
       * Call GetLongPathName() to get the spelling of the path name as it
       * is on disk.
       */
--    rc = GetFullPathName ((LPCSTR) file, sizeof (full_path_name), full_path_name, &basename);
+-    rc = GetFullPathName ((LPCSTR)file, sizeof (full_path_name), full_path_name, &basename);
 -    if (rc == 0 || rc > sizeof (full_path_name))
-+    rc = GetFullPathNameW (wide_file, sizeof (wide_full_path_name) / sizeof(wide_full_path_name[0]), wide_full_path_name, &basename);
++    rc = GetFullPathNameW (wide_file, sizeof (wide_full_path_name) / sizeof (wide_full_path_name[0]), wide_full_path_name, &basename);
 +    if (rc == 0 || rc > sizeof (wide_full_path_name))
  	return -1;
  
 -    rc = GetLongPathName (full_path_name, full_path_name, sizeof (full_path_name));
-+    rc = GetLongPathNameW (wide_full_path_name, wide_full_path_name, sizeof (wide_full_path_name) / sizeof(wide_full_path_name[0]));
++    rc = GetLongPathNameW (wide_full_path_name, wide_full_path_name, sizeof (wide_full_path_name) / sizeof (wide_full_path_name[0]));
 +    if (rc == 0 || rc > sizeof(wide_full_path_name))
 +    return -1;
 +    if (WideCharToMultiByte (CP_UTF8, 0, wide_full_path_name, rc, full_path_name, MAX_PATH, NULL, NULL) == 0)
 +    return -1;
-     statb->st_ino = FcStringHash ((const FcChar8 *) full_path_name);
+     statb->st_ino = FcStringHash ((const FcChar8 *)full_path_name);
  
      statb->st_mode = _S_IREAD | _S_IWRITE;
 diff --git a/src/fcstr.c b/src/fcstr.c
-index 8f756af..6760128 100644
+index 3bacec76..2e31e69e 100644
 --- a/src/fcstr.c
 +++ b/src/fcstr.c
-@@ -1173,27 +1173,27 @@ FcStrCanonAbsoluteFilename (const FcChar8 *s)
+@@ -1126,24 +1126,24 @@ FcStrCanonAbsoluteFilename (const FcChar8 *s)
   * Convert '\\' to '/' , remove double '/'
   */
  static void
 -FcConvertDosPath (char *str)
 +FcConvertDosPath (WCHAR *str)
  {
--  size_t len = strlen (str);
--  char *p = str;
--  char *dest = str;
--  char *end = str + len;
--  char last = 0;
-+  size_t len = wcslen (str);
-+  WCHAR *p = str;
-+  WCHAR *dest = str;
-+  WCHAR *end = str + len;
-+  WCHAR last = 0;
+-    size_t len = strlen (str);
+-    char  *p = str;
+-    char  *dest = str;
+-    char  *end = str + len;
+-    char   last = 0;
++    size_t len = wcslen (str);
++    WCHAR *p = str;
++    WCHAR *dest = str;
++    WCHAR *end = str + len;
++    WCHAR last = 0;
  
--  if (*p == '\\')
-+  if (*p == L'\\')
-     {
--      *p = '/';
-+      *p = L'/';
-       p++;
-       dest++;
-     }
-   while (p < end)
-     {
--      if (*p == '\\')
+-    if (*p == '\\') {
 -	*p = '/';
-+      if (*p == L'\\')
++    if (*p == L'\\') {
 +	*p = L'/';
+ 	p++;
+ 	dest++;
+     }
+     while (p < end) {
+-	if (*p == '\\')
+-	    *p = '/';
++	if (*p == L'\\')
++	    *p = L'/';
  
--      if (*p != '/'
--	  || last != '/')
-+      if (*p != L'/'
-+	  || last != L'/')
- 	{
- 	  *dest++ = *p;
+-	if (*p != '/' || last != '/') {
++	if (*p != L'/' || last != L'/') {
+ 	    *dest++ = *p;
  	}
-@@ -1211,13 +1211,26 @@ FcStrCanonFilename (const FcChar8 *s)
+ 
+@@ -1160,13 +1160,24 @@ FcStrCanonFilename (const FcChar8 *s)
  {
  #ifdef _WIN32
      FcChar8 full[FC_MAX_FILE_LEN + 2];
--    int size = GetFullPathName ((LPCSTR) s, sizeof (full) -1,
--				(LPSTR) full, NULL);
+-    int     size = GetFullPathName ((LPCSTR)s, sizeof (full) - 1,
+-                                    (LPSTR)full, NULL);
 -
-+    WCHAR wide_full[FC_MAX_FILE_LEN + 2];
-+    WCHAR wide_s[FC_MAX_FILE_LEN + 2];
-+    if (MultiByteToWideChar (CP_UTF8, 0, (LPSTR) s, -1, wide_s, FC_MAX_FILE_LEN) == 0)
-+    perror ("GetFullPathName");
-+    int size = GetFullPathNameW (wide_s, sizeof (wide_full) / sizeof(wide_full[0]) -1,
-+				wide_full, NULL);
-+
++    WCHAR   wide_full[FC_MAX_FILE_LEN + 2];
++    WCHAR  wide_s[FC_MAX_FILE_LEN + 2];
++    if (MultiByteToWideChar (CP_UTF8, 0, (LPSTR)s, -1, wide_s, FC_MAX_FILE_LEN) == 0)
++        perror ("GetFullPathName");
++    int size = GetFullPathNameW (wide_s, sizeof (wide_full) / sizeof (wide_full[0]) - 1, wide_full, NULL);
 +    // WideCharToMultiByte below needs an input buffer size that includes nul terminator,
 +    // otherwise it doesn't include a nul terminator in the output (full).
 +    // GetFullPathNameW returns a size that doesn't include the nul terminator.
 +    // Use size_bytes to hold this value, but only if size is a valid positive length.
 +    int size_bytes = size;
      if (size == 0)
- 	perror ("GetFullPathName");
+-	perror ("GetFullPathName");
++	    perror ("GetFullPathName");
 +    else if (size > 0)
 +       size_bytes++;
  
--    FcConvertDosPath ((char *) full);
+-    FcConvertDosPath ((char *)full);
 +    FcConvertDosPath (wide_full);
 +    if (WideCharToMultiByte (CP_UTF8, 0, wide_full, size_bytes, (LPSTR) full, FC_MAX_FILE_LEN, NULL, NULL) == 0)
-+    perror("GetFullPathName");
++        perror("GetFullPathName");
      return FcStrCanonAbsoluteFilename (full);
  #else
      if (s[0] == '/')
 diff --git a/src/fcwindows.h b/src/fcwindows.h
-index 23331f5..a575729 100644
+index 4c02c9bd..579b9c92 100644
 --- a/src/fcwindows.h
 +++ b/src/fcwindows.h
 @@ -38,7 +38,9 @@
@@ -349,173 +332,162 @@ index 23331f5..a575729 100644
  #  define WIN32_LEAN_AND_MEAN
  #  define WIN32_EXTRA_LEAN
 diff --git a/src/fcxml.c b/src/fcxml.c
-index c700f64..680f3b7 100644
+index d2e25fcf..710ca354 100644
 --- a/src/fcxml.c
 +++ b/src/fcxml.c
-@@ -57,10 +57,9 @@
+@@ -58,10 +58,9 @@
  #endif /* ENABLE_LIBXML2 */
  
  #ifdef _WIN32
-+#include <Shlobj.h>
- #include <mbstring.h>
- extern FcChar8 fontconfig_instprefix[];
++#  include <Shlobj.h>
+ #  include <mbstring.h>
+ extern FcChar8               fontconfig_instprefix[];
 -pfnGetSystemWindowsDirectory pGetSystemWindowsDirectory = NULL;
--pfnSHGetFolderPathA pSHGetFolderPathA = NULL;
+-pfnSHGetFolderPathA          pSHGetFolderPathA = NULL;
  static void
- _ensureWin32GettersReady();
+ _ensureWin32GettersReady ();
  #endif
-@@ -1344,9 +1343,10 @@ _get_real_paths_from_prefix(FcConfigParse *parse, const FcChar8 *path, const FcC
+@@ -1300,9 +1299,10 @@ _get_real_paths_from_prefix (FcConfigParse *parse, const FcChar8 *path, const Fc
+     }
  #else
-     if (strcmp ((const char *) path, "CUSTOMFONTDIR") == 0)
-     {
+     if (strcmp ((const char *)path, "CUSTOMFONTDIR") == 0) {
 -	FcChar8 *p;
 +	WCHAR *p;
-+    WCHAR wide_buffer[1000];
++	WCHAR  wide_buffer[1000];
  	path = buffer;
--	if (!GetModuleFileName (NULL, (LPCH) buffer, sizeof (buffer) - 20))
-+	if (!GetModuleFileNameW (NULL, wide_buffer, sizeof (buffer) / sizeof (buffer[0]) - 20))
- 	{
+-	if (!GetModuleFileName (NULL, (LPCH)buffer, sizeof (buffer) - 20)) {
++	if (!GetModuleFileNameW (NULL, wide_buffer, sizeof (buffer) / sizeof (buffer[0]) - 20)) {
  	    FcConfigMessage (parse, FcSevereError, "GetModuleFileName failed");
  	    return NULL;
-@@ -1357,47 +1357,63 @@ _get_real_paths_from_prefix(FcConfigParse *parse, const FcChar8 *path, const FcC
+ 	}
+@@ -1312,40 +1312,58 @@ _get_real_paths_from_prefix (FcConfigParse *parse, const FcChar8 *path, const Fc
  	 * pages have characters with backslash as the second
  	 * byte.
  	 */
 -	p = _mbsrchr (path, '\\');
--	if (p) *p = '\0';
 +	p = wcsrchr (wide_buffer, L'\\');
-+	if (p) *p = L'\0';
-+    if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR) buffer, 1000, NULL, NULL) == 0)
-+	return NULL;
- 	strcat ((char *) path, "\\fonts");
-     }
-     else if (strcmp ((const char *) path, "APPSHAREFONTDIR") == 0)
-     {
+ 	if (p)
+-	    *p = '\0';
++	    *p = L'\0';
++	if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR)buffer, 1000, NULL, NULL) == 0)
++	    return NULL;
+ 	strcat ((char *)path, "\\fonts");
+     } else if (strcmp ((const char *)path, "APPSHAREFONTDIR") == 0) {
 -	FcChar8 *p;
 +	WCHAR *p;
-+    WCHAR wide_buffer[1000];
++	WCHAR  wide_buffer[1000];
  	path = buffer;
--	if (!GetModuleFileName (NULL, (LPCH) buffer, sizeof (buffer) - 20))
-+	if (!GetModuleFileNameW (NULL, wide_buffer, sizeof (buffer) / sizeof (buffer[0]) - 20))
- 	{
+-	if (!GetModuleFileName (NULL, (LPCH)buffer, sizeof (buffer) - 20)) {
++	if (!GetModuleFileNameW (NULL, wide_buffer, sizeof (buffer) / sizeof (buffer[0]) - 20)) {
  	    FcConfigMessage (parse, FcSevereError, "GetModuleFileName failed");
--	    return NULL;
-+		return NULL;
- 	}
--	p = _mbsrchr (path, '\\');
--	if (p) *p = '\0';
-+    p = wcsrchr(wide_buffer, L'\\');
-+	if (p) *p = L'\0';
-+    if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR) buffer, 1000, NULL, NULL) == 0)
-+    return NULL;
- 	strcat ((char *) path, "\\..\\share\\fonts");
-     }
-     else if (strcmp ((const char *) path, "WINDOWSUSERFONTDIR") == 0)
-     {
-         path = buffer;
--        if (!(pSHGetFolderPathA && SUCCEEDED(pSHGetFolderPathA(NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, (char *) buffer))))
-+        WCHAR wide_buffer[MAX_PATH + 1];
-+# if !defined(WINAPI_FAMILY) || !(WINAPI_FAMILY == WINAPI_FAMILY_PC_APP || WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
-+	    if (!(SUCCEEDED(SHGetFolderPathW (NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, wide_buffer))))
-+# endif
-         {
--            FcConfigMessage(parse, FcSevereError, "SHGetFolderPathA failed");
-+            FcConfigMessage(parse, FcSevereError, "SHGetFolderPath failed");
-             return NULL;
-         }
-+	    if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR) path, MAX_PATH, NULL, NULL) == 0)
-+	    return NULL;
-         strcat((char *) path, "\\Microsoft\\Windows\\Fonts");
-     }
-     else if (strcmp ((const char *) path, "WINDOWSFONTDIR") == 0)
-     {
- 	int rc;
-+    WCHAR wide_buffer[1000];
- 	path = buffer;
--	_ensureWin32GettersReady();
--	rc = pGetSystemWindowsDirectory ((LPSTR) buffer, sizeof (buffer) - 20);
--	if (rc == 0 || rc > sizeof (buffer) - 20)
-+#   if !defined(WINAPI_FAMILY) || !(WINAPI_FAMILY == WINAPI_FAMILY_PC_APP || WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
-+	rc = GetSystemWindowsDirectoryW (wide_buffer, sizeof (wide_buffer) / sizeof (wide_buffer[0]) - 20);
-+	if (rc == 0 || rc > sizeof(wide_buffer) / sizeof(wide_buffer[0]) - 20)
- 	{
- 	    FcConfigMessage (parse, FcSevereError, "GetSystemWindowsDirectory failed");
  	    return NULL;
  	}
-+	if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, rc, (LPSTR) buffer, 1000, NULL, NULL) == 0)
-+		return NULL;
- 	if (path [strlen ((const char *) path) - 1] != '\\')
- 	    strcat ((char *) path, "\\");
- 	strcat ((char *) path, "fonts");
-+#else
-+	path = "C:\\Windows\\fonts";
-+#endif
-     }
-     else
-     {
-@@ -2417,7 +2433,7 @@ FcParseCacheDir (FcConfigParse *parse)
-     else if (strcmp ((const char *) data, "WINDOWSTEMPDIR_FONTCONFIG_CACHE") == 0)
-     {
- 	int rc;
--
-+    WCHAR wide_buffer[800];
- 	FcStrFree (data);
- 	data = malloc (1000);
- 	if (!data)
-@@ -2425,12 +2441,14 @@ FcParseCacheDir (FcConfigParse *parse)
- 	    FcConfigMessage (parse, FcSevereError, "out of memory");
- 	    goto bail;
- 	}
--	rc = GetTempPath (800, (LPSTR) data);
-+	rc = GetTempPathW (800, wide_buffer);
- 	if (rc == 0 || rc > 800)
- 	{
- 	    FcConfigMessage (parse, FcSevereError, "GetTempPath failed");
- 	    goto bail;
- 	}
-+    if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, rc, (LPSTR) data, 1000, NULL, NULL) == 0)
-+    goto bail;
- 	if (data [strlen ((const char *) data) - 1] != '\\')
- 	    strcat ((char *) data, "\\");
- 	strcat ((char *) data, "fontconfig\\cache");
-@@ -2438,13 +2456,18 @@ FcParseCacheDir (FcConfigParse *parse)
-     else if (strcmp ((const char *) data, "LOCAL_APPDATA_FONTCONFIG_CACHE") == 0)
-     {
- 	char szFPath[MAX_PATH + 1];
-+    WCHAR wide_buffer[MAX_PATH + 1];
- 	size_t len;
- 
--	if (!(pSHGetFolderPathA && SUCCEEDED(pSHGetFolderPathA(NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, szFPath))))
+-	p = _mbsrchr (path, '\\');
++	p = wcsrchr (wide_buffer, L'\\');
+ 	if (p)
+-	    *p = '\0';
++	    *p = L'\0';
++	if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR)buffer, 1000, NULL, NULL) == 0)
++	    return NULL;
+ 	strcat ((char *)path, "\\..\\share\\fonts");
+     } else if (strcmp ((const char *)path, "WINDOWSUSERFONTDIR") == 0) {
+ 	path = buffer;
+-	if (!(pSHGetFolderPathA && SUCCEEDED (pSHGetFolderPathA (NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, (char *)buffer)))) {
+-	    FcConfigMessage (parse, FcSevereError, "SHGetFolderPathA failed");
++	WCHAR wide_buffer[MAX_PATH + 1];
 +# if !defined(WINAPI_FAMILY) || !(WINAPI_FAMILY == WINAPI_FAMILY_PC_APP || WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
 +	if (!(SUCCEEDED(SHGetFolderPathW (NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, wide_buffer))))
 +# endif
- 	{
++	{
++	    FcConfigMessage (parse, FcSevereError, "SHGetFolderPath failed");
+ 	    return NULL;
+ 	}
++	if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR)path, MAX_PATH, NULL, NULL) == 0)
++	    return NULL;
+ 	strcat ((char *)path, "\\Microsoft\\Windows\\Fonts");
+     } else if (strcmp ((const char *)path, "WINDOWSFONTDIR") == 0) {
+ 	int rc;
++	WCHAR wide_buffer[1000];
+ 	path = buffer;
+ 	_ensureWin32GettersReady();
+-	rc = pGetSystemWindowsDirectory ((LPSTR)buffer, sizeof (buffer) - 20);
+-	if (rc == 0 || rc > sizeof (buffer) - 20) {
++#   if !defined(WINAPI_FAMILY) || !(WINAPI_FAMILY == WINAPI_FAMILY_PC_APP || WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
++	rc = GetSystemWindowsDirectoryW (wide_buffer, sizeof (wide_buffer) / sizeof (wide_buffer[0]) - 20);
++	if (rc == 0 || rc > sizeof(wide_buffer) / sizeof(wide_buffer[0]) - 20) {
+ 	    FcConfigMessage (parse, FcSevereError, "GetSystemWindowsDirectory failed");
+ 	    return NULL;
+ 	}
++	if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, rc, (LPSTR)buffer, 1000, NULL, NULL) == 0)
++	    return NULL;
+ 	if (path[strlen ((const char *)path) - 1] != '\\')
+ 	    strcat ((char *)path, "\\");
+ 	strcat ((char *)path, "fonts");
++#else
++	path = "C:\\Windows\\fonts";
++#endif
+     } else {
+ 	if (!prefix) {
+ 	    if (!FcStrIsAbsoluteFilename (path) && path[0] != '~')
+@@ -2261,7 +2279,8 @@ FcParseCacheDir (FcConfigParse *parse)
+ 	FcStrFree (data);
+ 	data = prefix;
+     } else if (strcmp ((const char *)data, "WINDOWSTEMPDIR_FONTCONFIG_CACHE") == 0) {
+-	int rc;
++	int   rc;
++	WCHAR wide_buffer[800];
+ 
+ 	FcStrFree (data);
+ 	data = malloc (1000);
+@@ -2269,22 +2288,30 @@ FcParseCacheDir (FcConfigParse *parse)
+ 	    FcConfigMessage (parse, FcSevereError, "out of memory");
+ 	    goto bail;
+ 	}
+-	rc = GetTempPath (800, (LPSTR)data);
++	rc = GetTempPathW (800, wide_buffer);
+ 	if (rc == 0 || rc > 800) {
+ 	    FcConfigMessage (parse, FcSevereError, "GetTempPath failed");
+ 	    goto bail;
+ 	}
++	if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, rc, (LPSTR)data, 1000, NULL, NULL) == 0)
++		goto bail;
+ 	if (data[strlen ((const char *)data) - 1] != '\\')
+ 	    strcat ((char *)data, "\\");
+ 	strcat ((char *)data, "fontconfig\\cache");
+     } else if (strcmp ((const char *)data, "LOCAL_APPDATA_FONTCONFIG_CACHE") == 0) {
+ 	char   szFPath[MAX_PATH + 1];
++	WCHAR  wide_buffer[MAX_PATH + 1];
+ 	size_t len;
+ 
+-	if (!(pSHGetFolderPathA && SUCCEEDED (pSHGetFolderPathA (NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, szFPath)))) {
 -	    FcConfigMessage (parse, FcSevereError, "SHGetFolderPathA failed");
++# if !defined(WINAPI_FAMILY) || !(WINAPI_FAMILY == WINAPI_FAMILY_PC_APP || WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
++	if (!(SUCCEEDED(SHGetFolderPathW (NULL, /* CSIDL_LOCAL_APPDATA */ 28, NULL, 0, wide_buffer))))
++# endif
++	{
 +	    FcConfigMessage (parse, FcSevereError, "SHGetFolderPath failed");
  	    goto bail;
  	}
-+    if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR) szFPath, MAX_PATH, NULL, NULL) == 0)
-+    goto bail;
- 	strncat(szFPath, "\\fontconfig\\cache", MAX_PATH - 1 - strlen(szFPath));
- 	len = strlen(szFPath) + 1;
++	if (WideCharToMultiByte (CP_UTF8, 0, wide_buffer, -1, (LPSTR)szFPath, MAX_PATH, NULL, NULL) == 0)
++		goto bail;
+ 	strncat (szFPath, "\\fontconfig\\cache", MAX_PATH - 1 - strlen (szFPath));
+ 	len = strlen (szFPath) + 1;
  	FcStrFree (data);
-@@ -3731,19 +3754,6 @@ FcConfigParseAndLoadFromMemory (FcConfig       *config,
+@@ -3481,17 +3508,6 @@ FcConfigParseAndLoadFromMemory (FcConfig      *config,
  static void
- _ensureWin32GettersReady()
+ _ensureWin32GettersReady ()
  {
--    if (!pGetSystemWindowsDirectory)
--    {
--        HMODULE hk32 = GetModuleHandleA("kernel32.dll");
--        if (!(pGetSystemWindowsDirectory = (pfnGetSystemWindowsDirectory)GetProcAddress(hk32, "GetSystemWindowsDirectoryA")))
--            pGetSystemWindowsDirectory = (pfnGetSystemWindowsDirectory)GetWindowsDirectory;
+-    if (!pGetSystemWindowsDirectory) {
+-	HMODULE hk32 = GetModuleHandleA ("kernel32.dll");
+-	if (!(pGetSystemWindowsDirectory = (pfnGetSystemWindowsDirectory)GetProcAddress (hk32, "GetSystemWindowsDirectoryA")))
+-	    pGetSystemWindowsDirectory = (pfnGetSystemWindowsDirectory)GetWindowsDirectory;
 -    }
--    if (!pSHGetFolderPathA)
--    {
--        HMODULE hSh = LoadLibraryA("shfolder.dll");
--        /* the check is done later, because there is no provided fallback */
--        if (hSh)
--            pSHGetFolderPathA = (pfnSHGetFolderPathA)GetProcAddress(hSh, "SHGetFolderPathA");
+-    if (!pSHGetFolderPathA) {
+-	HMODULE hSh = LoadLibraryA ("shfolder.dll");
+-	/* the check is done later, because there is no provided fallback */
+-	if (hSh)
+-	    pSHGetFolderPathA = (pfnSHGetFolderPathA)GetProcAddress (hSh, "SHGetFolderPathA");
 -    }
  }
- #endif // _WIN32
+ #endif  // _WIN32
  
