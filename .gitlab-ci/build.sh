@@ -16,9 +16,10 @@ disable=()
 distcheck=0
 enable_install=1
 disable_check=0
+clean_build=1
 cross=0
-buildsys="autotools"
-type="both"
+buildsys="meson"
+type="shared"
 arch=""
 buildopt=()
 SRCDIR=$MyPWD
@@ -27,7 +28,18 @@ export BUILD_ID=${BUILD_ID:-fontconfig-$$}
 export PREFIX=${PREFIX:-$MyPWD/prefix}
 export BUILDDIR=${BUILDDIR:-$MyPWD/build}
 
-while getopts a:cCe:d:hIs:t:X: OPT
+if [ "x$FC_DISTRO_NAME" = "x" ]; then
+    . /etc/os-release || :
+    FC_DISTRO_NAME=$ID
+fi
+if [ "x$FC_DISTRO_NAME" = "x" ]; then
+    echo "***"
+    echo "*** Unable to detect OS. cross-compiling may not work. Please consider setting FC_DISTRO_NAME"
+    echo "***"
+    sleep 3
+fi
+
+while getopts a:cCe:d:hINs:t:X: OPT
 do
     case $OPT in
         'a') arch=$OPTARG ;;
@@ -36,22 +48,36 @@ do
         'e') enable+=($OPTARG) ;;
         'd') disable+=($OPTARG) ;;
         'I') enable_install=0 ;;
+        'N') clean_build=0 ;;
         's') buildsys=$OPTARG ;;
         't') type=$OPTARG ;;
         'X') backend=$OPTARG ;;
         'h')
-            echo "Usage: $0 [-a ARCH] [-c] [-e OPT] [-d OPT] [-I] [-s BUILDSYS] [-t BUILDTYPE] [-X XMLBACKEND]"
+            echo "Usage: $0 [-a ARCH] [-c] [-C] [-e OPT] [-d OPT] [-h] [-I] [-N] [-s BUILDSYS] [-t BUILDTYPE] [-X XMLBACKEND]"
             exit 1
             ;;
     esac
 done
 case x"$FC_BUILD_PLATFORM" in
     'xmingw') cross=1 ;;
+    'xandroid') cross=1 ;;
     *) cross=0 ;;
 esac
 
 env
 r=0
+
+clean_exit() {
+    rc=$?
+    trap - INT TERM ABRT EXIT
+    if [ "x$TASK" != "x" ]; then
+        echo "Aborting from \"$TASK\" with the exit code $rc"
+    fi
+    mv /tmp/fc-build.log . || :
+    exit $rc
+}
+
+trap clean_exit INT TERM ABRT EXIT
 
 if [ x"$buildsys" == "xautotools" ]; then
     for i in "${enable[@]}"; do
@@ -90,27 +116,50 @@ if [ x"$buildsys" == "xautotools" ]; then
         fi
         . .gitlab-ci/${FC_DISTRO_NAME}-cross.sh
     fi
-    rm -rf "$BUILDDIR" "$PREFIX" || :
-    mkdir "$BUILDDIR" "$PREFIX"
+    if [ $clean_build -eq 1 ]; then
+        rm -rf "$BUILDDIR" "$PREFIX" || :
+        mkdir "$BUILDDIR" "$PREFIX"
+    fi
     cd "$BUILDDIR"
-    ../autogen.sh --prefix="$PREFIX" --disable-cache-build ${buildopt[*]} 2>&1 | tee /tmp/fc-build.log || r=$?
-    $MAKE V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+    TASK="autogen.sh"
+    ../autogen.sh --prefix="$PREFIX" --disable-cache-build ${buildopt[*]} 2>&1 | tee /tmp/fc-build.log
+    TASK="make"
+    $MAKE V=1 2>&1 | tee -a /tmp/fc-build.log
     if [ $disable_check -eq 0 ]; then
-        $MAKE check V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+        TASK="make check"
+        $MAKE check V=1 2>&1 | tee -a /tmp/fc-build.log
     fi
     if [ $enable_install -eq 1 ]; then
-        $MAKE install V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+        TASK="make install"
+        $MAKE install V=1 2>&1 | tee -a /tmp/fc-build.log
     fi
     if [ $distcheck -eq 1 ]; then
-        $MAKE distcheck V=1 2>&1 | tee -a /tmp/fc-build.log || r=$?
+        TASK="make distcheck"
+        $MAKE distcheck V=1 2>&1 | tee -a /tmp/fc-build.log
     fi
 elif [ x"$buildsys" == "xmeson" ]; then
+    TASK="pip install"
     pip install meson
 #   tomli not required for Python >= 3.11
     pip install tomli
+    pip install pytest pytest-tap requests
     for i in "${enable[@]}"; do
         buildopt+=(-D$i=enabled)
+
+        # Update bindgen on Fontations builds to improve support for constants in fcint.h
+        if [[ "$i" == "fontations" ]]; then
+            TASK="cargo install"
+            cargo install bindgen-cli
+            # Prepend the cargo bin directory to PATH
+            if [[ -d "$HOME/.cargo/bin" ]]; then
+                export PATH="$HOME/.cargo/bin:$PATH"
+                echo "Cargo bin directory added to PATH."
+            else
+                echo "Cargo bin directory not found."
+            fi
+        fi
     done
+    TASK=
     for i in "${disable[@]}"; do
         buildopt+=(-D$i=disabled)
     done
@@ -132,17 +181,25 @@ elif [ x"$buildsys" == "xmeson" ]; then
         . .gitlab-ci/$FC_DISTRO_NAME-cross.sh
     fi
     buildopt+=(--default-library=$type)
-    meson setup --prefix="$PREFIX" -Dnls=enabled -Dcache-build=disabled -Diconv=enabled ${buildopt[*]} "$BUILDDIR" 2>&1 | tee /tmp/fc-build.log || r=$?
-    meson compile -v -C "$BUILDDIR" 2>&1 | tee -a /tmp/fc-build.log || r=$?
+    if [ $clean_build -eq 1 ]; then
+        rm -rf $BUILDDIR || :
+    fi
+    TASK="meson setup"
+    meson setup --prefix="$PREFIX" -Dnls=enabled -Dcache-build=disabled -Diconv=enabled ${buildopt[*]} "$BUILDDIR" 2>&1 | tee /tmp/fc-build.log
+    TASK="meson compile"
+    meson compile -v -C "$BUILDDIR" 2>&1 | tee -a /tmp/fc-build.log
     if [ $disable_check -eq 0 ]; then
-        meson test -v -C "$BUILDDIR" 2>&1 | tee -a /tmp/fc-build.log || r=$?
+        TASK="meson test"
+        meson test -v -C "$BUILDDIR" 2>&1 | tee -a /tmp/fc-build.log
     fi
     if [ $enable_install -eq 1 ]; then
-        meson install -C "$BUILDDIR" 2>&1 | tee -a /tmp/fc-build.log || r=$?
+        TASK="meson install"
+        meson install -C "$BUILDDIR" 2>&1 | tee -a /tmp/fc-build.log
     fi
     if [ $distcheck -eq 1 ]; then
-        meson dist -C "$BUILDDIR" 2>&1 | tee -a /tmp/fc-build.log || r=$?
+        TASK="meson dist"
+        meson dist -C "$BUILDDIR" 2>&1 | tee -a /tmp/fc-build.log
     fi
 fi
-mv /tmp/fc-build.log . || :
+TASK=
 exit $r
