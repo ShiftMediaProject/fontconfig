@@ -51,7 +51,7 @@ if host_machine.system() == 'windows' and get_option('default_library') in ['bot
   fc_c_shared_args += '-DDLL_EXPORT'
 endif
 
-libfontconfig = library('fontconfig',
+libfontconfig = both_libraries('fontconfig',
   fc_sources, alias_headers, ft_alias_headers, fclang_h, fccase_h, fcobjshash_h, fcstdint_h,
   c_shared_args: fc_c_shared_args,
   include_directories: incbase,

@@ -1,11 +1,31 @@
                               Fontconfig
              Font configuration and customization library
-                             Version 2.16
-                              2025-01-17
+                            Version 2.16.1
+                              2025-03-13
 
 
 Check INSTALL for compilation and installation instructions.
 Report bugs to https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/new.
+
+2.16.1
+
+Akira TAGOH (10):
+      meson: create fc_cachedir at the installation time
+      meson: set WORDS_BIGENDIAN
+      ci: get back MinGW build to rawhide
+      meson: make sure config.h contains config-fixups.h for OSX
+      Reformatting with clang-format
+      ci: Add a workflow to check the coding style
+      ci: workaround conflict between systemd and systemd-standalone-sysusers
+      conf.d: Add Adwaita Sans as system-ui
+      ci: disable  job tentatively
+      ci: Add a release workflow
+
+Dominik Röttsches (1):
+      [Fontations] Allow linkage to internals in tests
+
+Thomas Devoogdt (1):
+      meson.build: explicitly check for pthread support
 
 2.16
 

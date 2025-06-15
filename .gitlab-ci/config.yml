@@ -1,4 +1,4 @@
-.default_tag: &default_tag "2025-01-17.1"
+.default_tag: &default_tag "2025-03-10.1"
 
 distributions:
   - name: fedora
@@ -27,6 +27,7 @@ distributions:
           FC_BUILD_TYPE: shared
           FC_XML_BACKEND: expat
       - name: "meson shared libxml2"
+        upload: 'rawhide'
         variables:
           FC_BUILDSYS: meson
           FC_BUILD_TYPE: shared
@@ -57,7 +58,7 @@ distributions:
           FC_BUILD_TYPE: static
           FC_XML_BACKEND: libxml2
       - name: "mingw autotools static libxml2"
-        build_only: "40"
+        build_only: "rawhide"
         variables:
           FC_BUILDSYS: autotools
           FC_BUILD_TYPE: static
@@ -122,6 +123,8 @@ packages:
         "autoconf",
         "automake",
         "clang-devel",
+        "clang-tools-extra",
+        "curl",
         "libtool",
         "gettext",
         "gettext-devel",
@@ -131,6 +134,7 @@ packages:
         "freetype-devel",
         "json-c-devel",
         "git",
+        "git-clang-format",
         "docbook-utils",
         "docbook-utils-pdf",
         "bubblewrap",
@@ -142,7 +146,6 @@ packages:
         "mingw64-gettext",
         "mingw64-freetype",
         "mingw64-libxml2",
-        "wine",
         "rust",
         "cargo",
         "bindgen-cli"
